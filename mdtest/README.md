@@ -1,5 +1,11 @@
 # mdtest
 
+Source code: https://github.com/hpc/ior
+
+Documentation: https://ior.readthedocs.io/en/latest/index.html
+
+Note that mdtest comes packaged with IOR.
+
 ## Purpose and Description
 
 - Describe the benchmark
@@ -7,11 +13,11 @@
 
 ## Licensing Requirements
 
-Describe any licensing requirements here
+mdtest is licensed under GPLv2, see [here](https://github.com/hpc/ior?tab=License-1-ov-file).
 
 ## Other Requirements
 
-If applicable, describe any other requirements to run the code here (e.g. ARM compatibility, needs a container, etc.)
+Mdtest is installed alongside IOR.
 
 ## How to build
 
