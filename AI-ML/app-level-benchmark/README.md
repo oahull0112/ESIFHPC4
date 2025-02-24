@@ -1,4 +1,4 @@
-# MLPerf
+# AI-ML
 
 ## Purpose and Description
 
