@@ -9,6 +9,10 @@
 
 Describe any licensing requirements here
 
+## Other Requirements
+
+If applicable, describe any other requirements to run the code here (e.g. ARM compatibility, needs a container, etc.)
+
 ## How to build
 
 Describe build process or otherwise how to obtain executable
