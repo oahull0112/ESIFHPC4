@@ -1,0 +1,3 @@
+[submodule "HPGMG/hpgmg"]
+	path = HPGMG/hpgmg
+	url = https://bitbucket.org/hpgmg/hpgmg
