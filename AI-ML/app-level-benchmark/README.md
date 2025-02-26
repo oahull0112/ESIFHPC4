@@ -15,10 +15,11 @@ We intend to specifically run the [Graph Neural Network (GNN) benchmark](https:/
 As AI/ML techniques continue to be applied to more scientific domains on NREL HPC systems, we need an application-level benchmark to accurately capture the performance and functionality of these routines. 
 
 *Useful links*
-[Full list of MLPerf inference benchmarks](https://github.com/mlcommons/inference)
-[Full list of MLPerf training benchmarks](https://github.com/mlcommons/training)
-[Inference results from other institutions](https://mlcommons.org/benchmarks/inference-datacenter/)
-[Training results from other institutions](https://mlcommons.org/benchmarks/training/)
+
+- [Full list of MLPerf inference benchmarks](https://github.com/mlcommons/inference)
+- [Full list of MLPerf training benchmarks](https://github.com/mlcommons/training)
+- [Inference results from other institutions](https://mlcommons.org/benchmarks/inference-datacenter/)
+- [Training results from other institutions](https://mlcommons.org/benchmarks/training/)
 
 ## Licensing Requirements
 
