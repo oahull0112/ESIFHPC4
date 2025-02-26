@@ -2,12 +2,11 @@
 
 ## Purpose and Description
 
-- Describe the benchmark
-- Describe why the benchmark is useful for our procurement
+AMR-Wind is a massively parallel, block-structured adaptive-mesh, incompressible flow solver for wind turbine and wind farm simulations. It depends on the AMReX library that provides mesh data structures, mesh adaptivity, and linear solvers to handle its governing equations. This software is part the exawind ecosystem, is available [here](https://github.com/exawind/AMR-Wind). The AMR-Wind benchmark assesses system throughput under stress, and how latency affects application performance on GPU-accelerated nodes. 
 
 ## Licensing Requirements
 
-Describe any licensing requirements here
+AMR-Wind is licensed under BSD 3-clause license. The license is included in the source code repository, [LICENSE](https://github.com/Exawind/amr-wind/blob/main/LICENSE).
 
 ## Other Requirements
 
