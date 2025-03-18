@@ -8,29 +8,32 @@ The OSU Microbenchmark collection represents a suite of tests used to measure MP
 The OSU Microbenchmark collection is available under BSD licensing. Further information can be located here: https://mvapich.cse.ohio-state.edu/static/media/mvapich/LICENSE-OMB.txt
 
 ## Other Requirements
-We require that two MPI distributions be tested - an MPICH variety of the vendors choice, and OpenMPI in addition. 
+We require that two MPI distributions be tested - an MPICH variety of the vendors choice,and OpenMPI.
 
 ## How to build
 
-We require a version of the OSU Micro-Benchmarks >= 7.4. The micro-benchmarks are downloaded from the following webpage: https://mvapich.cse.ohio-state.edu/benchmarks/ - the micro-benchmarks are compiled according to a standard 'configure' 'make' 'make install' pipeline. An example build/configuration script is located in the 'osu-scripts' directory, labelled as 'build.sh' 
+We require a version of the OSU Micro-Benchmarks >= 7.4. The micro-benchmarks are downloaded from the following webpage: https://mvapich.cse.ohio-state.edu/benchmarks/ - the micro-benchmarks are compiled according to a standard 'configure' 'make' 'make install' pipeline. An example build/configuration script is located in the 'osu-scripts' directory, labelled as 'build.sh'. With a valid MPI distribution installed, the build script should install the Micro-benchmarks without any further configuration steps. As the final step, the executables for the required OSU Micro-benchmarks are copied to the current working directory.
+
+## How to run
+
+Example scripts are provided in the 'osu-scripts' directory, where there are example scripts provided for each OSU Micro-benchmark that is required. Note, these scripts are formatted for the SLURM Job Scheduler, but this is not a requirement, they can be modified to fit PBS/QSUB/others as necessary. Run requirements are listed below
 
 
 
 ## Run Definitions and Requirements
+A successful run of the OSU Micro-benchmarks is defined as a run of all four defined tests (alltoall, allreduce, latency, osu-mbw-mr) executed across two different MPI distributions: an MPICH variety of the vendors choice, and OpenMPI. Minimum requirements per test are listed below. 
 
-Specifics of the runs and their success criteria/acceptable thresholds
 
-## How to run
+| Test          | Description                    | Nodes Used | Ranks Used          |
+|---------------|--------------------------------|------------|---------------------|
+| osu_latency   | Latency (Ping-Pong)            | 2          | 1 Per Node          |
+| osu_mbw_mr    | Multi-Bandwidth & Message Rate | 2          | %80 Available Cores |
+| osu_allreduce | All Reduce MPI Operations      | All        | %80 Available Cores |
+| osu_alltoall  | All-To-All MPI Operations      | All        | 1 Per Nic           |
 
-Explain how to run the code
 
-### Tests
 
-List specific tests here
 
-## Run Rules
-
-In addition to the general ESIF-HPC-4 benchmarking rules, detail any extra benchmark-specific rules
 
 ## Benchmark test results to report and files to return
 
