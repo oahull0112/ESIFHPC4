@@ -27,8 +27,8 @@ A successful run of the OSU Micro-benchmarks is defined as a run of all four def
 | Test          | Description                    | Nodes Used | Ranks Used          |
 |---------------|--------------------------------|------------|---------------------|
 | osu_latency   | Latency (Ping-Pong)            | 2          | 1 Per Node          |
-| osu_mbw_mr    | Multi-Bandwidth & Message Rate | 2          | %80 Available Cores |
-| osu_allreduce | All Reduce MPI Operations      | All        | %80 Available Cores |
+| osu_mbw_mr    | Multi-Bandwidth & Message Rate | 2          | 80% Available Cores |
+| osu_allreduce | All Reduce MPI Operations      | All        | 80% Available Cores |
 | osu_alltoall  | All-To-All MPI Operations      | All        | 1 Per Nic           |
 
 
