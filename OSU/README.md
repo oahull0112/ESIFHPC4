@@ -7,9 +7,15 @@ The OSU Microbenchmark collection represents a suite of tests used to measure MP
 
 The OSU Microbenchmark collection is available under BSD licensing. Further information can be located here: https://mvapich.cse.ohio-state.edu/static/media/mvapich/LICENSE-OMB.txt
 
+## Other Requirements
+We require that two MPI distributions be tested - an MPICH variety of the vendors choice, and OpenMPI in addition. 
+
 ## How to build
 
-Describe build process or otherwise how to obtain executable
+We require a version of the OSU Micro-Benchmarks >= 7.4. The micro-benchmarks are downloaded from the following webpage: https://mvapich.cse.ohio-state.edu/benchmarks/ - the micro-benchmarks are compiled according to a standard 'configure' 'make' 'make install' pipeline. An example configure command is as follows:
+
+./configure --prefix=/home/user/osu-micro-benchmarks CC=mpicc CXX=mpicxx 
+
 
 ## Run Definitions and Requirements
 
