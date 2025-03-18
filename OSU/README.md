@@ -1,17 +1,11 @@
 # OSU Microbenchmarks
 
 ## Purpose and Description
-
-- Describe the benchmark
-- Describe why the benchmark is useful for our procurement
+The OSU Microbenchmark collection represents a suite of tests used to measure MPI performance in distributed computing systems. The tests include examples such as checking latency (ping-pong), measuring bandwidth rates across pairs of processes, collective tests, and other device based tests. The benchmarks are written in three different programming languages: C, Java, and Python. We use these tests to measure the performance of MPI functions on NREL HPC systems. The primary tests used are: latency, multi-bandwidth/multi-rate, all-to-all, and all-reduce. 
 
 ## Licensing Requirements
 
-Describe any licensing requirements here
-
-## Other Requirements
-
-If applicable, describe any other requirements to run the code here (e.g. ARM compatibility, needs a container, etc.)
+The OSU Microbenchmark collection is available under BSD licensing. Further information can be located here: https://mvapich.cse.ohio-state.edu/static/media/mvapich/LICENSE-OMB.txt
 
 ## How to build
 
