@@ -12,9 +12,8 @@ We require that two MPI distributions be tested - an MPICH variety of the vendor
 
 ## How to build
 
-We require a version of the OSU Micro-Benchmarks >= 7.4. The micro-benchmarks are downloaded from the following webpage: https://mvapich.cse.ohio-state.edu/benchmarks/ - the micro-benchmarks are compiled according to a standard 'configure' 'make' 'make install' pipeline. An example configure command is as follows:
+We require a version of the OSU Micro-Benchmarks >= 7.4. The micro-benchmarks are downloaded from the following webpage: https://mvapich.cse.ohio-state.edu/benchmarks/ - the micro-benchmarks are compiled according to a standard 'configure' 'make' 'make install' pipeline. An example build/configuration script is located in the 'osu-scripts' directory, labelled as 'build.sh' 
 
-./configure --prefix=/home/user/osu-micro-benchmarks CC=mpicc CXX=mpicxx 
 
 
 ## Run Definitions and Requirements
