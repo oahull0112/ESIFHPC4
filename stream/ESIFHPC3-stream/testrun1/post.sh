@@ -16,6 +16,7 @@ done
 
 #Split the files based on the number of threads/processors
 export MAXTHREADS=36
+export MAXTHREADS=4
 for test in Copy Add Scale Triad ; do
   split -l $MAXTHREADS  $test $test.
 done
