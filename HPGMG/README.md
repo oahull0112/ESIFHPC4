@@ -49,11 +49,17 @@ the second is the number of boxes per rank.
 
 #### Scaling Test
 
-Performance for the MPI rank counts requested in the benchmark reporting sheet (64, 128, 256, 512, and 1024) as well as performance results for the full number, half, and one-quarter of the Offered Standard compute units must be provided. Additional runs may be reported with other MPI rank counts if desired. Performance for other rank counts should be reported to support projection to the Offered system if the benchmark test system differs from the Offered system. For all runs, the Offeror may run with any number of threads per MPI rank to obtain the best performance for their system.
+Performance for the MPI rank counts requested in the benchmark reporting sheet (208, 416, 832, 1664, 3328) as well as performance results for the full number, half, and one-quarter of the Offered Standard compute units must be provided. 
+Additional runs may be reported with other MPI rank counts if desired. 
+Performance for other rank counts should be reported to support projection to the Offered system if the benchmark test system differs from the Offered system. 
+For all runs, the Offeror may run with any number of threads per MPI rank to obtain the best performance for their system.
 
 #### Throughput Test
 
-To generate these results, the Offeror shall fill the Standard compute unit offering (or project thereto) with 8-12 concurrent HPGMG runs, with the goal of maximizing the aggregate metric (DOF/s) achievable on the full Standard compute unit offering. The specific number of runs may be chosen to best fit the offered system. The HPGMG-FV benchmark runs for a fixed time, and reports performance as degrees of freedom per second (DOF/s). System throughput from these results will be calculated as the sum of the DOF/s values from the concurrent jobs.
+To generate these results, the Offeror shall fill the Standard compute unit offering (or project thereto) with 8-12 concurrent HPGMG runs, with the goal of maximizing the aggregate metric (DOF/s) achievable on the full Standard compute unit offering. 
+The specific number of runs may be chosen to best fit the offered system. 
+The HPGMG-FV benchmark runs for a fixed time, and reports performance as degrees of freedom per second (DOF/s). 
+System throughput from these results will be calculated as the sum of the DOF/s values from the concurrent jobs.
 
 ## Run Rules
 

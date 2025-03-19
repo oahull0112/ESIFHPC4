@@ -1,0 +1,12 @@
+  make
+  anode=`scontrol show hostnames | head -1`
+  export OMP_NUM_THREADS=52
+  srun -n 4 --nodes=2 --tasks-per-node=2  ./pstream  -D -F -t 3 -T -s -2 1>pstream.out 2>pstream.triad
+  sort -r pstream.triad
+  grep ^0 pstream.out | sort -k3,3 -k6,6  > pstream.map
+  grep thread pstream.out ; grep -i $anode pstream.map | head -3 ; echo ... ; echo ... ; grep -i $anode pstream.map | tail -3
+
+# make mstream
+# srun --tasks-per-node=4  --nodes=2 --tasks=8 ./mstream -n 5000
+# make stream
+# ./stream -n 5000
