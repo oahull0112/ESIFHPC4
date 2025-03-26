@@ -8,7 +8,7 @@ The OSU Microbenchmark collection represents a suite of tests used to measure MP
 The OSU Microbenchmark collection is available under BSD licensing. Further information can be located here: https://mvapich.cse.ohio-state.edu/static/media/mvapich/LICENSE-OMB.txt
 
 ## Other Requirements
-We require that two MPI distributions be tested - an MPICH variety of the vendors choice,and OpenMPI.
+We require that two MPI distributions be tested - an MPI distribution of the vendors choice, and then any open-source distribution of MPI, such as MPICH or OpenMPI.
 
 ## How to build
 
@@ -21,7 +21,7 @@ Example scripts are provided in the 'osu-scripts' directory, where there are exa
 
 
 ## Run Definitions and Requirements
-A successful run of the OSU Micro-benchmarks is defined as a run of all four defined tests (alltoall, allreduce, latency, osu-mbw-mr) executed across two different MPI distributions: an MPICH variety of the vendors choice, and OpenMPI. Minimum requirements per test are listed below. 
+A successful run of the OSU Micro-benchmarks is defined as a run of all four defined tests (alltoall, allreduce, latency, osu-mbw-mr) executed across the two requested MPI distributions. Minimum requirements are listed below. 
 
 
 | Test          | Description                    | Nodes Used | Ranks Used          |
