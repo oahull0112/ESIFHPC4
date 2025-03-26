@@ -8,7 +8,7 @@ The OSU Microbenchmark collection represents a suite of tests used to measure MP
 The OSU Microbenchmark collection is available under BSD licensing. Further information can be located here: https://mvapich.cse.ohio-state.edu/static/media/mvapich/LICENSE-OMB.txt
 
 ## Other Requirements
-We require that two MPI distributions be tested - an MPICH variety of the vendors choice,and OpenMPI.
+We require that two MPI distributions be tested - an MPI distribution of the vendors choice, and then any open-source distribution of MPI, such as MPICH or OpenMPI.
 
 ## How to build
 
@@ -21,7 +21,7 @@ Example scripts are provided in the 'osu-scripts' directory, where there are exa
 
 
 ## Run Definitions and Requirements
-A successful run of the OSU Micro-benchmarks is defined as a run of all four defined tests (alltoall, allreduce, latency, osu-mbw-mr) executed across two different MPI distributions: an MPICH variety of the vendors choice, and OpenMPI. Minimum requirements per test are listed below. 
+A successful run of the OSU Micro-benchmarks is defined as a run of all four defined tests (alltoall, allreduce, latency, osu-mbw-mr) executed across the two requested MPI distributions. Minimum requirements are listed below. 
 
 
 | Test          | Description                    | Nodes Used | Ranks Used          |
@@ -35,6 +35,11 @@ A successful run of the OSU Micro-benchmarks is defined as a run of all four def
 
 
 
-## Benchmark test results to report and files to return
+## Benchmark data/results to return
 
-Describe what results and information the offerer should return, beyond what is detailed in the benchmarking reporting sheet
+The OSU micro-benchmarks are required to be run to a message size of 8192kb (8mb), and for each micro-benchmark to be run a minimum of 5 times each in order to collect an average of the associated results. When the results from a given test are output, a table will be displayed containing the relevant information for the relevant OSU benchmark. Latency, Allreduce, and Alltoall will return latency information associated with the given operations, the Multi-bandwidth/message rate test will return a table that contains both the bandwidth and number of messages successfully sent at a given message size. 
+
+Example results are located in the directory 'example-results' and are labelled according to OSU micro-benchmark. The average of results can be returned however the vendor wishes, with a recommendation of using a CSV table.
+
+
+
