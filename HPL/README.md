@@ -7,10 +7,6 @@ HPL solves a random dense linear system in double precision arithmetic on distri
 
 HPL is licensed per the COPYRIGHT notice in the hpl-2.3 folder.
 
-## Other Requirements
-
-If applicable, describe any other requirements to run the code here (e.g. ARM compatibility, needs a container, etc.)
-
 ## How to build
 
 The source code of Netlib can be accessed here, [HPL](https://www.netlib.org/benchmark/hpl/hpl-2.3.tar.gz). Build instructions are in the INSTALL file (top directory) and are summarized below: 
@@ -23,20 +19,41 @@ Optimized binaries of HPL can be obtained from [Intel-HPL](https://www.intel.com
 
 ## Run Definitions and Requirements
 
-Specifics of the runs and their success criteria/acceptable thresholds
+The run output should show that tests sucessfully passed, finished and ended, as in:
+```
+================================================================================
+...
+--------------------------------------------------------------------------------
+||Ax-b||_oo/(eps*(||A||_oo*||x||_oo+||b||_oo)*N)=   0.000181904482 ...... PASSED
+...
+================================================================================
+
+Finished      1 tests with the following results:
+              1 tests completed and passed residual checks,
+              0 tests completed and failed residual checks,
+              0 tests skipped because of illegal input values.
+--------------------------------------------------------------------------------
+
+End of Tests.
+================================================================================
+
+```
 
 ## How to run
 
-Explain how to run the code
+To execute xhpl on CPUs, MPI with or without OpenMP support are required. The required input is number of nodes, total number of MPI ranks, total number of ranks per node and total number of OpenMP threads per MPI rank. The benchmark results can be obtained with Slurm cluster management: `srun -N <number of nodes> -n <total number of ranks> -c < number of cpus per task> ./xhpl`.  
+
+To run xhpl on GPUs, you need GPU-Aware MPI with or without OpenMP support for an optimal performance. The required input is number of nodes, total number of MPI ranks, total number of ranks per node, total number of OpenMP threads per MPI rank, and total number of GPUs per node. The benchmark results can be obtained with Slurm: `srun -N <number of nodes> -n <total number of ranks> --cpus-per-task=< number of CPUs per task> --gpus-per-node=<total number of GPUs per node> ./xhpl`. 
 
 ### Tests
 
-List specific tests here
+Testing will include single-node and multi-node configurations.
 
 ## Run Rules
 
-In addition to the general ESIF-HPC-4 benchmarking rules, detail any extra benchmark-specific rules
+Publicly available, optimized HPL versions or binaries are permitted. A single or multiple programming models might be used to optimize performance based on the architecture of the machine.
 
 ## Benchmark test results to report and files to return
 
-Describe what results and information the offerer should return, beyond what is detailed in the benchmarking reporting sheet
+The Make.myarch files or script, job submission scripts, stdout and stderr files from each run, an environment dump, and HPL.dat files shall be included in the File response.
+
