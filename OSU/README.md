@@ -39,5 +39,7 @@ A successful run of the OSU Micro-benchmarks is defined as a run of all four def
 
 The OSU micro-benchmarks are required to be run to a message size of 8192kb (8mb), and for each micro-benchmark to be run a minimum of 5 times each in order to collect an average of the associated results. When the results from a given test are output, a table will be displayed containing the relevant information for the relevant OSU benchmark. Latency, Allreduce, and Alltoall will return latency information associated with the given operations, the Multi-bandwidth/message rate test will return a table that contains both the bandwidth and number of messages successfully sent at a given message size. 
 
+Example results are located in the directory 'example-results' and are labelled according to OSU micro-benchmark. The average of results can be returned however the vendor wishes, with a recommendation of using a CSV table.
+
 
 
