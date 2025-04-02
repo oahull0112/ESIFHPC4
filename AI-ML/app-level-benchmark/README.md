@@ -2,7 +2,7 @@
 
 ## Purpose and Description
 
-The purpose of this benchmark is to capture a 'typical scientific AI' workload performed by researchers at NREL. There will be both 'training' and 'inference' components for the benchmark, using PyTorch as the AI/ML framework.
+The purpose of this benchmark is to capture a 'typical scientific AI' workload performed by researchers at NREL. There will be both 'single node' and 'multi node' components for the benchmark, using PyTorch as the AI/ML framework.
 
 The exact model is TBD and is being actively developed.
 
