@@ -8,8 +8,6 @@ The HPGMG finite volume benchmark is important to certain combustion application
 The code uses hybrid parallelism over both MPI ranks and OpenMP threads.
 
 
-- Describe the benchmark
-- Describe why the benchmark is useful for our procurement
 
 
 ## Licensing Requirements
