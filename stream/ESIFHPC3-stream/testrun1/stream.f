@@ -267,7 +267,7 @@ C     ..
       PRINT *,'----------------------------------------------------'
 
  9000 FORMAT (1x,a,i6,a)
- 9010 FORMAT (1x,a,i10)
+ 9010 FORMAT (1x,a,i15)
  9020 FORMAT (1x,a,i10,a)
  9030 FORMAT (1x,a,i3,a,a)
  9040 FORMAT ('Function',5x,'Rate (MB/s)  Avg time   Min time  Max time'

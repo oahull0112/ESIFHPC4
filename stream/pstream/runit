@@ -36,7 +36,7 @@ nvidia-smi 1> nvidia.out 2> /dev/null
 if [ $? -eq 0 ]; then
 	ml PrgEnv-nvhpc
 	make mstream
-	srun --tasks-per-node=4  --nodes=2 --tasks=8 ./mstream -n 5000 > mstream.out
+	srun -n 8 --nodes=2 --tasks-per-node=4 ./mstream -n 5000 > mstream.out
 	make stream
 	./stream -n 5000 > stream.out
 else
