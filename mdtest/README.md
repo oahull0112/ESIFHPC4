@@ -18,10 +18,6 @@ The purpose of this benchmark is to measure the performance of file metadata ope
 
 mdtest is licensed under GPLv2, see [here](https://github.com/hpc/ior?tab=License-1-ov-file).
 
-## Other Requirements
-
-Mdtest is installed alongside IOR.
-
 ## How to build
 
 Please see example IOR/mdtest build on Kestrel [here](https://github.com/NREL/ESIFHPC4/blob/main/IOR/kestrel-example-build-script.sh)

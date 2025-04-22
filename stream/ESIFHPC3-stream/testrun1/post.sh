@@ -15,10 +15,10 @@ for test in Copy Add Scale Triad ; do
 done
 
 #Split the files based on the number of threads/processors
-export MAXTHREADS=36
-export MAXTHREADS=4
+#max_threads needs to match the value from test.sh
+export max_threads=4
 for test in Copy Add Scale Triad ; do
-  split -l $MAXTHREADS  $test $test.
+  split -l $max_threads  $test $test.
 done
 
 #Paste them back together making a table, one for each test
@@ -29,9 +29,11 @@ paste Triad.a* | awk '{print $1 "\t" $2 "\t" $4 "\t" $6 "\t" $8}' >> Triad.tab
 
 #Now we will put all of the tests together in a single file.
 #First we make a header which gives the node type.  The default
-#is "Test System;  As-is code" but it can be read from the command line.
+#is "Test System,  Reference, As-is code" but it can be read from the command line.
+#If you enter a system and code description on the command line they
+#should be seperated by a comma ",".
 if [[ $# -eq 0 ]]  ; then
-	echo "Test System;  As-is code" >STREAM.tab
+	echo "Standard,Reference,As-is code" >STREAM.tab
 else
 	echo $@  >STREAM.tab
 fi
@@ -46,7 +48,18 @@ done
 #Create a CSV version of the TAB file
 sed "s/\t/,/g" STREAM.tab > STREAM.csv
 
-#At this point we are done. We have the files STREAM.tab and STREAM.csv
+for test in Copy Add Scale Triad ; do
+  echo -e "$nodetype\n$(cat $test.tab)" > $test.tab
+  sed "s/\t/,/g" $test.tab > $test.csv
+done
+
+
+echo "Node type,System,Optimization,test,Threads,Rate (MB/s),Avg time,Min time,Max time" > pandas.csv
+for test in Copy Add Scale Triad ; do
+   tail --lines=+4 $test.csv | sed s/^/"$nodetype,$test,"/ >> pandas.csv
+done
+
+#At this point we are done. We have the files STREAM.tab and STREAM.csv, pandas.csv
 #but below we create some additional files that might be useful for 
 #analysis and ploting.  Actually, it is kind of silly.  These files
 #are created and then deleted in the last 5 lines of this script unless
@@ -54,10 +67,6 @@ sed "s/\t/,/g" STREAM.tab > STREAM.csv
 
 DO_EXTRAS=true
 if $DO_EXTRAS ; then
-for test in Copy Add Scale Triad ; do
-  echo -e "$nodetype\n$(cat $test.tab)" > $test.tab
-  sed "s/\t/,/g" $test.tab > $test.csv
-done
 
 # Here we rename files for plotting
   for test in Copy Add Scale Triad ; do

@@ -15,6 +15,8 @@
   Written by: Massimiliano Fatica, NVIDIA Corporation
 
   Further modifications by: Ben Cumming, CSCS; Andreas Herten (JSC/FZJ)
+  https://github.com/bcumming/cuda-stream
+
 */
 #ifndef NTIMES
 #define NTIMES  200000
@@ -172,8 +174,8 @@ int main(int argc, char** argv)
     printf(" STREAM Benchmark implementation in CUDA on device %d of %s\n",GPU,hostbuffer);
     printf(" Device name: %s\n", prop.name);
     printf(" Array elements %ld",N);
-    printf(" Array size (%s precision) =%7.2f MB\n", sizeof(double)==sizeof(real)?"double":"single", double(N)*double(sizeof(real))/1.e6);
-    printf(" Total memory for 3 arrays =%7.2f GB\n",3.0*double(N)*double(sizeof(real))/1.e9);
+    printf(" Array size (%s precision) =%12.6f MB\n", sizeof(double)==sizeof(real)?"double":"single", double(N)*double(sizeof(real))/1.e6);
+    printf(" Total memory for 3 arrays =%12.6f GB\n",3.0*double(N)*double(sizeof(real))/1.e9);
     printf(" NTIMES %d\n",NTIMES);
 
     /* Allocate memory on device */

@@ -2,36 +2,43 @@
 
 ## Purpose and Description
 
-- Describe the benchmark
-- Describe why the benchmark is useful for our procurement
+- stream.[c,f] are the standard memory bandwith test.
+- pstream.c is a variation of stream designed to test the abillity to get good processor affinity.
+- mstream.cu and stream.cu are GPU versions of stream.c
 
 ## Licensing Requirements
 
-Describe any licensing requirements here
+Open source
 
 ## Other Requirements
 
-If applicable, describe any other requirements to run the code here (e.g. ARM compatibility, needs a container, etc.)
+mstream.cu and stream.cu require GPUs
 
 ## How to build
 
-Describe build process or otherwise how to obtain executable
+Build procedures are described in the source directories.
 
 ## Run Definitions and Requirements
 
-Specifics of the runs and their success criteria/acceptable thresholds
+There are no criteria/acceptable thresholds except for pstream.c It must show that
+there is good affinity mapping with no cores oversubscribed.
 
 ## How to run
 
-Explain how to run the code
+Run procedures are described in the source directories.
 
 ### Tests
 
-List specific tests here
+stream.c - standard stream bechnmark
+stream.f - standard stream bechnmark
+pstream.c - affinity version of stream benchmark
+stream.cu - GPU stream
+mstream.cu - MPI version of GPU stream
 
 ## Run Rules
 
-In addition to the general ESIF-HPC-4 benchmarking rules, detail any extra benchmark-specific rules
+Run procedures are described in the source directories.
+
 
 ## Benchmark test results to report and files to return
 
