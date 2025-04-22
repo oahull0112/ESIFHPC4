@@ -43,4 +43,3 @@ if __name__ == '__main__':
     "files are specified then look for rsl.out.0000 in current directory")
   parser.add_argument("files", nargs="*", help= "rsl.out.0000 file")
   main(vars(parser.parse_args()))
-
