@@ -49,7 +49,8 @@ ABL.surface_roughness_z0 = 0.15
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨#
 #        ADAPTIVE MESH REFINEMENT       #
 #.......................................#
-amr.n_cell              = 512 512 512   # Grid cells at coarsest AMRlevel
+#amr.n_cell              = 512 512 512   # Grid cells at coarsest AMRlevel
+amr.n_cell              = 1024 1024 1024   # Grid cells at coarsest AMRlevel
 amr.max_level           = 0           # Max AMR level in hierarchy 
 
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨#
