@@ -55,5 +55,5 @@ Publicly available, optimized HPL versions or binaries are permitted. A single o
 
 ## Benchmark test results to report and files to return
 
-The Make.myarch files or script, job submission scripts, stdout and stderr files from each run, an environment dump, and HPL.dat files shall be included in the File response.
-
+* The Make.myarch files or script, job submission scripts, stdout and stderr files from each run, an environment dump, and HPL.dat files shall be included in the File response.
+* The Text response should include high-level descriptions of build and run optimizations.
