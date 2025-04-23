@@ -117,8 +117,19 @@ __global__ void add_kernel(const float* d_x, float* d_y, float* d_z, const unsig
 
 
 
-int main()
+int main(int argc, char *argv[])
+
 {
+    int count;
+    int deviceIndex;
+    deviceIndex=0;
+    if (argc > 1 ) {
+     deviceIndex=std::stoi(argv[1]);
+    }
+    HIP_CHECK(hipGetDeviceCount(&count));
+    if (deviceIndex >= count || deviceIndex < 0)
+        throw std::runtime_error("Chosen device index is invalid");
+    std::cout <<"Running on GPU " << deviceIndex << std::endl;
     double ts[5],te[5];
 // The number of float elements in each vector.
     constexpr unsigned int size = 1000000;

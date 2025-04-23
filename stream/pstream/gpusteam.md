@@ -128,4 +128,38 @@ Triad:         16.1638      0.00000730   0.00000691   0.00001383
 ```
 
 
+# AMD programs
+
+The directory **amd** containes two programs.  These are "a work in progress" and at this time there is no reporting requirements developed.  
+
+**astream.cpp** is similar to mstream.cu but uses hip instead of cuda.  The kernels are a bit different and there is an option to run with groups.  The goal of groups as stted in the source is to "is reduce the dispatch overhead".
+
+**stream.hip** is a simple program that calls the normal stream tests a single time.  The hip kernels in this code match the cuda versions.  This code requires
+some include files that can be found in the repo: https://github.com/ROCm/rocm-examples.git.
+
+
+These two code were runt on NRELs experimental machine mi250-test.hpc.nrel.gov which has 8 AMD gpus.
+
+## astream build and run procedure
+
+```
+ml openmpi
+export OMPI_CC=/opt/rocm/bin/hipcc
+mpicc -std=c++11 -O3 -lm astream.cpp -o astream
+mpirun -n 8 ./astream
+```
+
+## stream.hip build and run procedure
+
+```
+git clone https://github.com/ROCm/rocm-examples.git
+cp stream.hip rocm-examples/HIP-Basic/saxpy
+cd rocm-examples/HIP-Basic/saxpy
+/opt/rocm/bin/hipcc -std=c++17 -Wall -Wextra -I ../../Common  -o hip_stream stream.hip 
+./hip_stream
+
+```
+
+
+
 
