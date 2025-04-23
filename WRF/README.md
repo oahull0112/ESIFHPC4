@@ -49,8 +49,7 @@ The [Conus2.5km WRFV4.4 benchmark](https://www2.mmm.ucar.edu/wrf/users/benchmark
 
 ### Tests
 
-Strong scaling tests will be performed using the CONUS-2.5km benchmark on single and multiple CPU and GPU nodes. The single-node and multi-node runs measure the inter and intranode communication performance of WRF.
-Additionally, throughput test will be conducted by running 5 instances of WRF with NetCDF for serial I/O and PnetCDF for parallel I/O.
+Strong scaling and throughput tests will be performed using the CONUS benchmarks on single and multiple CPU and GPU nodes. CONUS-12km will be used on the single-node while CONUS-2.5km will be used on multi-node runs. The Offeror should run 4-6 concurent jobs instances of the benchmark on the target system. The harmonic-mean of the runtime from the cuncurrent jobs will be used for reporting strong-scaling results. The application throughput can be computed as following: `throughput = allocation factor * node-class count) / (number of nodes * runtime)`
 
 ## Run Rules
 
@@ -59,6 +58,6 @@ Additionally, throughput test will be conducted by running 5 instances of WRF wi
 
 ## Benchmark test results to report and files to return
 
-* The wallclock time (`Timing for main`) reported in `rsl.out.0000` should be entered into the Spreadsheet response.
+* For scaling and throughput reporting, the harmonic mean of the wallclock time (`Timing for main`) reported in `rsl.out.0000` files should be entered into the Spreadsheet response.
 * The Text response should include high-level descriptions of build and run optimizations.
 * The file response should include namelist.input, configure.wrf, rsl.error.0000 and rsl.out.0000, and diffout_tag files
