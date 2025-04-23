@@ -1,0 +1,61 @@
+
+# Sienna
+
+## Purpose and Description
+
+- The Sienna framework is an open-source ecosystem for simulation and optimization of modern energy systems. It is designed to model, solve, and analyze scheduling problems and dynamic simulations of quasi-static infrastructure systems.
+- Sienna consists of three main modules:
+  - **Sienna\Data**: Supports efficient intake and use of energy systems input data, including multiple file formats, time series representations, and unit system conversions.
+  - **Sienna\Ops**: Enables simulation of system scheduling, including unit commitment, economic dispatch, automatic generation control, and nonlinear optimal power flow.
+  - **Sienna\Dyn**: Simulates power system dynamic responses to perturbations, including phasor simulations, electromagnetic transients, and small-signal stability.
+- The framework applies advanced computer science, visualization, applied mathematics, and computational science to create a flexible modeling environment for energy systems.
+
+## Licensing Requirements
+
+Sienna is open-source software. Licensing details for its components can be found on the [Sienna GitHub repository](https://github.com/NREL/Sienna).
+
+## Other Requirements
+
+- Sienna requires Julia as the primary programming language and depends on several Julia packages, including `PowerSimulations.jl` and `PowerSystems.jl`.
+- For large-scale simulations, an appropriate optimization solver (e.g., JuMP-compatible solvers) is required.
+
+## How to build
+
+Instructions to build and install Sienna components:
+
+1. Install Julia from [JuliaLang.org](https://julialang.org/).
+2. Add the required packages using the Julia package manager:
+   ```julia
+   ] add PowerSimulations PowerSystems
+   ```
+3. For the latest development version, use:
+   ```julia
+   ] add PowerSimulations#main
+   ```
+
+## Run Definitions and Requirements
+
+- Sienna benchmarks should be run on single-node only.
+- The benchmarks include:
+  - Unit Commitment and Economic Dispatch simulations using `PowerSimulations.jl`.
+
+## How to run
+
+1. Prepare input data files for the simulation, including system configurations and time series data.
+2. Use the provided Julia scripts to set up and execute the benchmarks.
+3. Example commands for running benchmarks:
+   ```julia
+   using PowerSystems
+   using PowerSimulations
+   # Define and run a simulation
+   ```
+
+## Run Rules
+
+- Benchmarks should be run on CPU nodes.
+- The Benchmarks are single node only.
+- GPU-compatible Optimizers that are compatible with Julia JuMP may be exercised on GPU nodes. 
+
+## Benchmark test results to report and files to return
+
+TBD
