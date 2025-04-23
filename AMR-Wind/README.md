@@ -2,7 +2,7 @@
 
 ## Purpose and Description
 
-AMR-Wind is a massively parallel, block-structured adaptive-mesh, incompressible flow solver for wind turbine and wind farm simulations. It depends on the AMReX library that provides mesh data structures, mesh adaptivity, and linear solvers to handle its governing equations. This software is part the exawind ecosystem, is available [here](https://github.com/exawind/AMR-Wind). The AMR-Wind benchmark assesses how latency affects application performance on GPU-accelerated nodes. 
+AMR-Wind is a massively parallel, block-structured adaptive-mesh, incompressible flow solver for wind turbine and wind farm simulations. It depends on the AMReX library that provides mesh data structures, mesh adaptivity, and linear solvers to handle its governing equations. This software is part the exawind ecosystem, is available [here](https://github.com/exawind/AMR-Wind). The AMR-Wind benchmark assesses how latency affects application performance on GPU-accelerated nodes and application throughput. 
 
 ## Licensing Requirements
 
@@ -58,12 +58,19 @@ benchmark shall beavailable in this repo.
 
 ## How to run
 
-To run AMR-Wind, you need GPU-Aware MPI support for an optimal performance. The required input is number of nodes, total number of MPI ranks, total number of ranks per node, and total number of GPUs per node. The benchmark results can be obtained with Slurm: 
-`srun -N <number of nodes> -n <total number of GPUs> --ntasks-per-node=<number of GPUs per node> --cpu-bind=cores --gpus-per-node=<number of GPUs per node> <path to build directory>/amr_wind <input file> >& <output file>.log`
+To run AMR-Wind CPUs, you need MPI support and Slurm inputs including number of nodes, total number of tasks and number of tasks per node. The benchmark results can be obtained with Slurm:
+````
+srun -N <number of nodes> -n <total number of tasks> --ntasks-per-node=<number of tasks per node> <path to build directory>/amr_wind <input file> >& <output file>.log
 
+```
+To run AMR-Wind on GPUs, GPU-Aware MPI is required for an optimal performance. Additionally, inputs such as number of nodes, total number of MPI tasks, total number of tasks per node, and total number of GPUs per node are required. The benchmark results can be obtained with Slurm:
+```
+srun -N <number of nodes> -n <total number of GPUs> --ntasks-per-node=<number of GPUs per node> --gpus-per-node=<number of GPUs per node> <path to build directory>/amr_wind <input file> >& <output file>.log`
+
+```
 ### Tests
 
-This repo provides two test cases with different grid sizes for single-node and multinode strong scaling tests. The smaller test case, fitting within a single node's GPU capacity (from one to the maximum), measures inter-node latency, while the larger test case, spanning multiple nodes, measures intra-node latency.
+This repo provides two test cases with different grid sizes for single-node and multinode strong-scaling and throughput tests. The smaller test case, fitting within a single node's CPUs or GPUs capacity, while the larger test case spans multiple nodes. The Offeror should run 4-6 concurent jobs instances of the benchmark on the target system. The application throughput can be computed as following: ` throughput = allocation factor * node-class count) / (number of nodes * runtime)`.
 
 ## Run Rules
 
@@ -73,8 +80,6 @@ The input files cause writing of large output every 100 timesteps and writes che
 
 The following AMR-Wind-specific information should be provided:
 
-* For scaling studies, the wall time to be reported is the sum of the wallclock times that are reported in the InitData and Evolve row at the end of output log files should be entered into the Spreadsheet response.
-
+* For reporting scaling and throughput studies, use the harmonic mean of the `Time spent in Evolve` wall-clock times from output logs in the Spreadsheet.
 * As part of the File response, please return job-scripts and their outputs, log files, and plt01000 folders from each run.
-
 * Include in the Text response validation data, with validation results in a table. If results vary by more than the 1e-3 reference tolerance, please also report the maximum difference of results against the reference results with a justification as to why the results should be considered correct.
