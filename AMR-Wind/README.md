@@ -59,7 +59,7 @@ benchmark shall beavailable in this repo.
 ## How to run
 
 To run AMR-Wind CPUs, you need MPI support and Slurm inputs including number of nodes, total number of tasks and number of tasks per node. The benchmark results can be obtained with Slurm:
-````
+```
 srun -N <number of nodes> -n <total number of tasks> --ntasks-per-node=<number of tasks per node> <path to build directory>/amr_wind <input file> >& <output file>.log
 
 ```
