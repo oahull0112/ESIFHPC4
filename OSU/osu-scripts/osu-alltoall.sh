@@ -5,7 +5,7 @@
 #SBATCH --ntasks=104
 #SBATCH --mem=0
 #SBATCH --output=osu-collective-alltoall/osu-alltoall_%a.out
-
+#SBATCH --array=1-5
 
 
 ### Script is written to be submitted to a slurm job scheduler, basic parameters are filled in

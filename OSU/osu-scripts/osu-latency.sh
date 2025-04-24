@@ -7,7 +7,7 @@
 #SBATCH --time=0:1:0
 #SBATCH --account=esifapps
 #SBATCH --output=osu-pt2pt-latency/osu-latency_%a.out
-
+#SBATCH --array=1-5
 
 ### Script is written to be submitted to a slurm job scheduler, basic parameters are filled in
 ### Script can be modified to fit other job schedulers as necessary
