@@ -2,7 +2,7 @@
 
 ## Purpose and Description
 
-This benchmark is intended to stress GPU-GPU (or accelerator-accelerator) network communication through the use of an appropriate collective communication library (CCL). The exact implementation of this benchmark depends on the target's hardware architecture. For example, because Kestrel (NREL's current flagship system) hosts NVIDIA H100 GPUs, we implement an AllReduce test using [NCCL](https://developer.nvidia.com/nccl).
+This benchmark is intended to stress GPU-GPU (or accelerator-accelerator) network communication through the use of an appropriate collective communication library (CCL). The exact implementation of this benchmark depends on the target's hardware architecture. For example, because Kestrel (NREL's current flagship system) hosts NVIDIA H100 GPUs, we implement AllReduce and AllGather tests using [NCCL](https://developer.nvidia.com/nccl). Running AllReduce and AllGather on any equivalent CCL for other hardware is satisfactory for this benchmark.
 
 ## Licensing Requirements
 
@@ -14,19 +14,19 @@ None.
 
 ## How to build
 
-See the Slurm script [`build_nccl_cxi.sh`](./build_nccl_cxi.sh) for instructions on how to build NCCL with CXI-enabled libfabric on Kestrel. Note the use of a custom Open Fabrics Initiative (OFI) plugin to enable the use of HPE Slingshot communication protocols, which is needed because NCCL assumes an InfiniBand interconnect by default.
+See the Slurm script [`build_nccl_cxi.sh`](./build_nccl_cxi.sh) for instructions on how to build NCCL with CXI-enabled libfabric on Kestrel. Note the use of a custom Open Fabrics Initiative (OFI) plugin to enable the use of HPE Slingshot communication protocols, which is needed because NCCL assumes an InfiniBand interconnect by default. This step may not be necessary depending on your hardware and network configuration.
 
 ## Run Definitions and Requirements
 
-On Kestrel, the maximum out-of-place bus bandwidth measured by NCCL AllReduce is ~45 GB/s. Network communication performance from the tested CCL should exceeded this value by X%.
+On Kestrel, the maximum out-of-place bus bandwidth is ~45 GB/s as measured by NCCL AllReduce and ~42 GB/s as measured by NCCL AllGather. See "Benchmark test results to report and files to return" below for reference.
 
 ## How to run
 
-See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository.
+See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` and `all_gather_perf` from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository.
 
 ### Tests
 
-Running a multi-GPU AllReduce test satisfies this benchmark.
+Running multi-GPU AllReduce and AllGather collectives across multiple nodes satisfies this benchmark.
 
 ```
 all_reduce_perf -b 8 -e 4G -f 2
@@ -41,9 +41,9 @@ all_reduce_perf -b 8 -e 4G -f 2
 ## Run Rules
 
 
-
 ## Benchmark test results to report and files to return
 
+### AllReduce reference
 Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https://github.com/NVIDIA/nccl-tests/tree/master) built with the [custom NCCL+CXI plugin](https://github.com/NERSC/nccl-ofi-plugin) (described in 'How to build') to enable the use of the HPE Slingshot interconnect. This example output represents a run of 64 GPU devices across 16 nodes:
 
 ```
@@ -81,4 +81,38 @@ Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https:
   1073741824     268435456     float     sum      -1    49081   21.88   43.07      0    46386   23.15   45.57      0
   2147483648     536870912     float     sum      -1    92587   23.19   45.66      0    92579   23.20   45.67      0
   4294967296    1073741824     float     sum      -1   184959   23.22   45.72      0   185005   23.22   45.71      0
+```
+
+### AllGather reference
+
+```
+#
+#                                                              out-of-place                       in-place
+#       size         count      type   redop    root     time   algbw   busbw #wrong     time   algbw   busbw #wrong
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)            (us)  (GB/s)  (GB/s)
+           0             0     float    none      -1     0.27    0.00    0.00      0     0.18    0.00    0.00      0
+           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
+           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
+           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
+           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
+           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
+           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
+        1024             4     float    none      -1    576.2    0.00    0.00      0    594.5    0.00    0.00      0
+        2048             8     float    none      -1    577.1    0.00    0.00      0    601.6    0.00    0.00      0
+        4096            16     float    none      -1    576.1    0.01    0.01      0    580.8    0.01    0.01      0
+        8192            32     float    none      -1    580.6    0.01    0.01      0    575.5    0.01    0.01      0
+       16384            64     float    none      -1    578.0    0.03    0.03      0    607.8    0.03    0.03      0
+       32768           128     float    none      -1    578.4    0.06    0.06      0    579.3    0.06    0.06      0
+       65536           256     float    none      -1    584.7    0.11    0.11      0    580.2    0.11    0.11      0
+      131072           512     float    none      -1    562.8    0.23    0.23      0    590.6    0.22    0.22      0
+      262144          1024     float    none      -1    661.0    0.40    0.39      0    623.8    0.42    0.41      0
+      524288          2048     float    none      -1    715.0    0.73    0.72      0    777.5    0.67    0.66      0
+     1048576          4096     float    none      -1    763.6    1.37    1.35      0    705.9    1.49    1.46      0
+     2097152          8192     float    none      -1   1277.2    1.64    1.62      0   1473.5    1.42    1.40      0
+     4194304         16384     float    none      -1   1183.1    3.55    3.49      0   1142.4    3.67    3.61      0
+     8388608         32768     float    none      -1   1133.5    7.40    7.28      0   1233.5    6.80    6.69      0
+    16777216         65536     float    none      -1   1029.6   16.29   16.04      0   1078.2   15.56   15.32      0
+    33554432        131072     float    none      -1    986.3   34.02   33.49      0   1031.0   32.55   32.04      0
+    67108864        262144     float    none      -1   1587.7   42.27   41.61      0   1588.7   42.24   41.58      0
+   134217728        524288     float    none      -1   3150.1   42.61   41.94      0   3142.4   42.71   42.04      0
 ```

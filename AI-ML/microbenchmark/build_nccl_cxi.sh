@@ -39,6 +39,8 @@ else
     echo Skipping ... nccl directory already exists
 fi
 
+# NOTE -- This step could be unnecessary if you are targeting a system with InfiniBand interconnect.
+# This plugin ultimately enables NCCL to communicate through the Cray Slingshot interconnect.
 echo ========== BUILDING OFI PLUGIN ==========
 if [ ! -e aws-ofi-nccl ]; then
     git clone -b v1.6.0 https://github.com/aws/aws-ofi-nccl.git
