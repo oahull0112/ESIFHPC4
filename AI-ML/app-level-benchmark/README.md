@@ -45,7 +45,11 @@ Finally, install 3D-UNet from conda-forge based on instructions from the [3D-UNe
 conda install pytorch-3dunet
 ```
 
-Note that on Kestrel, this benchmark targets NVIDIA H100s running with CUDA 12.4-compatible GPU drivers. As such, the installation command used was the following:
+Submitters may find the Kestrel Build Example below to be a helpful starting point for implementing this benchmark.
+
+### Kestrel build example
+
+To concretely demonstrate how to build and run this benchmark, we provide step-by-step instructions we used for our system. Note that on Kestrel, this benchmark targets NVIDIA H100s running with CUDA 12.4-compatible GPU drivers. As such, the installation commands used were the following:
 
 <!-- ```
 ml mamba
@@ -58,31 +62,36 @@ mamba install pytorch-3dunet -y
 
 ```
 ml mamba
-mamba create --prefix=./3dunet-env -c pytorch -c nvidia -c conda-forge pytorch pytorch-cuda=12.4 conda-forge::cuda-version=12.4 pytorch-3dunet
+mamba create --prefix=./pytorch-3dunet -c pytorch -c nvidia -c conda-forge pytorch pytorch-cuda=12.4 conda-forge::cuda-version=12.4 pytorch-3dunet
+conda activate ./pytorch-3dunet
 pip3 install torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 
 pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger nibabel scipy https://github.com/mlcommons/logging/archive/refs/tags/1.1.0-rc4.zip
 ```
 
 Once the environment is built, the KiTS19 dataset needs to be downloaded onto the test machine and preprocessed for model training. Please refer to the [MLCommons 3D-UNet benchmark page](https://github.com/mlcommons/training/tree/master/retired_benchmarks/unet3d/pytorch#steps-to-download-and-verify-data) for step-by-step instructions for how to do so.
 
-On Kestrel, these were the commands that were used to download KiTS19 data.
+These were the commands that were used to download KiTS19 data:
 
 ```
+conda activate ./pytorch-3dunet
 mkdir raw-data-dir
 cd raw-data-dir
 git clone https://github.com/neheller/kits19
 cd kits19
-pip3 install -r requirements.txt
 python3 -m starter_code.get_imaging
 cd ../..
 ```
 
-On Kestrel, these were the commands that were used to preprocess data. Note that we change the hard-coded location of results from the root-level `/results` folder to `./results` in main.py:
+These were the commands that were used to preprocess data. 
+
+**NOTE**: We change the hard-coded location of results from the root-level `/results` folder to `./results` in `main.py`. We have also encountered the error `AssertionError: Invalid hash for case_00053_x.npy.` when running `preprocess_dataset.py`. To avoid this, we add `53` to the "EXCLUDED_CASES" listed in `preprocess_dataset.py`.
 
 ```
+conda activate ./pytorch-3dunet
 git clone git@github.com:mlcommons/training.git
 cd training/retired_benchmarks/unet3d/pytorch
 sed -i 's|/results|./results|' main.py
+sed -i "s/EXCLUDED_CASES = \[\]/EXCLUDED_CASES = \[53\]/" preprocess_dataset.py
 mkdir data
 mkdir results
 python3 preprocess_dataset.py --data_dir ../../../../raw-data-dir/kits19/data --results_dir ./data
