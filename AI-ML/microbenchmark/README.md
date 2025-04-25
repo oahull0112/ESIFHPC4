@@ -30,6 +30,7 @@ Running multi-GPU AllReduce and AllGather collectives across multiple nodes sati
 
 ```
 all_reduce_perf -b 8 -e 4G -f 2
+all_gather_perf -b 8 -e 4G -f 2
 ```
 
 **Options:**
@@ -84,6 +85,8 @@ Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https:
 ```
 
 ### AllGather reference
+
+Below are AllGather results from Kestrel when running [`all_gather_perf`](https://github.com/NVIDIA/nccl-tests/tree/master) built with the [custom NCCL+CXI plugin](https://github.com/NERSC/nccl-ofi-plugin) (described in 'How to build') to enable the use of the HPE Slingshot interconnect. This example output represents a run of 64 GPU devices across 16 nodes:
 
 ```
 #
