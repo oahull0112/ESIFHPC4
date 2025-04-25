@@ -85,7 +85,7 @@ cd training/retired_benchmarks/unet3d/pytorch
 sed -i 's|/results|./results|' main.py
 mkdir data
 mkdir results
-python3 preprocess_dataset.py --data_dir ../../../../raw-data-dir --results_dir ./data
+python3 preprocess_dataset.py --data_dir ../../../../raw-data-dir/kits19/data --results_dir ./data
 ```
 
 On Kestrel, these were the commands that were used to run the benchmark. Note that we change the hard-coded location of data from the root-level `/data` folder to `./data` in run_and_time.sh:
