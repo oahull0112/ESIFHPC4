@@ -47,12 +47,53 @@ conda install pytorch-3dunet
 
 Note that on Kestrel, this benchmark targets NVIDIA H100s running with CUDA 12.4-compatible GPU drivers. As such, the installation command used was the following:
 
+<!-- ```
+ml mamba
+mamba create --prefix=./pytorch-3dunet-env
+conda activate ./pytorch-3dunet-env
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 
+pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger nibabel scipy
+mamba install pytorch-3dunet -y
+``` -->
+
 ```
 ml mamba
 mamba create --prefix=./3dunet-env -c pytorch -c nvidia -c conda-forge pytorch pytorch-cuda=12.4 conda-forge::cuda-version=12.4 pytorch-3dunet
+pip3 install torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 
+pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger nibabel scipy https://github.com/mlcommons/logging/archive/refs/tags/1.1.0-rc4.zip
 ```
 
 Once the environment is built, the KiTS19 dataset needs to be downloaded onto the test machine and preprocessed for model training. Please refer to the [MLCommons 3D-UNet benchmark page](https://github.com/mlcommons/training/tree/master/retired_benchmarks/unet3d/pytorch#steps-to-download-and-verify-data) for step-by-step instructions for how to do so.
+
+On Kestrel, these were the commands that were used to download KiTS19 data.
+
+```
+mkdir raw-data-dir
+cd raw-data-dir
+git clone https://github.com/neheller/kits19
+cd kits19
+pip3 install -r requirements.txt
+python3 -m starter_code.get_imaging
+cd ../..
+```
+
+On Kestrel, these were the commands that were used to preprocess data. Note that we change the hard-coded location of results from the root-level `/results` folder to `./results` in main.py:
+
+```
+git clone git@github.com:mlcommons/training.git
+cd training/retired_benchmarks/unet3d/pytorch
+sed -i 's|/results|./results|' main.py
+mkdir data
+mkdir results
+python3 preprocess_dataset.py --data_dir ../../../../raw-data-dir --results_dir ./data
+```
+
+On Kestrel, these were the commands that were used to run the benchmark. Note that we change the hard-coded location of data from the root-level `/data` folder to `./data` in run_and_time.sh:
+
+```
+sed -i 's|DATASET_DIR="/data"|DATASET_DIR="./data"|' run_and_time.sh
+bash run_and_time.sh 0
+```
 
 ## Run Definitions and Requirements
 
