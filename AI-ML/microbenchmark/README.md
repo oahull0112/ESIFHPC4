@@ -18,7 +18,7 @@ See the Slurm script [`build_nccl_cxi.sh`](./build_nccl_cxi.sh) for instructions
 
 ## Run Definitions and Requirements
 
-On Kestrel, the maximum out-of-place bus bandwidth is ~45 GB/s as measured by NCCL AllReduce and ~42 GB/s as measured by NCCL AllGather. See "Benchmark test results to report and files to return" below for reference.
+On Kestrel, the maximum out-of-place bus bandwidth is ~45.7 GB/s as measured by NCCL AllReduce and ~45.6 GB/s as measured by NCCL AllGather. See "Benchmark test results to report and files to return" below for reference.
 
 ## How to run
 
@@ -93,29 +93,34 @@ Below are AllGather results from Kestrel when running [`all_gather_perf`](https:
 #                                                              out-of-place                       in-place
 #       size         count      type   redop    root     time   algbw   busbw #wrong     time   algbw   busbw #wrong
 #        (B)    (elements)                               (us)  (GB/s)  (GB/s)            (us)  (GB/s)  (GB/s)
-           0             0     float    none      -1     0.27    0.00    0.00      0     0.18    0.00    0.00      0
+           0             0     float    none      -1     0.22    0.00    0.00      0     0.18    0.00    0.00      0
+           0             0     float    none      -1     0.19    0.00    0.00      0     0.17    0.00    0.00      0
            0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
            0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
            0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
            0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
            0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
-           0             0     float    none      -1     0.17    0.00    0.00      0     0.17    0.00    0.00      0
-        1024             4     float    none      -1    576.2    0.00    0.00      0    594.5    0.00    0.00      0
-        2048             8     float    none      -1    577.1    0.00    0.00      0    601.6    0.00    0.00      0
-        4096            16     float    none      -1    576.1    0.01    0.01      0    580.8    0.01    0.01      0
-        8192            32     float    none      -1    580.6    0.01    0.01      0    575.5    0.01    0.01      0
-       16384            64     float    none      -1    578.0    0.03    0.03      0    607.8    0.03    0.03      0
-       32768           128     float    none      -1    578.4    0.06    0.06      0    579.3    0.06    0.06      0
-       65536           256     float    none      -1    584.7    0.11    0.11      0    580.2    0.11    0.11      0
-      131072           512     float    none      -1    562.8    0.23    0.23      0    590.6    0.22    0.22      0
-      262144          1024     float    none      -1    661.0    0.40    0.39      0    623.8    0.42    0.41      0
-      524288          2048     float    none      -1    715.0    0.73    0.72      0    777.5    0.67    0.66      0
-     1048576          4096     float    none      -1    763.6    1.37    1.35      0    705.9    1.49    1.46      0
-     2097152          8192     float    none      -1   1277.2    1.64    1.62      0   1473.5    1.42    1.40      0
-     4194304         16384     float    none      -1   1183.1    3.55    3.49      0   1142.4    3.67    3.61      0
-     8388608         32768     float    none      -1   1133.5    7.40    7.28      0   1233.5    6.80    6.69      0
-    16777216         65536     float    none      -1   1029.6   16.29   16.04      0   1078.2   15.56   15.32      0
-    33554432        131072     float    none      -1    986.3   34.02   33.49      0   1031.0   32.55   32.04      0
-    67108864        262144     float    none      -1   1587.7   42.27   41.61      0   1588.7   42.24   41.58      0
-   134217728        524288     float    none      -1   3150.1   42.61   41.94      0   3142.4   42.71   42.04      0
+        1024             4     float    none      -1    564.5    0.00    0.00      0    567.9    0.00    0.00      0
+        2048             8     float    none      -1    567.7    0.00    0.00      0    565.4    0.00    0.00      0
+        4096            16     float    none      -1    563.1    0.01    0.01      0    671.0    0.01    0.01      0
+        8192            32     float    none      -1    566.9    0.01    0.01      0    565.6    0.01    0.01      0
+       16384            64     float    none      -1    551.7    0.03    0.03      0    672.6    0.02    0.02      0
+       32768           128     float    none      -1    678.2    0.05    0.05      0    568.9    0.06    0.06      0
+       65536           256     float    none      -1    573.6    0.11    0.11      0    570.8    0.11    0.11      0
+      131072           512     float    none      -1    709.9    0.18    0.18      0    632.1    0.21    0.20      0
+      262144          1024     float    none      -1    466.2    0.56    0.55      0    625.4    0.42    0.41      0
+      524288          2048     float    none      -1    835.2    0.63    0.62      0    755.5    0.69    0.68      0
+     1048576          4096     float    none      -1    735.4    1.43    1.40      0    684.8    1.53    1.51      0
+     2097152          8192     float    none      -1   1375.5    1.52    1.50      0   1330.9    1.58    1.55      0
+     4194304         16384     float    none      -1   1126.6    3.72    3.66      0   1308.1    3.21    3.16      0
+     8388608         32768     float    none      -1   1255.9    6.68    6.57      0   1230.3    6.82    6.71      0
+    16777216         65536     float    none      -1    979.5   17.13   16.86      0    956.4   17.54   17.27      0
+    33554432        131072     float    none      -1   1092.4   30.72   30.24      0    809.9   41.43   40.78      0
+    67108864        262144     float    none      -1   1594.4   42.09   41.43      0   1589.5   42.22   41.56      0
+   134217728        524288     float    none      -1   3151.5   42.59   41.92      0   3141.8   42.72   42.05      0
+   268435456       1048576     float    none      -1   5911.2   45.41   44.70      0   5878.0   45.67   44.95      0
+   536870912       2097152     float    none      -1    11677   45.97   45.26      0    11654   46.07   45.35      0
+  1073741824       4194304     float    none      -1    23255   46.17   45.45      0    23264   46.16   45.43      0
+  2147483648       8388608     float    none      -1    46360   46.32   45.60      0    46357   46.32   45.60      0
+  4294967296      16777216     float    none      -1    92644   46.36   45.64      0    92619   46.37   45.65      0
 ```
