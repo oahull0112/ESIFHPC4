@@ -34,12 +34,12 @@ mkdir environments
 cd environments
 spack manager create-env --name amrwind-cpu --spec 'amr-wind+netcdf %oneapi'
 # Comment the above line and uncomment the line below for a GPU build
-# spack manager create-env --name amr_wind-gpu --spec 'amr-wind+cuda+gpu-aware-mpi cuda_arch=90  %oneapi'
+# spack manager create-env --name amrwind-gpu --spec 'amr-wind+cuda+gpu-aware-mpi cuda_arch=90  %oneapi'
 
 # Activate the environment
-spack env activate -d ${EXAWIND_MANAGER}/environments/amr-wind-cpu
+spack env activate -d ${EXAWIND_MANAGER}/environments/amrwind-cpu
 # Comment the above line and uncomment the line below for a GPU build
-#spack env activate -d ${EXAWIND_MANAGER}/environments/amr-wind-gpu
+#spack env activate -d ${EXAWIND_MANAGER}/environments/amrwind-gpu
 
 # concretize specs and dependencies
 spack concretize -f
