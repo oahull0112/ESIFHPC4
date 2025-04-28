@@ -21,7 +21,8 @@ requirement: MPI, OpenMP, (HPGMG-FE requires PETSC)
 
 ## How to build
 
-To build HPGMG, use the snapshot of the code provided in the hpgmg directory. 
+To build HPGMG, use the snapshot of the code provided in the hpgmg directory.
+HPGMG source is provided as a git submodule, you can use `--exclusive` when cloning the full repositery or use `git submodule update --init --recursive` If you already cloned without `recursive`.
 Results generated for Standard compute units must use the binary executable created from this source.
 
 Edit the Makefile as needed.
@@ -47,7 +48,9 @@ the second is the number of boxes per rank.
 
 #### Scaling Test
 
-Performance for the MPI rank counts requested in the benchmark reporting sheet (208, 416, 832, 1664, 3328) as well as performance results for the full number, half, and one-quarter of the Offered Standard compute units must be provided. 
+Performance for the MPI rank counts requested in the benchmark reporting sheet (2, 4, 8, 16 and 32 full nodes i.e. tasks_per_node=104(for CPU nodes) and 128 for GPU nodes) as well as performance results for the full number, half, and one-quarter of the Offered Standard compute units must be provided. 
+For Kestel, for the CPU nodes N=2322, which is the total number of cpu nodes. 
+For the GPU nodes N=132, which is the total number of accelerated nodes. 
 Additional runs may be reported with other MPI rank counts if desired. 
 Performance for other rank counts should be reported to support projection to the Offered system if the benchmark test system differs from the Offered system. 
 For all runs, the Offeror may run with any number of threads per MPI rank to obtain the best performance for their system.
@@ -79,3 +82,10 @@ This table should be extended to report all job configurations used in the test.
 The sum of DOF/s over all jobs should be entered where specified in the sheet.
 
 Other content to be returned is as enumerated in the General Benchmark Instructions.
+
+
+## Running HPGMG on GPUs 
+
+As of the time this repositery was created, there is only a cuda version of HPGMG that allows running HPGMG on GPUs. 
+HPGMG-cuda source is provided as a git submodule. 
+If you have access to a GPU enabled HPGMG for your hardware of choice, you can use that to report the metrics defined above. 

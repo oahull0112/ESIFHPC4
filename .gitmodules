@@ -4,3 +4,6 @@
 [submodule "HPCG/hpcg"]
 	path = HPCG/hpcg
 	url = https://github.com/hpcg-benchmark/hpcg.git
+[submodule "HPGMG/hpgmg-cuda"]
+	path = HPGMG/hpgmg-cuda
+	url = https://bitbucket.org/nsakharnykh/hpgmg-cuda.git
