@@ -10,6 +10,7 @@
 
 module load q-chem/6.2
 
+#Check up if there is a local disk. You may not need to do this check
 if [ -e /dev/nvme0n1 ]; then
  SCRATCH=$TMPDIR
  echo "This node has a local storage and will use $SCRATCH as the scratch path"

@@ -1,15 +1,16 @@
 #!/bin/bash -l
 #SBATCH --account=hpcapps
 #SBATCH --nodes=1
-#SBATCH --tasks-per-node=104
+#SBATCH --tasks-per-node=32
 #SBATCH --time=48:00:00
-#SBATCH --job-name=qchem_test
-#SBATCH --exclusive
+#SBATCH --gres=gpu:1
+#SBATCH --job-name=brianqc_test
 #SBATCH --output=std.out
 #SBATCH --error=std.err
 
-module load q-chem/6.2
+module load brianqc/1.5
 
+#Check up if there is a local disk. You may not need to do this check
 if [ -e /dev/nvme0n1 ]; then
  SCRATCH=$TMPDIR
  echo "This node has a local storage and will use $SCRATCH as the scratch path"
@@ -26,12 +27,12 @@ export QCLOCALSCR=$SCRATCH
 jobnm=input
 
 if [ $SLURM_JOB_NUM_NODES -gt 1 ]; then
- QCHEMOPT="-mpi -np $SLURM_NTASKS"
+ QCHEMOPT="-gpu -mpi -np $SLURM_NTASKS"
 else
- QCHEMOPT="-nt $SLURM_NTASKS"
+ QCHEMOPT="-gpu -nt $SLURM_NTASKS"
 fi
 
-echo Running Q-Chem with this command: qchem $QCHEMOPT $jobnm.com $jobnm.out
+echo Running Q-Chem with this command: qchem $QCHEMOPT $jobnm.in $jobnm.out
 touch running
 qchem $QCHEMOPT $jobnm.com $jobnm.out
 rm running
