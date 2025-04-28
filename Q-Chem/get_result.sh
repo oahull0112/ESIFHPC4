@@ -1,6 +1,4 @@
 #!/bin/bash
-job_name=$1
-cd $job_name
 for job_type in small medium large; do
  cd $job_type
  echo $job_type
