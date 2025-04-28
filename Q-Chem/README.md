@@ -2,8 +2,7 @@
 
 ## Purpose and Description
 
-- Describe the benchmark
-- Describe why the benchmark is useful for our procurement
+Q-Chem is an ab initio quantum chemistry software package for modeling of molecular systems and BrianQC is its GPU version.
 
 ## Licensing Requirements
 
