@@ -2,27 +2,38 @@
 
 ## Purpose and Description
 
-Q-Chem is an ab initio quantum chemistry software package for modeling of molecular systems and BrianQC is its GPU version.
+[Q-Chem](https://www.q-chem.com/) is an ab initio quantum chemistry software package for modeling of molecular systems and [BrianQC](https://www.brianqc.com/) is its GPU version. This benchmark performs a DFT geometry optimization calculation for a Nafion monomer with different basis sets. The small job uses 6-31G*, and medium job uses 6-311++G(2d,2p), and the large job uses aug-cc-pvtz.
 
 ## Licensing Requirements
 
-Describe any licensing requirements here
-
-## Other Requirements
-
-If applicable, describe any other requirements to run the code here (e.g. ARM compatibility, needs a container, etc.)
-
-## How to build
-
-Describe build process or otherwise how to obtain executable
+Both Q-Chem and BrianQC are commercial packages and vendors should follow the instructions of their websites to obtain licenses and installation packages. 
 
 ## Run Definitions and Requirements
 
-Specifics of the runs and their success criteria/acceptable thresholds
+The file "input.com" defines the initio geometry and calculation method. The "qchem" and "brianqc" directories contains the slurm script and submitting script. In order to run a Q-Chem test using one computational node (let's call it "q1"):
+```
+cp -r qchem q1
+cd q1
+./submit_job.sh
+```
+The submit_job.sh will automatically create three sub-directories, namely "large", "medium", and "small", and then submit one job for each. If you want to change the job names, please edit the 2nd line of submit_job.sh. If you want use more than one node or change the number of tasks per node, please change the h
 
-## How to run
+When the three jobs are completed, you can use
+```
+../get_result.sh
+```
+in the "q1" directory to get the final energy (in order to ensure calculation has been converged correctly) and wall time. The output of get_result.sh should be return to NREL.
 
-Explain how to run the code
+In order to run a BrianQC test using one computational node and one GPU per node (let's call it "b11"):
+```
+cp -r brianqc b11
+cd b11
+./submit_job.sh
+#After all three job completed
+../get_result.sh
+```
+
+We supply "q1_nrel" and "b11_nrel"
 
 ### Tests
 
