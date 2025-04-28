@@ -36,5 +36,5 @@ We supply "q1_nrel" and "b11_nrel" directories as the sample results obtained fr
 
 ## Benchmark test results to report and files to return
 
-Vendors are expected to run Q-Chem tests on one and/or more computing nodes and BrianQC tests on one and/or more computing nodes with one and/or more GPUs until the wall time doesn't decrease, although we don't expect Q-Chem will have a good scaling for multi-node jobs (especially for smaller jobs). The "output" file from "get_result.sh" script for each test should be returned to NREL. 
+Vendors are expected to run Q-Chem tests on one and/or more computing nodes and BrianQC tests on one and/or more computing nodes with one and/or more GPUs until the wall time doesn't decrease, although we don't expect Q-Chem/BrianQC have good scaling for multi-node jobs (especially for smaller jobs). The "output" file from "get_result.sh" script for each test should be returned to NREL. 
 
