@@ -10,14 +10,14 @@ AMR-Wind is licensed under BSD 3-clause license. The license is included in the 
 
 ## How to build
 
-AMR-Wind can be built with [`ExaWind-manager`](https://github.com/Exawind/exawind-manager) or CMake on GPUs. Instructions for building AMR-Wind with ExaWind-manager is provided below, while instructions for building AMR-Wind with CMake can be found [here](https://exawind.github.io/amr-wind/user/build.html).
+AMR-Wind can be built with [`ExaWind-manager`](https://github.com/Exawind/exawind-manager) or CMake on CPUs and GPUs. Instructions for building AMR-Wind with ExaWind-manager is provided below, while instructions for building AMR-Wind with CMake can be found [here](https://exawind.github.io/amr-wind/user/build.html).
 
 ```
-# GNU
-module load PrgEnv-gnu
+# Load modules
+module load PrgEnv-intel
 module load cray-mpich/8.1.28
-module load  cray-libsci/23.12.5
-module load cuda
+# Uncomment the cuda module for a GPU build 
+# module load cuda 
 module load cray-python
 
 # clone ExaWind-manager
@@ -29,13 +29,17 @@ cd exawind-manager
 export EXAWIND_MANAGER=`pwd`
 source ${EXAWIND_MANAGER}/start.sh && spack-start
 
-# Create Spack environment and change the software versions if needed
+# Create Spack environment
 mkdir environments
 cd environments
-spack manager create-env --name amr_wind-gpu --spec 'amr-wind+cuda+gpu-aware-mpi cuda_arch=90  %gcc'
+spack manager create-env --name amrwind-cpu --spec 'amr-wind+netcdf %oneapi'
+# Comment the above line and uncomment the line below for a GPU build
+# spack manager create-env --name amr_wind-gpu --spec 'amr-wind+cuda+gpu-aware-mpi cuda_arch=90  %oneapi'
 
 # Activate the environment
-spack env activate -d ${EXAWIND_MANAGER}/environments/amr-wind
+spack env activate -d ${EXAWIND_MANAGER}/environments/amr-wind-cpu
+# Comment the above line and uncomment the line below for a GPU build
+#spack env activate -d ${EXAWIND_MANAGER}/environments/amr-wind-gpu
 
 # concretize specs and dependencies
 spack concretize -f
@@ -47,7 +51,7 @@ spack -d install
 
 ## Run Definitions and Requirements
 
-Validating output in AMR-Wind requires checking the absolute and relative error between the norms of the two output directories at the 1000<sup>th</sup> timestep for different output variables. To validate results, for the smaller grid problem, run:
+Validating output in AMR-Wind requires checking the absolute and relative error between the norms of the two output directories at the 1000<sup>th</sup> timestep for different output variables. Run the following command to validate results:
 
 ```
 ./${BASE}/submods/amrex/Tools/Plotfile/fcompare plt01000 plt01000.ref-<grid size>
