@@ -6,7 +6,7 @@
 
 ## Licensing Requirements
 
-Both Q-Chem and BrianQC are commercial packages and vendors should follow the instructions on their websites to obtain licenses and install packages. If vendors have difficulty to obtain licenses, or Q-Chem and/or BrianQC doesn't support the chip that you propose to use, please contact NREL as soon as possible.
+Both Q-Chem and BrianQC are commercial packages and vendors should follow the instructions on their websites to obtain licenses and install packages. If vendors have difficulty to obtain licenses, or Q-Chem and/or BrianQC don't support the chip that you propose to use, please contact NREL as soon as possible.
 
 ## Run Definitions and Requirements
 
@@ -22,7 +22,7 @@ When all three jobs have completed, you can use
 ```
 ../get_result.sh > output
 ```
-in the "q1" directory to get the final energy (in order to ensure calculation converges correctly) and wall time. The output of "get_result.sh" (namely, "output") should be returned to NREL.
+in the "q1" directory to get the final energy (in order to ensure calculation converges correctly) and wall time for each job. The output of "get_result.sh" (namely, "output") should be returned to NREL.
 
 In order to run a BrianQC test using one computing node and one GPU per node (let's call it "b11"):
 ```
