@@ -31,7 +31,7 @@ $ python diffwrf.py wrfout_d01_2019-11-27_00:00:00 wrfout_reference > diffout_ta
 ```
 
 ## How to run
-The [Conus2.5km WRFV4.4 benchmark](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/v4.4_bench_conus2.5km.tar.gz) will be used for measuring performance and scaling of target architectures.
+The [Conus2.5km](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/v4.4_bench_conus2.5km.tar.gz) and [Conus12km](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/v4.4_bench_conus12km.tar.gz) WRFV4.4 benchmarks will be used for measuring throughput and scaling of WRF on the target system.
 
 * To run WRF on CPUs, copy wrfinput_d01, wrfbdy_d01, namelist.input, and *.dat from the benchmark directory and copy runtime files from WRF/run/<files> in the run directory. The benchmark results can be obtained using `srun` as following:
   
