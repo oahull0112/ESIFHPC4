@@ -36,7 +36,7 @@ Once the HPGMG binary is compiled, a simple example of running it with OpenMPI o
 
 `
 export OMP_NUM_THREADS=18;
-mpirun -np X ./hpgmg-fv 7 8
+srun --ntasks-per-node=${n_tasks_per_node} --ntasks=${total_tasks} ./hpgmg-fv 7 8
 `
 
 Another example of running the HPGMG benchmark is shown in hpgmg/README.md. 
