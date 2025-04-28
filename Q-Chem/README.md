@@ -14,15 +14,15 @@ The file "input.com" defines the initio geometry and calculation method. The "qc
 ```
 cp -r qchem q1
 cd q1
-./submit_job.sh
+./submit_job.sh > output
 ```
-The submit_job.sh will automatically create three sub-directories, namely "large", "medium", and "small", and then submit one job for each. If you want to change the job names, please edit the 2nd line of submit_job.sh. If you want use more than one node or change the number of tasks per node, please change the h
+The submit_job.sh will automatically create three sub-directories, namely "large", "medium", and "small", and then submit one job for each. If you want to change the job names, please edit the 2nd line of submit_job.sh. If you want to use more than one node or change the number of tasks per node (or number of GPUs per node for BrianQC jobs), please change the header part of job.slurm file.
 
-When the three jobs are completed, you can use
+When the three jobs have completed, you can use
 ```
 ../get_result.sh
 ```
-in the "q1" directory to get the final energy (in order to ensure calculation has been converged correctly) and wall time. The output of get_result.sh should be return to NREL.
+in the "q1" directory to get the final energy (in order to ensure calculation converges correctly) and wall time. The output of get_result.sh should be return to NREL.
 
 In order to run a BrianQC test using one computational node and one GPU per node (let's call it "b11"):
 ```
@@ -30,19 +30,10 @@ cp -r brianqc b11
 cd b11
 ./submit_job.sh
 #After all three job completed
-../get_result.sh
+../get_result.sh > output
 ```
-
-We supply "q1_nrel" and "b11_nrel"
-
-### Tests
-
-List specific tests here
-
-## Run Rules
-
-In addition to the general ESIF-HPC-4 benchmarking rules, detail any extra benchmark-specific rules
+We supply "q1_nrel" and "b11_nrel" as the sample results obtained from NREL's computer. 
 
 ## Benchmark test results to report and files to return
 
-Describe what results and information the offerer should return, beyond what is detailed in the benchmarking reporting sheet
+Vendors are expected to run Q-Chem tests on one or more computing nodes and BrianQC tests on one or more computing nodes with one or more GPUs until the wall time doesn't decrease. The output for each test should be returned. We don't expect Q-Chem will have a good scaling for multi-node jobs (especially for smaller jobs).  
