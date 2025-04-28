@@ -16,8 +16,8 @@ The HPGMG benchmark is licensed under the 2-clause BSD license found in hpgmg/LI
 
 ## Other Requirements
 
-requirement: MPI, OpenMP, (HPGMG-FE requires PETSC)
-
+requirement: MPI, OpenMP, (HPGMG-FE requires PETSC).
+Note that only hpgmg-fv is used for testing the target system.
 
 ## How to build
 
