@@ -20,24 +20,24 @@ Documentation on installation [here](https://ior.readthedocs.io/en/latest/userDo
 
 See example build script used to build IOR on Kestrel, `kestrel-example-build-script.sh`
 
+These tests require MPI and parallel HDF5
+
 ## Run Definitions and Requirements
 
-Specifics of the runs and their success criteria/acceptable thresholds
+Currently we have six IOR tests, whose run commands can be found in `kestrel-example-run-script.sh`
+
+1. POSIX Streaming, 10 GB single-segment, file-per-process
+2. MPI Streaming, 100 GB single-segment, single file
+3. HDF5 Streaming, 100 GB single-segment, single file
+4. HDF5 Streaming, 100 GB ten-segment, single file
+5. POSIX Random, 1 GB single-segment, single file
+6. HDF5 Small Transfer, 1 GB ten-segment, single file
 
 ## How to run
 
 See example run script on Kestrel, `kestrel-example-run-script.sh`
-Note that this script is only an example showing a single IOR run with example IOR inputs.
 For a full set of IOR inputs, see [IOR options](https://ior.readthedocs.io/en/latest/userDoc/options.html)
-
-### Tests
-
-List specific tests here
-
-## Run Rules
-
-In addition to the general ESIF-HPC-4 benchmarking rules, detail any extra benchmark-specific rules
 
 ## Benchmark test results to report and files to return
 
-Describe what results and information the offerer should return, beyond what is detailed in the benchmarking reporting sheet
+Todo
