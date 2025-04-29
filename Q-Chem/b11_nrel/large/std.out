@@ -1,0 +1,52 @@
+This node has a local storage and will use /tmp/scratch/8664549 as the scratch path
+Running Q-Chem with this command: qchem -gpu -nt 32 input.in input.out
+You are running Q-Chem version: 6.2.0
+QCSCRATCH /tmp/scratch/8664549 should NOT be the same!
+unset QCLOCALSCR ...
+
+#
+# job setting
+#
+local host:  x3101c0s41b0n0
+current dir: /home/hlong/hpcapps/qchem/esif4/ESIFHPC4/Q-Chem/b1/large
+input file:  input.com
+output file: input.out
+nprocs     : 1
+nthreads   : 32
+#
+# qchem installation setting
+#
+QC:          /nopt/nrel/apps/software/q-chem/6.2-bq
+QCAUX:       /nopt/nrel/apps/software/q-chem/6.2-bq/qcaux
+QCPROG:      /nopt/nrel/apps/software/q-chem/6.2-bq/exe/qcprog.exe_s
+QCPROG_S:    /nopt/nrel/apps/software/q-chem/6.2-bq/exe/qcprog.exe_s
+PARALLEL:    -DSERIAL
+QCMPI:       
+#
+# qchem directory setting
+#
+qcrun:       qchem2749378
+QCSCRATCH:   /tmp/scratch/8664549
+QCLOCALSCR:  
+QCTMPDIR:    /tmp/scratch/8664549
+QCFILEPREF:  /tmp/scratch/8664549/qchem2749378
+QCSAVEDIR:   
+workdirs:    /tmp/scratch/8664549/qchem2749378
+workdir0:    /tmp/scratch/8664549/qchem2749378
+partmpdirs =  
+#
+# parallel setting
+#
+QCRSH:           ssh
+QCMPI:           mpich
+QCMPIRUN:        /nopt/nrel/apps/software/q-chem/6.2-bq/bin/mpi/mpirun_qchem
+QCMACHINEFILE:   /tmp/scratch/8664549/qchem2749378/hostfile
+x3101c0s41b0n0
+
+#
+# env setting
+#
+exported envs:   QC QCAUX QCSCRATCH QCRUNNAME QCFILEPREF QCPROG QCPROG_S GUIFILE
+remove work dirs /tmp/scratch/8664549/qchem2749378.0 -- /tmp/scratch/8664549/qchem2749378.0
+rm -rf /tmp/scratch/8664549/qchem2749378.0
+rm -rf /tmp/scratch/8664549/qchem2749378

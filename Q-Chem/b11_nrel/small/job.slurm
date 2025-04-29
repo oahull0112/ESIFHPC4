@@ -1,10 +1,11 @@
 #!/bin/bash -l
 #SBATCH --account=hpcapps
 #SBATCH --nodes=1
-#SBATCH --tasks-per-node=128
-#SBATCH --time=1:00:00
+#SBATCH --tasks-per-node=32
+#SBATCH --time=48:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --job-name=brainqc_test
+#SBATCH --mem=80G
+#SBATCH --job-name=b11.small
 #SBATCH --output=std.out
 #SBATCH --error=std.err
 

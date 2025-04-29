@@ -4,7 +4,7 @@
 #SBATCH --tasks-per-node=104
 #SBATCH --time=1:00:00
 #SBATCH -p debug
-#SBATCH --job-name=qchem_test
+#SBATCH --job-name=q1.medium
 #SBATCH --exclusive
 #SBATCH --output=std.out
 #SBATCH --error=std.err
