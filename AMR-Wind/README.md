@@ -16,6 +16,7 @@ AMR-Wind can be built with [`ExaWind-manager`](https://github.com/Exawind/exawin
 # Load modules
 module load PrgEnv-intel
 module load cray-mpich/8.1.28
+module load cray-libsci/23.12.5
 # Uncomment the cuda module for a GPU build 
 # module load cuda 
 module load cray-python
@@ -32,7 +33,7 @@ source ${EXAWIND_MANAGER}/start.sh && spack-start
 # Create Spack environment
 mkdir environments
 cd environments
-spack manager create-env --name amrwind-cpu --spec 'amr-wind+netcdf %oneapi'
+spack manager create-env --name amrwind-cpu --spec 'amr-wind+mpi+netcdf %oneapi'
 # Comment the above line and uncomment the line below for a GPU build
 # spack manager create-env --name amrwind-gpu --spec 'amr-wind+cuda+gpu-aware-mpi cuda_arch=90  %oneapi'
 
