@@ -1,0 +1,6 @@
+     2 triad     2642081.3         0.000092     0.000091     0.000099     284
+STREAM_ARRAY_SIZE= 10000000
+MPI_ID Function    Best Rate MB/s  Avg time     Min time     Max time  Called
+     0 triad     2728002.6         0.000090     0.000088     0.000097     287
+     3 triad     2728002.6         0.000090     0.000088     0.000095     277
+     1 triad     2728002.6         0.000090     0.000088     0.000095     281
