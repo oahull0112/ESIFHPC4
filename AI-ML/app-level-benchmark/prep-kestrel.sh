@@ -13,7 +13,7 @@ eval "$(conda shell.bash hook)"
 mamba create --prefix=./pytorch-3dunet-env python
 conda activate ./pytorch-3dunet-env
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
-pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger requests nibabel scipy https://github.com/mlcommons/logging/archive/refs/tags/1.1.0-rc4.zip
+pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger tqdm requests nibabel scipy https://github.com/mlcommons/logging/archive/refs/tags/1.1.0-rc4.zip
 
 # Download KiTS19 data
 mkdir raw-data-dir
