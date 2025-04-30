@@ -47,7 +47,7 @@ The [Conus2.5km](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/v4.4_bench_co
 
 ### Tests
 
-Strong scaling and throughput tests will be performed using the CONUS benchmarks on single and multiple CPU and GPU nodes. CONUS-12km will be used on the single-node while CONUS-2.5km will be used on multi-node runs. The Offeror should run 4-6 concurent jobs instances of the benchmark on the target system. The harmonic-mean of the runtime from the cuncurrent jobs will be used for reporting strong-scaling results. This repository includes a script (script/wrf_stats.py) to obtain runtimes from individual output files. The application throughput can be computed as following: `throughput = allocation factor * node-class count) / (number of nodes * runtime)`
+Strong scaling and throughput tests will be performed using the CONUS benchmarks on single and multiple CPU and GPU nodes. CONUS-12km will be used on the single-node while CONUS-2.5km will be used on multi-node runs. The Offeror should run 4-6 concurent jobs instances of the benchmark on the target system. The harmonic-mean of the runtime from the cuncurrent jobs will be used for reporting strong-scaling results. This repository includes a script (`script/wrf_stats.py`) to obtain runtimes from individual output files. The application throughput can be computed as following: `throughput = allocation factor * node-class count) / (number of nodes * runtime)`.
 
 ## Run Rules
 
