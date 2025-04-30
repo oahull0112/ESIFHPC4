@@ -57,3 +57,4 @@ Publicly available, optimized HPL versions or binaries are permitted. A single o
 
 * The Make.myarch files or script, job submission scripts, stdout and stderr files from each run, an environment dump, and HPL.dat files shall be included in the File response.
 * The Text response should include high-level descriptions of build and run optimizations.
+* For performance reporting, the performance reported in the output files and the theoretical performance should be entered into the Spreadsheet (`report/HPL_benchmark.csv`) response.
