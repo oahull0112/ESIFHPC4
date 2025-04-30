@@ -58,12 +58,11 @@ Validating output in AMR-Wind requires checking the absolute and relative error 
 ./${BASE}/submods/amrex/Tools/Plotfile/fcompare plt01000 plt01000.ref-<grid size>
 
 ```
-where `plt01000.ref-<grid size>` is the reference output directory, being compared against `plt01000` generated from the Offeror's runs. The reference output directories for validation of each of the two cases being considered for this
-benchmark shall beavailable in this repo.
+where `plt01000.ref-<grid size>` is the reference output directory, being compared against `plt01000` generated from the Offeror's runs. The reference output directories (`nrel_256/plt01000` and `nrel_512/plt01000`) for validation of each of the two cases being considered for this benchmark shall be available in this repo.
 
 ## How to run
 
-To run AMR-Wind CPUs, you need MPI support and Slurm inputs including number of nodes, total number of tasks and number of tasks per node. The benchmark results can be obtained with Slurm:
+To run AMR-Wind CPUs, you need MPI support, Slurm inputs including number of nodes, total number of tasks and number of tasks per node and input and executable files. The benchmark results can be obtained with Slurm:
 ```
 srun -N <number of nodes> -n <total number of tasks> --ntasks-per-node=<number of tasks per node> <path to build directory>/amr_wind <input file> >& <output file>.log
 
@@ -75,7 +74,7 @@ srun -N <number of nodes> -n <total number of GPUs> --ntasks-per-node=<number of
 ```
 ### Tests
 
-This repo provides two test cases with different grid sizes for single-node and multinode strong-scaling and throughput tests. The smaller test case, fitting within a single node's CPUs or GPUs capacity, while the larger test case spans multiple nodes. The Offeror should run 4-6 concurent jobs instances of the benchmark on the target system. The application throughput can be computed as following: ` throughput = allocation factor * node-class count) / (number of nodes * runtime)`.
+This repo provides two test cases (`nrel_256/abl_godunov-256.i` and `nrel_512/abl_godunov-512.i`) with different grid sizes for single-node and multinode strong-scaling and throughput tests. The smaller test case, fitting within a single node's CPUs or GPUs capacity, while the larger test case spans multiple nodes. The Offeror should run 4-6 concurent jobs instances of the benchmark on the target system. The application throughput can be computed as following: ` throughput = allocation factor * node-class count) / (number of nodes * runtime)`.
 
 ## Run Rules
 
@@ -85,6 +84,6 @@ The input files cause writing of large output every 100 timesteps and writes che
 
 The following AMR-Wind-specific information should be provided:
 
-* For reporting scaling and throughput studies, use the harmonic mean of the `Time spent in Evolve` wall-clock times from output logs in the Spreadsheet.
+* For reporting scaling and throughput studies, use the harmonic mean of the `Time spent in Evolve` wall-clock times from output logs in the Spreadsheet (`report/amr-wind_benchmark.csv`).
 * As part of the File response, please return job-scripts and their outputs, log files, and plt01000 folders from each run.
 * Include in the Text response validation data, with validation results in a table. If results vary by more than the 1e-3 reference tolerance, please also report the maximum difference of results against the reference results with a justification as to why the results should be considered correct.
