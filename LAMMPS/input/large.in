@@ -1,4 +1,4 @@
-variable 	thermo_print equal 6
+variable 	thermo_print equal 10
 variable	total_step equal ${thermo_print}*10
 units		real
 boundary	p p p
