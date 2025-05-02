@@ -7,11 +7,11 @@ Source code of LAMMPS version 29-Aug-2024 is available from [https://github.com/
 
 Directory `input` has LAMMPS inputs. Sample Slurm scripts have been provided for reference. 
 
-We supply a LAMMPS parameter file `data.begin.bz2`. This compressed file contains coordinates and velocities of ~0.75 million atoms in a cubic unit cell, ~20 nm on a side, representing a 35% LiCl solution pre-equlibrated to 300K and 1 atm. Larger unit cells for "medium" and "large" systems are generated programmatically from this file.
+We supply a LAMMPS parameter file `data.begin.bz2`. This compressed file must be uncompressed before any test runs. It contains coordinates and velocities of ~0.75 million atoms in a cubic unit cell, ~20 nm on a side, representing a 35% LiCl solution pre-equlibrated to 300K and 1 atm. Larger unit cells for "medium" and "large" systems are generated programmatically from this file.
 
 Three LAMMPS benchmarks are required, and input files `small.in`, `medium.in`, and `large.in` are provided. For `medium.in` and `large.in`, the unit cell decribed above is replicated to create larger cubic cells (via LAMMPS `replicate` commands).  
 
-Directory `nrel_results` has reference results for validation. 
+Directory `NREL_results` has reference results for validation. 
 
 How to Build
 ------------
