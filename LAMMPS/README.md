@@ -21,7 +21,7 @@ LAMMPS can be built by following the instructions at [https://lammps.sandia.gov/
 
 How to Run  
 ----------
-The "As-is" benchmark must be run on Standard and Accelerated nodes with no OpenMP parallization, that is, OMP_NUM_THREADS should be set to 1. Two sample Slurm scripts can be found in `std.2` and `gpu.22` directories for a 2-standard-node run and a 2-GPU-node run with 2 GPUs per node, respectively.
+The "As-is" benchmark must be run on Standard and Accelerated nodes with no OpenMP parallization, that is, OMP_NUM_THREADS should be set to 1. Two sample Slurm scripts can be found in `std.4` and `gpu.44` directories for a 4-standard-node run and a 4-GPU-node run with 4 GPUs per node, respectively.
   
 Each benchmark case should be run on 1, 2, 4, 8... nodes. For `medium` and `large` jobs, especially running on a small number of Accelerated nodes, it is possible that jobs won't run due to the limitation of memory. In this case, `Out of Memory` should be reported in the Spreadsheet response. It is possible that the optimal speed is achieved when number of MPI ranks per node is smaller than the number of CPU cores per node and in this case, the Offeror needs to vary the number of MPI ranks per node to find the optimal value. The "# cores" reported should reflect the number of `physical` CPU cores hosting independent threads of execution.
 
@@ -43,11 +43,11 @@ Reporting Results
 -----------------
 For the Spreadsheet response, the target performance numbers are "timesteps/s" as reported in the LAMMPS standard output stream. In addition to these values, the total number-of-steps that have been run and the reported "Loop time" must be included as well. Example logfile output looks like
 
-`Loop time of 263.197 on 192 procs for 10000 steps with 744000 atoms`  
-`Performance: 3.283 ns/day, 7.311 hours/ns, 37.994 timesteps/s, 28.268 Matom-step/s`
+`Loop time of 317.023 on 128 procs for 8000 steps with 5952000 atoms`  
+`Performance: 2.180 ns/day, 11.008 hours/ns, 25.235 timesteps/s, 150.198 Matom-step/s`
 
-In this case, the number-of-steps is 10000, the loop-time is 263.197 seconds, and the performance is 37.994 timesteps/s.
+In this case, the number-of-steps is 8000, the loop-time is 317.023 seconds, and the performance is 25.235 timesteps/s.
 
 ## What Must be Returned
-In addition to the content enumerated in the General Benchmark Instructions, (a) output log files from the four validation runs, and (b) `rms_errors.dat` files from validation should be included in the File response.
+In addition to the performance results, (a) output log files from the four validation runs, and (b) `rms_errors.dat` files from validation should also be included in the File response.
 
