@@ -16,7 +16,7 @@ to the number of GPUs on the node.
 
 
 
-## Typical build and run...
+## Build and run...
 
 The included makefile shows the build process of the two codes.  Stream.cu
 can be built with the "normal" nvcc.  Mstream.cu requires a mpicc that also

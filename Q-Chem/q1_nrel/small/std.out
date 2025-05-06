@@ -1,0 +1,52 @@
+This node does not have a local storage drive and will use /scratch/hlong/8618285 as the scratch path
+Running Q-Chem with this command: qchem -nt 104 input.com input.out
+You are running Q-Chem version: 6.2.0
+QCSCRATCH /scratch/hlong/8618285 should NOT be the same!
+unset QCLOCALSCR ...
+
+#
+# job setting
+#
+local host:  x1003c0s2b0n1
+current dir: /home/hlong/hpcapps/qchem/esif4/ESIFHPC4/Q-Chem/qchem/small
+input file:  input.com
+output file: input.out
+nprocs     : 1
+nthreads   : 104
+#
+# qchem installation setting
+#
+QC:          /nopt/nrel/apps/software/q-chem/6.2
+QCAUX:       /nopt/nrel/apps/software/q-chem/6.2/qcaux
+QCPROG:      /nopt/nrel/apps/software/q-chem/6.2/exe/qcprog.exe_s
+QCPROG_S:    /nopt/nrel/apps/software/q-chem/6.2/exe/qcprog.exe_s
+PARALLEL:    -DSERIAL
+QCMPI:       
+#
+# qchem directory setting
+#
+qcrun:       qchem2043493
+QCSCRATCH:   /scratch/hlong/8618285
+QCLOCALSCR:  
+QCTMPDIR:    /scratch/hlong/8618285
+QCFILEPREF:  /scratch/hlong/8618285/qchem2043493
+QCSAVEDIR:   
+workdirs:    /scratch/hlong/8618285/qchem2043493
+workdir0:    /scratch/hlong/8618285/qchem2043493
+partmpdirs =  
+#
+# parallel setting
+#
+QCRSH:           ssh
+QCMPI:           mpich
+QCMPIRUN:        /nopt/nrel/apps/software/q-chem/6.2/bin/mpi/mpirun_qchem
+QCMACHINEFILE:   /scratch/hlong/8618285/qchem2043493/hostfile
+x1003c0s2b0n1
+
+#
+# env setting
+#
+exported envs:   QC QCAUX QCSCRATCH QCRUNNAME QCFILEPREF QCPROG QCPROG_S GUIFILE
+remove work dirs /scratch/hlong/8618285/qchem2043493.0 -- /scratch/hlong/8618285/qchem2043493.0
+rm -rf /scratch/hlong/8618285/qchem2043493.0
+rm -rf /scratch/hlong/8618285/qchem2043493

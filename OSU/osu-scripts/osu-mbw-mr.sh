@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name="OSU - pt2pt - MBW-MR"
+#SBATCH --job-name="osu-mbw-mr"
 #SBATCH --nodes=2
 #SBATCH --ntasks=208
 #SBATCH --ntasks-per-node=104
 #SBATCH --time=00:20:00
 #SBATCH --output=osu-mbw-mr/osu-mbw-mr-results_%a.out
-
+#SBATCH --array=1-5
 
 
 ### Script is written to be submitted to a slurm job scheduler, basic parameters are filled in

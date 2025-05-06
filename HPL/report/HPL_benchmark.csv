@@ -3,3 +3,7 @@ Standard,Reference,As-is,1,8,13,8,5870,6989
 Standard,Reference,As-is,64,8,13,512,125748,447283.2
 Accelerated,Reference,As-is,1,4,,4,176400,268000
 Accelerated,Reference,As-is,64,4,,256,9659000,17152000
+Standard,Target,As-is,,,,,,
+Standard,Target,Optimized,,,,,,
+Accelerated,Target,As-is,,,,,,
+Accelerated,Target,Optimized,,,,,,

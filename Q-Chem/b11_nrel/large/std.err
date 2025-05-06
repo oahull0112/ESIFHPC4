@@ -1,0 +1,7 @@
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  No such resource: CUDA NVIDIA H100 80GB HBM3#0000:04:00.0
+/nopt/nrel/apps/software/q-chem/6.2-bq/bin/qchem: line 129: 2749391 Aborted                 (core dumped) ${QCPROG_S} ${inp} ${scr}
+Error in Q-Chem run part 1
+Error in the Q-Chem run
+mv: cannot stat 'job_status': No such file or directory
+rmdir: failed to remove '/tmp/scratch/8664549': Permission denied

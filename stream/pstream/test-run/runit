@@ -1,0 +1,50 @@
+#!/bin/bash
+
+#SBATCH --job-name="gpu"
+#SBATCH --account=hpcapps
+#SBATCH --time=0:10:00
+#SBATCH --partition=gpu-h100
+#SBATCH --nodes=2
+#SBATCH --gres=gpu:h100:4
+#SBATCH --exclusive
+#SBATCH --output=output-%j.out
+#SBATCH --error=infor-%j.out
+
+now=`date +"%m%d%H%M"`
+echo $now
+cat $0
+printenv
+
+make clean
+
+
+make pstream
+anode=`scontrol show hostnames | head -1`
+cores=`cat /proc/cpuinfo | grep processor | wc -l`
+threads=`echo $cores / 2  | bc`
+echo $threads on $anode
+export OMP_NUM_THREADS=$threads
+
+
+srun -n 4 --nodes=2 --tasks-per-node=2  ./pstream  -D -F -t 3 -T -s -2 1>pstream.out 2>pstream.triad
+
+exec 6>&1
+exec > pstream.summary
+sort -r pstream.triad
+grep ^0 pstream.out | sort -k3,3 -k6,6  > pstream.map
+grep thread pstream.out ; grep -i $anode pstream.map | head -3 ; echo ... ; echo ... ; grep -i $anode pstream.map | tail -3 
+exec 1>&6 6>&-
+
+nvidia-smi 1> nvidia.out 2> /dev/null
+if [ $? -eq 0 ]; then
+	ml PrgEnv-nvhpc
+	make mstream
+	srun -n 8 --nodes=2 --tasks-per-node=4 ./mstream -n 5000 > mstream.out
+	make stream
+	./stream -n 5000 > stream.out
+else
+	echo GPUs not found
+fi
+
+
+tar -czf $now.tgz  pstream.out pstream.triad pstream.summary strm.0* pstream.map *out

@@ -128,4 +128,29 @@ no arguments : Print a list of the nodes on which the command is run and exit.
 Typical run:
              mpirun -n 2 ./pstream -F -t 4 -D
  ```
+## Running
+
+The makefile does a simple build using mpicc with openmp enabled.
+
+The script "runit" will call make to build the code and then run it. It will run with two
+tasks per node on two nodes.  It should set the number of threads so that each node will
+be full populated.  Fully populating the node is a requirement.  The test should be run
+with various numbers of MPI tasks per node and on at least two nodes.  
+
+## Report requirements
+
+The primary output from the code is stdout.  This gives the mapping of tasks/threads to 
+cores.  As we note above the results of the stream test itself is sent to stderr.  This
+is a secondary output.  
+
+In addition to output from the program it is required to report any command line settings
+and/or environmental variables required to get the shown mapping to cores.
+
+The "runit" script has a short block for post processing the outputs to produce a summary.
+This includes sorting the stdout to produce pstream.map.  This file can be quickly examined 
+to see proper mappings of thread to cores.  The last column should list every core 1 time
+for each node.  The summary output is not a required report.
+
+
+
 

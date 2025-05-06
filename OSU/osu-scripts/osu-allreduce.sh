@@ -6,7 +6,7 @@
 #SBATCH --exclusive
 #SBATCH --output=osu-allreduce/osu-allreduce_%a.out
 #SBATCH --time=00:20:00
-
+#SBATCH --array=1-5
 
 ### Script is written to be submitted to a slurm job scheduler, basic parameters are filled in
 ### Script can be modified to fit other job schedulers as necessary
