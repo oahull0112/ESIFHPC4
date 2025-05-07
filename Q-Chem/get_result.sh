@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 for job_type in small medium large; do
 	cd $job_type
 	echo $job_type
