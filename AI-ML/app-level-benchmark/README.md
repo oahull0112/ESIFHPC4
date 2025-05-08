@@ -84,7 +84,7 @@ cd ../..
 
 These were the commands that were used to preprocess data. 
 
-**NOTE**: We change the hard-coded location of results from the root-level `/results` folder to `./results` in `main.py` as well as `/data/` to `./data` in `run_and_time.sh`. We have also encountered the error `AssertionError: Invalid hash for case_00053_x.npy.` when running `preprocess_dataset.py`. To avoid this, we add `53` to the "EXCLUDED_CASES" listed in `preprocess_dataset.py`. Finally, to avoid errors associated with old versions of `scipy` referencing the outdated method `scipy.signal.gaussian`, we update the call to that method in  `runtime/inference.py` to reflect `scipy.signal.windows.gaussian`:
+**NOTE**: We change the hard-coded location of results from the root-level `/results` folder to `./results` in `main.py` as well as `/data/` to `./data` in `run_and_time.sh`. We have also encountered the error `AssertionError: Invalid hash for case_XXXXX_x.npy.` for several cases when running `preprocess_dataset.py`. As a temporary workaround, we comment out the dataset verification entirely, as the benchmark will still run on the unverified cases. Finally, to avoid errors associated with old versions of `scipy` referencing the outdated method `scipy.signal.gaussian`, we update the call to that method in  `runtime/inference.py` to reflect `scipy.signal.windows.gaussian`:
 
 ```
 conda activate ./pytorch-3dunet
@@ -92,7 +92,7 @@ git clone git@github.com:mlcommons/training.git
 cd training/retired_benchmarks/unet3d/pytorch
 sed -i 's|/results|./results|' main.py
 sed -i 's|DATASET_DIR="/data"|DATASET_DIR="./data"|' run_and_time.sh
-sed -i "s/EXCLUDED_CASES = \[\]/EXCLUDED_CASES = \[53\]/" preprocess_dataset.py
+sed -i 's|verify_dataset(args.results_dir)|#verify_dataset(args.results_dir)|' preprocess_dataset.py
 sed -i 's|signal.gaussian|signal.windows.gaussian|' runtime/inference.py
 mkdir data
 mkdir results

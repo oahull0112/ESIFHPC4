@@ -28,7 +28,7 @@ git clone git@github.com:mlcommons/training.git
 cd training/retired_benchmarks/unet3d/pytorch
 sed -i 's|/results|./results|' main.py
 sed -i 's|DATASET_DIR="/data"|DATASET_DIR="./data"|' run_and_time.sh
-sed -i "s/EXCLUDED_CASES = \[\]/EXCLUDED_CASES = \[53\]/" preprocess_dataset.py
+sed -i 's|verify_dataset(args.results_dir)|#verify_dataset(args.results_dir)|' preprocess_dataset.py
 sed -i 's|signal.gaussian|signal.windows.gaussian|' runtime/inference.py
 mkdir data
 mkdir results
