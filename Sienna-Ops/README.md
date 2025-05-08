@@ -24,13 +24,39 @@ Sienna is open-source software. Licensing details for its components can be foun
 Instructions to build and install Sienna components:
 
 1. Install Julia from [JuliaLang.org](https://julialang.org/).
+
+### Option 1: Use an existing Project.toml file
+2. Instantiate the `Project.toml` file in this directory. On 
+the terminal, assuming that you are in the same directory as this
+README.md, run
+   ```shell
+   julia --project=.
+   ```
+   ```julia
+   ] instantiate
+   ```
+   This should install all the packages needed to run the benchmark
+
+### Option 2: Build your own Julia environment
+
 2. Add the required packages using the Julia package manager:
    ```julia
-   ] add PowerSimulations PowerSystems
+   ] add PowerSimulations PowerSystems HydroPowerSimulations
    ```
+
 3. For the latest development version, use:
    ```julia
    ] add PowerSimulations#main
+   ```
+4. Add requisite solvers
+   ```julia
+   ] add HiGHS IPOPT Xpress Gurobi
+   ```
+
+5. Run the benchmarks as follows
+   ```shell
+   julia --project=. small/run_RTS_UC.jl
+   julia --project=. small/run_RTS_UC-ED.jl
    ```
 
 ## Run Definitions and Requirements
