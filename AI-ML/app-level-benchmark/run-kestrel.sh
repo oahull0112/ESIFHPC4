@@ -14,5 +14,4 @@ conda activate ./pytorch-3dunet-env
 cd training/retired_benchmarks/unet3d/pytorch
 sed -i 's|DATASET_DIR="/data"|DATASET_DIR="./data"|' run_and_time.sh
 
-export PATH=$HOME/.envs/gpu_monitor/bin:$PATH
-gm -f 3 bash run_and_time.sh 0
+bash run_and_time.sh 0
