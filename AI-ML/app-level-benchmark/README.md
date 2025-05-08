@@ -105,6 +105,9 @@ On Kestrel, these were the commands that were used to run the benchmark. Note th
 bash run_and_time.sh 0
 ```
 
+Please refer to [`prep-kestrel.sh`](./prep-kestrel.sh) for an example Slurm script to create the appropriate environment on Kestrel following these instructions. Similarly, [`run-kestrel.sh`](./run-kestrel.sh) is an example Slurm script to run the 3D-UNet benchmark on an H100 on Kestrel after `prep-kestrel.sh` successfully completes.
+
+
 ## Run Definitions and Requirements
 
 ## How to run

@@ -8,10 +8,10 @@
 #SBATCH --job-name=3DUNet
 #SBATCH -o %j-%x.out
 
+### !! Only run this script AFTER running prep-kestrel.sh !! ###
+
 eval "$(conda shell.bash hook)"
 conda activate ./pytorch-3dunet-env
-
 cd training/retired_benchmarks/unet3d/pytorch
-sed -i 's|DATASET_DIR="/data"|DATASET_DIR="./data"|' run_and_time.sh
 
 bash run_and_time.sh 0
