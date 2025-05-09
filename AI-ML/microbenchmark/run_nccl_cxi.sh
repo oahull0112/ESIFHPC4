@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A esifapps
 #SBATCH -p gpu-h100
-#SBATCH --nodes=64
+#SBATCH --nodes=16
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:4
 #SBATCH --mem=0
