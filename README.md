@@ -24,7 +24,7 @@ The below table summarizes each benchmark.
 - Class B: functionality benchmark
 - Running a benchmark in an optimized configuration is purely optional
 
-"Class A" Applications:
+**"Class A" Applications:**
 | Application | Standard | Accelerated | Optimized | As-is |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [VASP](https://github.com/NREL/ESIFHPC4/tree/main/VASP)        | Yes      | Yes         | Optional  | Yes   |
@@ -37,14 +37,14 @@ The below table summarizes each benchmark.
 
 \** MLPerf-3DUnet can be chosen to run *either* standard or accelerated, though accelerated is preferred.
 
-"Class B" Applications - functionality only
+**"Class B" Applications - functionality only**
 | Application | Standard | Accelerated | Optimized | As-is |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [Q-Chem](https://github.com/NREL/ESIFHPC4/tree/main/Q-Chem)      | Yes      | Yes         | No        | Yes   |
 | [BerkeleyGW](https://github.com/NREL/ESIFHPC4/tree/main/BerkeleyGW)  | Yes      | Yes         | No        | Yes   |
 | [Sienna](https://github.com/NREL/ESIFHPC4/tree/main/Sienna-Ops)      | Yes      | No          | No        | Yes   |
 
-Microbenchmarks:
+**Microbenchmarks:**
 | Application | Standard | Accelerated | Optimized | As-is |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [OSU](https://github.com/NREL/ESIFHPC4/tree/main/OSU)         | Yes      | No          | Optional  | Yes   |
