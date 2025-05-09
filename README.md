@@ -13,16 +13,11 @@ Important Notes:
 	- Different benchmarks in the suite are at various states of "in-progress"
 	- Most benchmarks do not have finalized inputs or run requirements as of [DATE]
 - Benchmarks are divided into "Class A" and "Class B". 
-	- "Class A" represents the set of benchmarks for which we care about performance.
-	- "Class B" represent the set of benchmarks for which their successful execution on any new machine is critical, but for which we are less interested in performance results or optimization. I.e., these are functionality tests.
+	- "Class A" - Performance-required benchmarks: set of benchmarks for which specific performance targets must be met or exceeded. 
+	- "Class B" - Functionality benchmarks: set of benchmarks intended to demonstrate and baseline the functionality, scalability, and software readiness of specific workloads or system features, but no specific performance level will be required. 
 - The official version of the benchmark suite will be provided as a release from this repository.
 - The official version of the suite will not be available until September 2025 at the earliest.
 - Until the official release, we may add or subtract benchmarks, change run requirements, etc.
-
-The below table summarizes each benchmark.
-- Class A: we plan to judge the machine based on performance
-- Class B: functionality benchmark
-- Running a benchmark in an optimized configuration is purely optional
 
 **"Class A" Applications:**
 | Application | Standard | Accelerated | Optimized | As-is |
