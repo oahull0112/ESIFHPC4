@@ -11,7 +11,7 @@
 
 #Make sure to update the E4_BGW variable here
 #E4_BGW=/path/to/berkeleygw-workflow
-E4_BGW=/scratch/jacl0659/software/ESIFHPC4/BerkeleyGW
+E4_BGW=
 if [[ -z "${E4_BGW}" ]]; then
     echo "The E4_BGW variable is not defined."
     echo "Please also set E4_BGW in site_path_config.sh and try again."
@@ -23,7 +23,7 @@ HDF_LIBPATH=
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HDF_LIBPATH
 
 #executables
-BGW_DIR=$E4_BGW/BerkeleyGW-master/bin
+BGW_DIR=$E4_BGW/BerkeleyGW/bin
 
 #input data
 Si_WFN_folder=$E4_BGW/Si_WFN_folder
