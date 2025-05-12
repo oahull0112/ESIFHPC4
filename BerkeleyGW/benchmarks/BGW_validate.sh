@@ -4,8 +4,8 @@ Usage () {
   echo "BGW_validate.sh: test output correctness for the ESIF-HPC4 BerkeleyGW benchmark."
   echo " Usage: BGW_validate.sh <app> <size> <output_file>"
   echo " Allowed apps: [ epsilon ]"
-  echo " Allowed sizes: [ small, medium ]"
-  echo " Example: BGW_validate.sh epsilon medium BGW_EPSILON.out"
+  echo " Allowed sizes: [ small, medium, large ]"
+  echo " Example: BGW_validate.sh epsilon small BGW_EPSILON.out"
 }
 
 validate_args () {
@@ -45,6 +45,7 @@ validate_args () {
   case "$size" in
   small);;
   medium);;
+  large);;
   *)
     echo "Error: the requested size ($2) is not supported."
     Usage
@@ -74,18 +75,10 @@ define_expectations () {
     expected_2=1.070898941170535E+01
     tolerance=1.0E-10
     ;;
-
-  sigma:small)
-    sigstr='       1     429'
-    expected_1=6.558148597 
-    expected_2=6.160450464
-    tolerance=0.0
-    ;;
-  sigma:medium)
-    sigstr='       1    1021'
-    expected_1=6.617391171
-    expected_2=6.075106894
-    tolerance=0.0
+  epsilon:large)
+    expected_1=1.416652250097137E+01
+    expected_2=1.151002087971401E+01
+    tolerance=1.0E-10
     ;;
 
   esac
@@ -117,17 +110,6 @@ gather_measurements () {
   testval_2=`grep "$epsstr" $test_file | awk {'print $5'}`
   ;;
 
-  sigma)
-  # test_file=`dirname $outfile`/eqp1.dat
-  test_file=`echo $outfile | sed 's/.out//g'`/eqp1.dat
-  if [ -f $test_file ]; then
-      testval_1=`grep "$sigstr" $test_file | awk {'print $3'}`
-      testval_2=`grep "$sigstr" $test_file | awk {'print $4'}`
-  else
-      echo "The file $test_file is needed for validation, but could not be found"
-      echo "Proceeding, but validation will fail."
-  fi
-  ;;
   esac
 
   TOTAL_TIME=`grep '\- TOTAL '     $gm_outfile | awk {'print $6'}`

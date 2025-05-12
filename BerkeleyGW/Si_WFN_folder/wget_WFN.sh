@@ -6,10 +6,14 @@ Usage () {
   echo "Allowed sizes:"
   echo "[ small     (   3 GB )," 
   echo "  medium    (  18 GB ),"
+  echo "  large     (  71 GB ) ]"
 }
 
 #ESIF_HPC4=<TODO>
-Si_WFN_url=$ESIF_HPC4/benchmark_data/BGW_input
+#Si_WFN_url=<TODO>
+NERSC_TEN=https://portal.nersc.gov/project/m888/nersc10
+Si_WFN_url=$NERSC_TEN/benchmark_data/BGW_input
+
 
 case "$1" in
 
@@ -24,6 +28,10 @@ case "$1" in
 
   medium)
     WFN_gz=Si510_WFN_file.tar.gz
+    ;;
+
+  large)
+    WFN_gz=Si998_WFN_file.tar.gz
     ;;
 
   *)
