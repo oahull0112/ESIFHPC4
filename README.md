@@ -6,8 +6,6 @@ The purpose of the "draft release" on [DATE] is so that we can make our RFP benc
 
 This early draft release does not represent or guarantee any final form of the suite.
 
-Please contact olivia.hull@nrel.gov with any questions or comments about the benchmarks, especially if you encounter a specific issue with the building or execution of a benchmark.
-
 Important Notes:
 - This is an in-progress draft release.
 	- Different benchmarks in the suite are at various states of "in-progress"
@@ -15,8 +13,7 @@ Important Notes:
 - Benchmarks are divided into "Class A" and "Class B". 
 	- "Class A" - Performance-required benchmarks: set of benchmarks for which specific performance targets must be met or exceeded. 
 	- "Class B" - Functionality benchmarks: set of benchmarks intended to demonstrate and baseline the functionality, scalability, and software readiness of specific workloads or system features, but no specific performance level will be required. 
-- The official version of the benchmark suite will be provided as a release from this repository.
-- The official version of the suite will not be available until September 2025 at the earliest.
+- The official version of the benchmark suite will be provided with the RFP.
 - Until the official release, we may add or subtract benchmarks, change run requirements, etc.
 
 **"Class A" Applications:**
