@@ -2,14 +2,14 @@
 
 Contains benchmarks to be run for NREL's ESIF-HPC-4 procurement.
 
-The purpose of the "draft release" on [DATE] is so that we can make our RFP benchmarking plans transparent to all vendors ahead of the RFP. Our hope is that this early draft release will give vendors additional time to work with our team on the benchmarks, especially as we have a few "in-house" codes represented in the suite that may be unfamiliar to vendors.
+The purpose of the "draft release" on 5/29/2025 is so that we can make our RFP benchmarking plans transparent to all vendors ahead of the RFP. Our hope is that this early draft release will give vendors additional time to work with our team on the benchmarks, especially as we have a few "in-house" codes represented in the suite that may be unfamiliar to vendors.
 
 This early draft release does not represent or guarantee any final form of the suite.
 
 Important Notes:
 - This is an in-progress draft release.
 	- Different benchmarks in the suite are at various states of "in-progress"
-	- Most benchmarks do not have finalized inputs or run requirements as of [DATE]
+	- Most benchmarks do not have finalized inputs or run requirements as of 5/29/2025
 - Benchmarks are divided into "Class A" and "Class B". 
 	- "Class A" - Performance-required benchmarks: set of benchmarks for which specific performance targets must be met or exceeded. 
 	- "Class B" - Functionality benchmarks: set of benchmarks intended to demonstrate and baseline the functionality, scalability, and software readiness of specific workloads or system features, but no specific performance level will be required. 
