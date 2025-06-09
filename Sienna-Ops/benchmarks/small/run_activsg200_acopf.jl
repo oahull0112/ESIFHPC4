@@ -5,8 +5,6 @@ using Dates
 using Ipopt
 using HydroPowerSimulations
 
-import PowerModels
-
 # Constants
 const PSI = PowerSimulations
 const PSY = PowerSystems
