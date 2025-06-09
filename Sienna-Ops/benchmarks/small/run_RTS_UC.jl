@@ -4,7 +4,6 @@ using HydroPowerSimulations
 using PowerSystemCaseBuilder
 using HiGHS # solver
 using Dates
-import Logging
 
 sys = build_system(PSISystems, "modified_RTS_GMLC_DA_sys"; skip_serialization = true)
 @show sys

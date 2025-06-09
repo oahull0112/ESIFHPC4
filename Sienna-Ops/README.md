@@ -50,7 +50,7 @@ README.md, run
    ```
 4. Add requisite solvers
    ```julia
-   ] add HiGHS IPOPT Xpress Gurobi
+   ] add HiGHS IPOPT
    ```
 
 5. Run the benchmarks as follows

@@ -6,16 +6,26 @@ using PowerSystemCaseBuilder
 using Dates
 using Xpress
 using Ipopt #solver
+using HiGHS
 
-solver = optimizer_with_attributes(Xpress.Optimizer, "OUTPUTLOG" => 1)
+import Logging
+
+solver_UC = optimizer_with_attributes(
+    HiGHS.Optimizer, 
+    "mip_rel_gap" => 0.01, 
+    "log_to_console" => true,
+    "output_flag" => true,
+    "parallel" => "on",
+)
 solver_ED = optimizer_with_attributes(
     Ipopt.Optimizer,
     "linear_solver" => "ma27",
+    "print_level" => 3,
 )
 sys_DA = build_system(PSISystems, "modified_RTS_GMLC_DA_sys"; skip_serialization = true)
 sys_RT = build_system(PSISystems, "modified_RTS_GMLC_RT_sys"; skip_serialization = true)
 
-template_uc = template_unit_commitment()
+template_uc = template_unit_commitment(;use_slacks = false)
 set_device_model!(template_uc, ThermalStandard, ThermalStandardUnitCommitment)
 set_device_model!(template_uc, HydroDispatch, HydroDispatchRunOfRiver)
 
@@ -27,8 +37,14 @@ set_device_model!(template_ed, TwoTerminalHVDCLine, HVDCTwoTerminalLossless)
 
 models = SimulationModels(;
     decision_models = [
-        DecisionModel(template_uc, sys_DA; optimizer = solver, name = "UC"),
-        DecisionModel(template_ed, sys_RT; optimizer = solver_ED, name = "ED"),
+        DecisionModel(
+            template_uc,
+            sys_DA;
+            optimizer = solver_UC,
+            name = "UC",
+            optimizer_solve_log_print = true
+        ),
+        DecisionModel(template_ed, sys_RT; optimizer = solver_ED, name = "ED",),
     ],
 )
 
@@ -53,13 +69,17 @@ isdir("RTS-store") || mkdir("RTS-store")
 
 sim = Simulation(;
     name = "rts-test",
-    steps = 1,
+    steps = 7,
     models = models,
     sequence = DA_RT_sequence,
     simulation_folder = "RTS-store", # joinpath(".", "rts-store"),
 )
 
-build!(sim)
+build!(
+    sim,
+    console_level=Logging.Info,
+    file_level=Logging.Debug
+)
 execute!(sim; enable_progress_bar = true)
 
 results = SimulationResults(sim);
