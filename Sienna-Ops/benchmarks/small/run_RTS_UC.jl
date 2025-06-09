@@ -30,18 +30,25 @@ solver = optimizer_with_attributes(
     "log_to_console" => true,
     "output_flag" => true,
 )
-# solver = optimizer_with_attributes(Xpress.Optimizer, "OUTPUTLOG" => 1)
 
-problem = DecisionModel(template_uc, sys; optimizer = solver, horizon = Hour(24))
+problem = DecisionModel(
+    template_uc, 
+    sys; 
+    optimizer = solver,
+    horizon = Hour(24),
+    optimizer_solve_log_print=true
+)
 
 isdir("RTS-store") || mkdir("RTS-store")
 
-build!(problem; output_dir = "RTS-store")
+build!(problem, output_dir = "RTS_UC-store")
 
-solve!(problem, export_problem_results = false, console_level = Logging.Info,)
+solve!(
+    problem,
+    export_problem_results = false,
+)
 
 res = OptimizationProblemResults(problem)
 
-# @show read_variables(res)
 read_parameters(res)
 
