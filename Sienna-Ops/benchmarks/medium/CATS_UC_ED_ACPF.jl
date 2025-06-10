@@ -22,7 +22,7 @@ using HSL # works only after getting the HSL license and the files for HSL_jll (
 mip_gap = 0.5
 
 PROJECT_ROOT = realpath(".")
-UC_ONLY = true
+UC_ONLY = false
 DIST_SLACK = true
 Q_LIMITS = true
 V_PTDF_TOL = eps()  # defaults to eps()
