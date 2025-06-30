@@ -1,4 +1,3 @@
-# filepath: /Users/kpanda/UserApps/HPCApps/ESIFHPC4/Sienna-Ops/benchmarks/small/configure_parallel_simulation_no_torc.jl
 using PowerSimulations
 
 include("partitioned_RTS_UC-ED.jl")
