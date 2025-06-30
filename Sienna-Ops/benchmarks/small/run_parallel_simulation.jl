@@ -7,7 +7,7 @@ script_dir = dirname(@__FILE__)
 # Get the relative path to Project.toml (one level up from small/ directory)
 project_path = joinpath(script_dir, "..")
 
-output_dir="RTS_UC-ED2"
+output_dir="Parallel_RTS_UC-ED"
 # Delete and recreate output directory if it exists
 if isdir(output_dir)
     rm(output_dir, recursive=true)
