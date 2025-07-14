@@ -56,7 +56,7 @@ set_device_model!(template_uc, storage_model)
 # set_service_model!(template_uc, ServiceModel(VariableReserve{ReserveUp}, RangeReserve))
 # set_service_model!(template_uc, ServiceModel(VariableReserve{ReserveDown}, RangeReserve))
 
-mip_gap = 0.1
+mip_gap = 0.01
 
 # optimizer = optimizer_with_attributes(
 #     Xpress.Optimizer,
@@ -83,7 +83,7 @@ model = DecisionModel(
 )
 models = SimulationModels(; decision_models = [model])
 
-steps_sim = 2
+steps_sim = 30
 current_date = string( today() )
 sequence = SimulationSequence(
     models = models,
