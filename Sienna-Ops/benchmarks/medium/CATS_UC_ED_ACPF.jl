@@ -1,4 +1,4 @@
-# using AppleAccelerate
+using AppleAccelerate
 using PowerSystems
 using PowerSimulations
 using HydroPowerSimulations
@@ -19,21 +19,15 @@ import Xpress
 import HSL_jll # works only after getting the HSL license and the files for HSL_jll
 using HSL # works only after getting the HSL license and the files for HSL_jll (]dev HSL_jll first)
 
-mip_gap = 0.5
-
-PROJECT_ROOT = realpath(".")
-UC_ONLY = false
-DIST_SLACK = true
-Q_LIMITS = true
-V_PTDF_TOL = eps()  # defaults to eps()
-V_PTDF_CACHESIZE = 1e5
-HORIZON_UC = Hour(6)
-HORIZON_ED = Hour(6)
-
-system_path = joinpath(@__DIR__, "input_data", "CATS", "sys.json")
-system = PSY.System(system_path)
-
-function check_impedances!(system, min_ohm_line=0.1, max_ohm_line=150, rx_line=0.25, min_ohm_tr2=0.1, max_ohm_tr2=15, rx_tr2=0.1)
+function check_impedances!(
+    system::PSY.System, 
+    min_ohm_line::Float64=0.1, 
+    max_ohm_line::Float64=150.,
+    rx_line::Float64=0.25,
+    min_ohm_tr2::Float64=0.1,
+    max_ohm_tr2::Float64=15., 
+    rx_tr2::Float64=0.1
+)
     base_mva = get_base_power(system)
     lines = get_components(Line, system)
     tr2w = get_components(Transformer2W, system)
@@ -68,9 +62,8 @@ end
 
 # check_impedances!(system)
 
-system_ed = deepcopy(system)
 
-function set_tight_voltage_limits!(system)
+function set_tight_voltage_limits!(system::PSY.System)
     buses = get_components(ACBus, system)
     for b in buses
         if get_bustype(b) ∈ (ACBusTypes.REF, ACBusTypes.PV)
@@ -80,7 +73,7 @@ function set_tight_voltage_limits!(system)
     end
 end
 
-function transform_ts!(system, system_ed)
+function transform_ts!(system::PSY.System, system_ed::PSY.System)
     transform_single_time_series!(
            system,
            Dates.Hour(HORIZON_UC),  # horizon: 48 hr ahead 
@@ -94,7 +87,12 @@ function transform_ts!(system, system_ed)
     );
 end
 
-function setup_uc_problem(system, ac_pf, ds, q_lim)
+function setup_uc_problem(
+    system::PSY.System,
+    ac_pf::Bool,
+    ds::Bool,
+    q_lim::Bool,
+)
     ptdf = VirtualPTDF(system;
         tol = V_PTDF_TOL,
         max_cache_size = 10000,
@@ -111,7 +109,7 @@ function setup_uc_problem(system, ac_pf, ds, q_lim)
                 power_flow_evaluation=PowerFlows.ACPowerFlow(
                     ;
                     calculate_loss_factors=true, 
-                    generator_slack_participation_factors=Dict((typeof(x), get_name(x)) => 1.0 for x in get_components(Generator, system)),
+                    # generator_slack_participation_factors=Dict((typeof(x), get_name(x)) => 1.0 for x in get_components(Generator, system)),
                     check_reactive_power_limits=q_lim,
                 )
             )
@@ -143,21 +141,15 @@ function setup_uc_problem(system, ac_pf, ds, q_lim)
     # set_device_model!(template_uc, DeviceModel(Line, StaticBranch; attributes = Dict("filter_function" => x -> get_base_voltage(get_from(get_arc(x))) > 100)))
     # set_device_model!(template_uc, DeviceModel(Transformer2W, StaticBranch; attributes = Dict("filter_function" => x -> get_base_voltage(get_to(get_arc(x))) > 300)))
 
-    solver_xpress = JuMP.optimizer_with_attributes(Xpress.Optimizer, "MIPRELSTOP" => 0.2)
-
-    solver_ipopt = JuMP.optimizer_with_attributes(Ipopt.Optimizer,
-    "print_level" => 3,
-    "hsllib" => HSL_jll.libhsl_path, # uncomment after getting the HSL license and the files for HSL_jll
-    "linear_solver" => "ma57", # uncomment after getting the HSL license and the files for HSL_jll
-    "tol" => 1e-6,
-    "acceptable_tol" => 1e-3,
+    solver_xpress = JuMP.optimizer_with_attributes(
+        Xpress.Optimizer,
+        "MIPRELSTOP" => 0.2
     )
 
     problem_uc = DecisionModel(
     template_uc, 
     system; 
     optimizer = solver_xpress, 
-    # optimizer = solver_ipopt,
     optimizer_solve_log_print = true, 
     name = "UC"
     )
@@ -165,7 +157,7 @@ function setup_uc_problem(system, ac_pf, ds, q_lim)
     return problem_uc
 end
 
-function setup_ed_problem(system, ds, q_lim)
+function setup_ed_problem(system::PSY.System, ds::Bool, q_lim::Bool)
     network_model_ed = NetworkModel(
         ACPPowerModel; 
         use_slacks=true, 
@@ -173,7 +165,7 @@ function setup_ed_problem(system, ds, q_lim)
             ;
             calculate_loss_factors=true, 
             check_reactive_power_limits=q_lim,
-            generator_slack_participation_factors=ds ? Dict(get_name(x) => 1.0 for x in get_components(Generator, system)) : nothing,
+            # generator_slack_participation_factors=ds ? Dict(get_name(x) => 1.0 for x in get_components(Generator, system)) : nothing,
         ),
     )
 
@@ -186,9 +178,9 @@ function setup_ed_problem(system, ds, q_lim)
     set_device_model!(template_ed, Transformer2W, StaticBranchUnbounded)
 
     solver_ipopt = JuMP.optimizer_with_attributes(Ipopt.Optimizer,
-    "print_level" => 3,
+    "print_level" => 5,
     "hsllib" => HSL_jll.libhsl_path, # uncomment after getting the HSL license and the files for HSL_jll
-    "linear_solver" => "ma57", # uncomment after getting the HSL license and the files for HSL_jll
+    "linear_solver" => "ma97", # uncomment after getting the HSL license and the files for HSL_jll
     "tol" => 1e-6,
     "acceptable_tol" => 1e-3,
     )
@@ -307,6 +299,17 @@ end
 
 ##############################
 
+UC_ONLY = false
+DIST_SLACK = true
+Q_LIMITS = true
+V_PTDF_TOL = eps()  # defaults to eps()
+V_PTDF_CACHESIZE = 1e5
+HORIZON_UC = Hour(6)
+HORIZON_ED = Hour(6)
+
+system_path = joinpath(@__DIR__, "input_data", "CATS", "sys.json")
+system = PSY.System(system_path)
+system_ed = deepcopy(system)
 
 set_tight_voltage_limits!(system_ed)
 

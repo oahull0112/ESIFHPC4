@@ -9,28 +9,23 @@ using DataFrames
 using Logging
 using TimeSeries
 using StorageSystemsSimulations
-#using HiGHS #solver
+using HiGHS #solver
 
 using Xpress
 #using PowerGrap
 
 const PSY = PowerSystems
 
+include(joinpath(@__DIR__, "utils.jl"))
+
 system_path = joinpath(@__DIR__, "input_data", "extreme_solar_texas", "final_sys_DA.json")
 sys_DA = PSY.System(system_path)
 
-mip_gap = 0.1
-
-optimizer = optimizer_with_attributes(
-                Xpress.Optimizer,
-                #"parallel" => "on",
-                "MIPRELSTOP" => mip_gap)
-
-
-logger= configure_logging(console_level=Logging.Info)
+# Convert generator costs from quadratic to piecewise linear
+quadratic_to_piecewise_linear_sys!(sys_DA, 2)
 
 template_uc = template_unit_commitment(;
-network = NetworkModel(CopperPlatePowerModel; use_slacks = true))
+network = NetworkModel(AreaBalancePowerModel; use_slacks = true))
 set_device_model!(template_uc, HydroDispatch, HydroDispatchRunOfRiver)
 set_device_model!(template_uc, ThermalStandard, ThermalBasicUnitCommitment)
 set_device_model!(template_uc, ThermalMultiStart, ThermalBasicUnitCommitment)
@@ -60,17 +55,43 @@ set_device_model!(template_uc, storage_model)
 
 # set_service_model!(template_uc, ServiceModel(VariableReserve{ReserveUp}, RangeReserve))
 # set_service_model!(template_uc, ServiceModel(VariableReserve{ReserveDown}, RangeReserve))
+
+mip_gap = 0.1
+
+# optimizer = optimizer_with_attributes(
+#     Xpress.Optimizer,
+#     "MIPRELSTOP" => mip_gap
+# )
+
+optimizer = optimizer_with_attributes(
+    HiGHS.Optimizer, 
+    "mip_rel_gap" => mip_gap, 
+    "log_to_console" => true,
+    "output_flag" => true,
+    "parallel" => "on",
+)
+
 initial_date = "2018-03-15"
 start_time = DateTime(string(initial_date,"T00:00:00"))
-model = DecisionModel(template_uc, sys_DA; name = "UC", optimizer = optimizer, horizon = Hour(24), calculate_conflict = true)
+model = DecisionModel(
+    template_uc, sys_DA; 
+    name = "UC", 
+    optimizer = optimizer, 
+    horizon = Hour(24), 
+    calculate_conflict = true,
+    optimizer_solve_log_print = true
+)
 models = SimulationModels(; decision_models = [model])
 
-steps_sim    = 2
+steps_sim = 2
 current_date = string( today() )
 sequence = SimulationSequence(
     models = models,
     # ini_cond_chronology = InterProblemChronology(),
 )
+
+output_dir = "EST"
+isdir(output_dir) || mkdir(output_dir)
 
 sim = Simulation(
     name = current_date * "_DR-test" * "_" * string(steps_sim)* "steps",
@@ -78,7 +99,7 @@ sim = Simulation(
     models = models,
     initial_time = DateTime(string(initial_date,"T00:00:00")),
     sequence = sequence,
-    simulation_folder = "EST",
+    simulation_folder = output_dir,
 )
 
 build!(sim)
@@ -105,4 +126,4 @@ ts = get_time_series_array(Deterministic, solar, "max_active_power")
 
 # CSV.write("area_lmp.csv", uc_LMP_data)
 
-plot_dataframe(vre_power)
+# plot_dataframe(vre_power)
