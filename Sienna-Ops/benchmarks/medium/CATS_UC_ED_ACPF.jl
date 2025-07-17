@@ -60,9 +60,6 @@ function check_impedances!(
     end
 end
 
-# check_impedances!(system)
-
-
 function set_tight_voltage_limits!(system::PSY.System)
     buses = get_components(ACBus, system)
     for b in buses
@@ -160,13 +157,13 @@ end
 function setup_ed_problem(system::PSY.System, ds::Bool, q_lim::Bool)
     network_model_ed = NetworkModel(
         ACPPowerModel; 
-        use_slacks=true, 
-        power_flow_evaluation=PowerFlows.ACPowerFlow(
-            ;
-            calculate_loss_factors=true, 
-            check_reactive_power_limits=q_lim,
-            # generator_slack_participation_factors=ds ? Dict(get_name(x) => 1.0 for x in get_components(Generator, system)) : nothing,
-        ),
+        use_slacks=false, 
+        # power_flow_evaluation=PowerFlows.ACPowerFlow(
+        #     ;
+        #     calculate_loss_factors=true, 
+        #     check_reactive_power_limits=q_lim,
+        #     # generator_slack_participation_factors=ds ? Dict(get_name(x) => 1.0 for x in get_components(Generator, system)) : nothing,
+        # ),
     )
 
     template_ed = ProblemTemplate(network_model_ed)
@@ -284,7 +281,23 @@ function sc_add_simple(system, vd)
     buses = get_components(ACBus, system)
     for (b, q) in zip(collect(buses), q_sl)
         if q
-            t = ThermalStandard("SC_$(get_name(b))", true, true, b, 0, 0, 100, (min=0, max=0), (min=-1000, max=1000), nothing, ThermalGenerationCost(variable = zero(CostCurve), fixed = 10.0, start_up = 0.0, shut_down = 0.0,), 100, nothing, false, PrimeMovers.OT)
+            t = ThermalStandard(
+                "SC_$(get_name(b))", 
+                true, 
+                true,
+                b,
+                0,
+                0,
+                100,
+                (min=0, max=0),
+                (min=-1000, max=1000), 
+                nothing, 
+                ThermalGenerationCost(variable = zero(CostCurve), fixed = 10.0, start_up = 0.0, shut_down = 0.0,),
+                100,
+                nothing,
+                false,
+                PrimeMovers.OT
+            )
             # t = FixedAdmittance("SC_$(get_name(b))", true, b, 0 + 0.1im)
             add_component!(system, t)
             @show get_name(t)
@@ -326,8 +339,8 @@ if UC_ONLY
     vd = read_variables(uc_results)
     ad = read_aux_variables(uc_results)
 
-    @show maximum(ad["PowerFlowVoltageMagnitude__ACBus"][1, 2:end])
-    @show minimum(ad["PowerFlowVoltageMagnitude__ACBus"][1, 2:end])
+    # @show maximum(ad["PowerFlowVoltageMagnitude__ACBus"][1, 2:end])
+    # @show minimum(ad["PowerFlowVoltageMagnitude__ACBus"][1, 2:end])
 else
     problem_uc = setup_uc_problem(system, false, DIST_SLACK, Q_LIMITS)
     problem_ed = setup_ed_problem(system_ed, DIST_SLACK, Q_LIMITS)
@@ -340,18 +353,18 @@ else
     vd = read_variables(ed_results)
     ad = read_aux_variables(ed_results)
 
-    @show maximum(collect(first((first(vd["SystemBalanceSlackUp__ACBus__Q"])[2]))[2:end]))
+    # @show maximum(collect(first((first(vd["SystemBalanceSlackUp__ACBus__Q"])[2]))[2:end]))
 
-    @show maximum(collect(first((first(vd["SystemBalanceSlackDown__ACBus__Q"])[2]))[2:end]))
+    # @show maximum(collect(first((first(vd["SystemBalanceSlackDown__ACBus__Q"])[2]))[2:end]))
 
-    @show maximum(collect(first((first(vd["SystemBalanceSlackUp__ACBus__P"])[2]))[2:end]))
+    # @show maximum(collect(first((first(vd["SystemBalanceSlackUp__ACBus__P"])[2]))[2:end]))
 
-    @show maximum(collect(first((first(vd["SystemBalanceSlackDown__ACBus__P"])[2]))[2:end]))
+    # @show maximum(collect(first((first(vd["SystemBalanceSlackDown__ACBus__P"])[2]))[2:end]))
 
     # sc_add_simple(system_ed, vd)
 end
 
-lf_res=ad["PowerFlowLossFactors__ACBus"]
+# lf_res=ad["PowerFlowLossFactors__ACBus"]
 
 
 
