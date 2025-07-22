@@ -4,7 +4,6 @@ using HydroPowerSimulations
 const PSI = PowerSimulations
 using PowerSystemCaseBuilder
 using Dates
-# using Ipopt #solver
 using HiGHS
 # using HSL
 
@@ -82,13 +81,4 @@ function execute_simulation(sim, args...; kwargs...)
         error("Simulation failed to execute: status=$status")
     end
 end
-
-# function main()
-# 	println("entered main, $(ARGS)")
-#     process_simulation_partition_cli_args(build_simulation, execute_simulation, ARGS...)
-# end
-
-# if abspath(PROGRAM_FILE) == @__FILE__
-#     main()
-# end
 

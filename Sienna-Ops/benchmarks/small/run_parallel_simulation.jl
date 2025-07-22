@@ -23,7 +23,7 @@ run_parallel_simulation(
     num_steps=365,
     period=7,
     num_overlap_steps=1,
-    num_parallel_processes=50,
+    num_parallel_processes=51,
     exeflags="--project=$(project_path)",
     force=true,
 )
