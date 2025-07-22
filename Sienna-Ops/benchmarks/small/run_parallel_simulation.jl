@@ -14,16 +14,28 @@ if isdir(output_dir)
 end
 mkdir(output_dir)
 
-run_parallel_simulation(
-    build_simulation,
-    execute_simulation,
-    script="partitioned_RTS_UC-ED.jl",
-    output_dir=output_dir,
-    name="RTS",
-    num_steps=365,
-    period=7,
-    num_overlap_steps=1,
-    num_parallel_processes=51,
-    exeflags="--project=$(project_path)",
-    force=true,
-)
+start_time = now()
+elapsed_time = @elapsed begin 
+    run_parallel_simulation(
+        build_simulation,
+        execute_simulation,
+        script="partitioned_RTS_UC-ED.jl",
+        output_dir=output_dir,
+        name="RTS",
+        num_steps=365,
+        period=7,
+        num_overlap_steps=1,
+        num_parallel_processes=53,
+        exeflags="--project=$(project_path)",
+        force=true,
+    )
+end
+end_time = now()
+
+# Report the results
+println("\n" * "="^50)
+println("TIMING RESULTS")
+println("\n" * "="^50)
+println("Start time: $start_time")
+println("End time: $end_time")
+println("Elapsed time: $elapsed_time seconds")
