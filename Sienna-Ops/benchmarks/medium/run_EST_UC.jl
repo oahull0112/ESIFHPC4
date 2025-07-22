@@ -1,6 +1,5 @@
 using PowerSystems
 using PowerSimulations
-# using PowerNetworkMatrices
 using Dates
 using CSV
 using HydroPowerSimulations
@@ -10,7 +9,6 @@ using TimeSeries
 using StorageSystemsSimulations
 using HiGHS #solver
 using BenchmarkTools
-# using Statistics
 
 include(joinpath(@__DIR__, "utils.jl"))
 
@@ -270,6 +268,7 @@ function run_benchmark(;
         "sim" => sim,
         "results" => results,
         "timing" => timing_summary,
+        "report_files" => report_files,
         "benchmarks" => Dict(
             "system_load" => system_load_bench,
             "cost_conversion" => cost_conversion_bench,
