@@ -55,8 +55,12 @@ README.md, run
 
 5. Run the benchmarks as follows
    ```shell
-   julia --project=. small/run_RTS_UC.jl
-   julia --project=. small/run_RTS_UC-ED.jl
+   julia --threads=auto --project=. small/run_RTS_UC.jl
+   julia --threads=auto --project=. small/run_RTS_UC-ED.jl
+   julia --project=. small/run_parallel_simulation.jl
+   julia --threads=auto --project=. small/run_ACTIVSg200_ED.jl
+   julia --threads=auto --project=. medium/run_CATS.jl
+   julia --threads=auto --project=. medium/run_EST_UC.jl
    ```
 
 ## Run Definitions and Requirements
@@ -84,4 +88,4 @@ README.md, run
 
 ## Benchmark test results to report and files to return
 
-TBD
+The benchmark creates timing data that can be inspected visually for comparison.
