@@ -24,6 +24,7 @@ Important Notes:
 | [MLPerf-3DUnet**](https://github.com/NREL/ESIFHPC4/tree/main/AI-ML/app-level-benchmark)| Yes      | Yes         | Optional  | Yes   |
 | [AMR-Wind](https://github.com/NREL/ESIFHPC4/tree/main/AMR-Wind)    | Yes      | Yes         | Optional  | Yes   |
 | [LAMMPS](https://github.com/NREL/ESIFHPC4/tree/main/LAMMPS)      | Yes      | Yes         | Optional  | Yes   |
+| [BerkeleyGW](https://github.com/NREL/ESIFHPC4/tree/main/BerkeleyGW)  | Yes      | Yes         | Optional        | Yes   |
 
 \* WRF acceleration via AceCAST
 
@@ -32,8 +33,6 @@ Important Notes:
 **"Class B" Applications - functionality only**
 | Application | Standard | Accelerated | Optimized | As-is |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
-| [Q-Chem](https://github.com/NREL/ESIFHPC4/tree/main/Q-Chem)      | Yes      | Yes         | No        | Yes   |
-| [BerkeleyGW](https://github.com/NREL/ESIFHPC4/tree/main/BerkeleyGW)  | Yes      | Yes         | No        | Yes   |
 | [Sienna](https://github.com/NREL/ESIFHPC4/tree/main/Sienna-Ops)      | Yes      | No          | No        | Yes   |
 
 **Microbenchmarks:**
@@ -49,3 +48,10 @@ Important Notes:
 | FIO***         | Yes      | No          | Optional  | Yes   |
 
 \*** benchmark still in early development; not yet in repo.
+
+## Changelog
+
+### July 29, 2025
+- Removed Q-Chem from the suite
+- Moved BerkeleyGW from "Class B" to "Class A"
+

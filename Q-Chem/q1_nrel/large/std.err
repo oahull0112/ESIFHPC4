@@ -1,2 +1,0 @@
-mv: cannot stat 'job_status': No such file or directory
-rm: cannot remove '/scratch/hlong/8618274/*': No such file or directory

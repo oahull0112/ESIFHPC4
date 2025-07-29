@@ -1,2 +1,0 @@
-mv: cannot stat 'job_status': No such file or directory
-rmdir: failed to remove '/tmp/scratch/8664548': Permission denied
