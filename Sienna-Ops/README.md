@@ -12,7 +12,7 @@
 
 ## Licensing Requirements
 
-Sienna is open-source software. Licensing details for its components can be found on the [Sienna GitHub repository](https://github.com/NREL/Sienna).
+Sienna is open-source software. Licensing details for its components can be found on the [Sienna GitHub repository](https://github.com/NREL-Sienna).
 
 ## Other Requirements
 
