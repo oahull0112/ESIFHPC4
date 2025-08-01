@@ -1,9 +1,0 @@
-small
- SCF   energy = -2776.43119903
- Total job time:  325.52s(wall), 4163.23s(cpu) 
-medium
- SCF   energy = -2777.33783802
- Total job time:  1227.35s(wall), 13036.84s(cpu) 
-large
- SCF   energy = -2777.50204713
- Total job time:  10361.94s(wall), 4369.45s(cpu) 
