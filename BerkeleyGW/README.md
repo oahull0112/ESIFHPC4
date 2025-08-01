@@ -5,8 +5,8 @@ Any available ESIF-HPC4 benchmark run rules should be reviewed before running th
 Note, in particular:
 - Any broader ESIF-HPC4 run rules apply to this benchmark except where explicitly noted within this README.
 - Responses to the ESIF-HPC4 RFP including this benchmark should include the performance metrics discussed below. The reference times included for this benchmark were run by NREL on Kestrel. 
-- This benchmark defines multiple problem sizes: small, medium, and large to allow testing across a range of resource sizes. 
-- This benchmark can be run on GPU or CPU nodes, however GPU nodes are the preferred node type for this application due to the substantially lower run times required. 
+- This benchmark defines multiple problem sizes: small, medium, and large to allow testing across a range of resource sizes. The multiple problem sizes form a weak-scaling set, and a given problem size can be run with different amounts of compute resources to form a strong-scaling set. We have provided a table with strong-scaling results for each problem size at the end of this document. 
+- This benchmark can be run on standard or accelerated compute nodes, and is expected to perform well on both. In general, we see approximately 3x speed-up for the benchmarks when moving from the smallest possible number of standard nodes each size can run on to the smallest possible number of accelerated nodes. These benchmarks should be performed on each type of node offered.
 
 # 0. Workflow Overview
 
@@ -14,8 +14,7 @@ Predicting optical properties of materials and nanostructures is a key step towa
 
 This benchmark focuses on the Epsilon stage of the workflow; the DFT, Sigma, Kernel, and Absorbtion stages are not included in this benchmark. 
 
-The BerkeleyGW code is mostly written primarily in Fortran, with some C and C++,
-and contains about 100,000 lines of code. It is parallelized using MPI and OpenMP on the CPU, and OpenACC/OpenMP-target constructs on GPUs. The project website is https://berkeleygw.org, and its documentation is available from http://manual.berkeleygw.org/3.0/. A paper derscribing the details of its implementation is published here: https://www.sciencedirect.com/science/article/pii/S0010465511003912?via%3Dihub. BerkeleyGW is distributed under the Berkeley Software Distribution (BSD) license. Please see the [license.txt](BerkeleyGW/license.txt) and [Copyright.txt](BerkeleyGW/Copyright.txt) files for more details.
+The BerkeleyGW code is mostly written primarily in Fortran, with some C and C++, and contains about 100,000 lines of code. It is parallelized using MPI and OpenMP on the CPU, and OpenACC/OpenMP-target constructs on GPUs. The project website is https://berkeleygw.org, and its documentation is available from http://manual.berkeleygw.org/3.0/. A paper derscribing the details of its implementation is published here: https://www.sciencedirect.com/science/article/pii/S0010465511003912?via%3Dihub. BerkeleyGW is distributed under the Berkeley Software Distribution (BSD) license. Please see the [license.txt](BerkeleyGW/license.txt) and [Copyright.txt](BerkeleyGW/Copyright.txt) files for more details.
 
 ## 0.1 Epsilon 
 
@@ -32,7 +31,7 @@ Epsilon uses a two-tier MPI Inter- and Intra-pool decomposition to exploit the a
 
 # 1. BerkeleyGW Code Access and Compilation Details
 
-The instructions below can be used to build BerkeleyGW for the GPU-accelerated nodes of NREL's Kestrel system. This example is not intended to prescribe how to build BerkeleyGW; some modifications may be needed to build BerkeleyGW for other target architectures.
+The instructions below can be used to build BerkeleyGW for the GPU-accelerated nodes of NREL's Kestrel system. This example is not intended to prescribe how to build BerkeleyGW; some modifications may be needed to build BerkeleyGW for other target architectures. A download of the BerkeleyGW source code will contain a config/ directory containing arch.mk files the offeror might useful for compiling on their machine. 
 
 ## 1.0 Build Environment
 
@@ -53,7 +52,8 @@ BerkeleyGW depends on multiple external software packages, and has been tested e
 | FFT              | required   | FFTW versions 3.3.x |
 | LAPACK/BLAS      | required   | NetLib, ATLAS, Intel MKL, ACML, Cray LibSci      |
 | MPI              | optional   | OpenMPI, MPICH1, MPICH2, MVAPICH2, Intel MPI     |
-| ScaLAPACK/BLACS  | optional<br>(required if MPI is used) |  NetLib, Cray LibSci, Intel MKL, AMD |
+| ScaLAPACK/BLACS  | required if MPI is used |  NetLib, Cray LibSci, Intel MKL, AMD |
+| File IO          | required   | HDF5 |
 
 On Kestrel, these libraries can be loaded by module commands:
 ```bash
@@ -66,12 +66,7 @@ module load python
 
 ## 1.1 Downloading BerkeleyGW
 
-On NREL's Kestrel machine, BerkeleyGW can be run using the BerkeleyGW module. This module can be accessed for either CPU or GPU nodes by logging in via a CPU or GPU log-in node (https://nrel.github.io/HPC/Documentation/Systems/Kestrel/) and loading the module:
-```
-module load berkeleygw
-```
-
-If you decide to build your own version of BerkeleyGW, the latest version of BerkeleyGW can be downloaded from the BerkeleyGW website: https://berkeleygw.org/download/. The current release (4.0 at the time of this writing) is recommend for use due to the many performance improvements implemented as compared to the 3.x versions. Enter the E4_BGW directory, then download and untar the BerkeleyGW source code:
+To compile BerkeleyGW yourself, the latest version of BerkeleyGW can be downloaded from the BerkeleyGW website: https://berkeleygw.org/download/. The current release (4.0 at the time of this writing) is recommended for use due to the many performance improvements implemented as compared to the 3.x versions. Enter the E4_BGW directory, then download and untar the BerkeleyGW source code:
 ```
 cd $E4_BGW
 wget https://app.box.com/shared/static/22edl07muvhfnd900tnctsjjftbtcqc4.gz
@@ -91,9 +86,10 @@ Refer to the [BerkeleyGW manual](http://manual.berkeleygw.org/3.0/compilation-fl
 
 ## 1.3 Compiling BerkeleyGW
 
-Stay in the `BerkeleyGW` directory to compile the various BerkeleyGW modules. (Many modules will be compiled, but this benchmark only uses Epsilon.) The following  command will generate the complex (`cplx`) version of the code.
+Stay in the `BerkeleyGW` directory to compile the various BerkeleyGW modules. (Many modules could optionally be compiled, but this benchmark only uses Epsilon.) The following command will generate the complex (`cplx`) version of the code.
 ```
-make -j cplx 
+cp flavor_cplx.mk flavor.mk
+make -j epsilon
 ```
 After compilation, the excutable (`epsilon.cplx.x`) will be in the source directory. Symbolic links with the same name will be in the `BerkeleyGW/bin` directory.
 
@@ -106,6 +102,7 @@ The directory contains three problem sizes:
 | small        | Si<sub> 214</sub> |
 | medium       | Si<sub> 510</sub> |
 | large        | Si<sub> 998</sub> |
+
 Each problem simulates a silicon divacancy defect embedded in a series of progressively larger supercells. The small, medium, and large problems are provided to facilitate testing and profiling across a wide range of numbers of resources. 
 
 ## 2.1 Download wave-function data
@@ -140,7 +137,7 @@ cd $E4_BGW/benchmark/medium_Si510/
 sbatch run_epsilon_Si510.sh 
 ```
 
-Note that a script called stripe_large has been included that on Kestrel allows striping of a particular directory. This script is called by each run_epsilon_* Slurm script and should be removed if alternative striping is used. 
+Note that a script called stripe_large has been included that on Kestrel allows striping of a particular directory. This script is called by each run_epsilon_XXXX Slurm script and should be removed if alternative striping is used. 
 
 Each Kestrel GPU node has 4 NVIDIA H100 GPUs and dual socket AMD Genoa CPUs. The parallel configuration for all runs on Kestrel used 4 MPI tasks per node, and each MPI task uses 1 GPU and 16 CPU cores. To run on systems different than Kestrel, modify the run scripts to reflect the hardware specifics of the architecture of interest. For Epsilon, there are no constraints on the number of MPI tasks that may be used. The input file (`epsion.inp`) may not be modified **except** to optimize the maximum GPU memory per MPI rank (in GB) to use for Epsilon's chi summation phase using the `max_mem_nv_block_algo` flag in `epsion.inp`. This flag can have a strong influence on time to solution: more memory typically improves performance. Half the device memory is a reasonable initial guess.
 
