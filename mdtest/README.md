@@ -35,7 +35,7 @@ Each test will be run for the POSIX API. Each of these tests should be run at th
 - A single process
 - The optimal number of MPI processes on a single compute node
 - The minimum number of MPI processes on multiple compute nodes that achieves the peak results for the proposed system
-- The maximum number of MPI processes on the full set of nodes of each type, using one MPI process per physical core. If the number of files or directories does not divide evenly by the full rank count in a node class, integer division is acceptable to set the -n option. For example, if a node class had 16 nodes, 220/(36 cores/node * 16 nodes) = 1820.44; -n=1820 would be acceptable.
+- The maximum number of MPI processes on the full set of nodes of each type, using one MPI process per physical core. If the number of files or directories does not divide evenly by the full rank count in a node class, integer division is acceptable to set the -n option.
 
 ## How to run
 
@@ -64,4 +64,5 @@ Available options may be displayed with the "-h" option to mdtest. Useful option
 ## Benchmark test results to report and files to return
 
 Todo
+
 
