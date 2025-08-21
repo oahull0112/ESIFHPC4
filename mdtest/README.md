@@ -26,13 +26,13 @@ mdtest comes packaged with IOR. Please see the ESIF-HPC-4 IOR page for build inf
 
 For each proposed globally accessible file system, the Offeror shall run the following tests:
 
-- creating, statting, and removing 220 files in a single directory
-- creating, statting, and removing 220 files in separate directories (16 files each, 1-deep)
-- creating, statting, and removing 220 files in separate directories (16 files each, 8-deep)
+- creating, statting, and removing 2<sup>20</sup> files in a single directory
+- creating, statting, and removing 2<sup>20</sup> files in separate directories (16 files each, 1-deep)
+- creating, statting, and removing 2<sup>20</sup> files in separate directories, one MPI task per directory (via `-u` flag)
 
 Each test will be run for the POSIX API. Each of these tests should be run at the following process concurrencies:
 
-- A single process (POSIX API only, 220 tests only)
+- A single process
 - The optimal number of MPI processes on a single compute node
 - The minimum number of MPI processes on multiple compute nodes that achieves the peak results for the proposed system
 - The maximum number of MPI processes on the full set of nodes of each type, using one MPI process per physical core. If the number of files or directories does not divide evenly by the full rank count in a node class, integer division is acceptable to set the -n option. For example, if a node class had 16 nodes, 220/(36 cores/node * 16 nodes) = 1820.44; -n=1820 would be acceptable.
@@ -43,14 +43,15 @@ It is important to note that the total number of ranks for a given run must be a
 
 There are two example scripts available, `kestrel-mdtest-example-run-simple.sh` and `kestrel-mdtest-example-run-script.sh`.
 
-`kestrel-mdtest-example-run-simple.sh` shows example inputs and run commands for the three tests above for just 4 ranks on a single node.
+`kestrel-mdtest-example-run-simple.sh` shows example run commands for just 4 ranks on a single node.
 
-`kestrel-mdtest-example-run-script.sh` provides some helper functions (e.g. auto-enforces that the total number of ranks for a given run must be a power of 2) alongside more resource-intensive mdtest calculations.
+`kestrel-mdtest-example-run-script.sh` provides some helper functions (e.g. auto-enforces that the total number of ranks for a given run must be a power of 2) alongside examples of more resource-intensive mdtest calculations.
 
 ## Useful input flags
 
 Available options may be displayed with the "-h" option to mdtest. Useful options include
 
+- `-u` If present, each MPI task works on its own directory
 - `-C` Turn on file and directory creation tests
 - `-T` Turn on file and directory stat tests
 - `-r` Turn on file and directory remove tests
@@ -63,3 +64,4 @@ Available options may be displayed with the "-h" option to mdtest. Useful option
 ## Benchmark test results to report and files to return
 
 Todo
+
