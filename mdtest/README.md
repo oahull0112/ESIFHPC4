@@ -20,7 +20,7 @@ mdtest is licensed under GPLv2, see [here](https://github.com/hpc/ior?tab=Licens
 
 ## How to build
 
-mdtest comes packaged with IOR. Please see the ESIF-HPC-4 IOR page for build information [here](https://github.com/NREL/ESIFHPC4/tree/main/IOR) and example build instructions on Kestrel [here](https://github.com/NREL/ESIFHPC4/blob/main/IOR/kestrel-example-build-script.sh)
+mdtest comes packaged with IOR. Please see the ESIF-HPC-4 IOR page for build information [here](https://github.com/NREL/ESIFHPC4/tree/main/IOR) and example build instructions on Kestrel [here](https://github.com/NREL/ESIFHPC4/blob/main/IOR/kestrel-example-build-script.sh). mdtest requires MPI.
 
 ## Run Definitions and Requirements
 
@@ -36,6 +36,10 @@ Each test will be run for the POSIX API. Each of these tests should be run at th
 - The optimal number of MPI processes on a single compute node
 - The minimum number of MPI processes on multiple compute nodes that achieves the peak results for the proposed system
 - The maximum number of MPI processes on the full set of nodes of each type, using one MPI process per physical core. If the number of files or directories does not divide evenly by the full rank count in a node class, integer division is acceptable to set the -n option.
+
+MPI ranks must be placed consecutively on nodes, not round-robin or other schemes across nodes. MPI ranks must be evenly distributed on nodes.
+
+Observed benchmark performance shall be obtained from file systems configured as closely as possible to the proposed file systems. If the proposed storage solution includes multiple performance tiers directly accessible by applications, benchmark results shall be provided for all such tiers. The benchmark is intended to measure the capability of the storage subsystem to create and delete files and directories. The Offeror should not utilize optimizations that cache or buffer file metadata or metadata operations in compute node (client) memory.
 
 ## How to run
 
@@ -64,5 +68,6 @@ Available options may be displayed with the "-h" option to mdtest. Useful option
 ## Benchmark test results to report and files to return
 
 Todo
+
 
 
