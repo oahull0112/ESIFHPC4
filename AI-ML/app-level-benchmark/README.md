@@ -117,7 +117,7 @@ Please follow [the instructions from MLCommons](https://github.com/mlcommons/tra
 
 ### Tests
 
-List specific tests here
+There are two types of tests for this benchmark: as-is and optimized. For as-is tests, use the `run_and_time.sh` script with the default parameters listed below. For optimized tests, these parameters-along with the code-can be changed to optimize performance and demonstrate hardware capabilities.  
 
 Parameters set in `run_and_time.sh`:
 
@@ -139,3 +139,6 @@ Noting the time required to reach a mean DICE score of `0.908` from a single-nod
 
 ## Benchmark test results to report and files to return
 
+For as-is tests, report the node class (e.g., standard vs. accelerated), run time, and the last recorded DICE score. For optimized tests, report node class, parameters (both updated and unchanged) in `run_and_time.sh`, run time, last recorded DICE score, and also include run notes describing changes made to the run scripts and/or code.
+
+For both as-is and optimized tests, also include the `unet3d.log` file.
