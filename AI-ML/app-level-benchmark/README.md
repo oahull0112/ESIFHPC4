@@ -4,14 +4,6 @@
 
 The purpose of this benchmark is to capture a 'typical scientific AI' workload performed by researchers at NREL, in which image segmentation tasks are common for various scientific purposes. As such, we employ [the 3D-UNet model implementation from MLCommons](https://github.com/mlcommons/training/tree/master/retired_benchmarks/unet3d/pytorch) to segment three-dimensional images from the publicly available [KiTS19 dataset](https://github.com/neheller/kits19). This benchmark is currently single-node only and does not have multi-node capabilities.
 
-## Licensing Requirements
-
-None.
-
-## Other Requirements
-
-None.
-
 ## How to build
 
 Submitters are welcome to install PyTorch and 3D-UNet into any reproducible environment that is desired (e.g., Anaconda virtual environments or a container). The instructions here describe a typical approach using `conda`.
@@ -142,3 +134,4 @@ Noting the time required to reach a mean DICE score of `0.908` from a single-nod
 For as-is tests, report the node class (e.g., standard vs. accelerated), run time, and the last recorded DICE score. For optimized tests, report node class, parameters (both updated and unchanged) in `run_and_time.sh`, run time, last recorded DICE score, and also include run notes describing changes made to the run scripts and/or code.
 
 For both as-is and optimized tests, also include the `unet3d.log` file.
+
