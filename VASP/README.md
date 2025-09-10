@@ -56,11 +56,11 @@ Required: Results must be reported for both bench1 and bench2.
 
 Required: Run the benchmark with code as-is or ported (as needed) following the definitions of `as is` and `ported` in the General Benchmark Instructions.
 
+Optional: Results with optimized code may aditionally be reported.
+
 3. Node classes
 
 Required: Results must be reported for both standard nodes and accelerated nodes.
-
-Optional: Results with optimized code may aditionally be reported.
 
 4. Node counts
 
@@ -74,11 +74,12 @@ Optional: Runs using OpenMP may also be reported.
 
 6. Process/thread placement
 
-Standard runs: Use MPI ranks equal to at least 90% of the physical cores per node.
+Standard runs: Use MPI ranks and threads (where applicable for optional openMP runs) such that the total number of cores used (ranks × threads) is at least 90% of the physical cores per node.
 
-Accelerated runs: Use at least one MPI rank per accelerator.
+Accelerated runs: Use at least one MPI rank per accelerator. The Offeror is permitted to map ranks within a NUMA domain as desired, subject to limitations given in the General Benchmark Instructions.
 
-For optimized runs, the offeror is permitted to deviate from the above and instead use whatever placement is considered optimal.
+For optimized runs, the Offeror is permitted to deviate from the above and instead use whatever core, device, or node count is considered optimal, under any placement scheme.
+
 
 7. Reporting
 
@@ -88,7 +89,7 @@ In addition to content enumerated in the General Instructions, please return fil
 
 ## Additional Run Rules
 
-KPAR and NCORE have great impact on the performance. The Offeror is permitted to vary these parameters to identify the best performance. The Offeror is also permitted to map ranks within a NUMA domain as desired, subject to limitations given in the General Benchmark Instructions.
+KPAR and NCORE have great impact on the performance. The Offeror is permitted to vary these parameters to identify the best performance. 
    
 ## Validation
 
