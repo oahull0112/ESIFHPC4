@@ -10,7 +10,7 @@
   - **Sienna\Dyn**: Simulates power system dynamic responses to perturbations, including phasor simulations, electromagnetic transients, and small-signal stability.
 - The framework applies advanced computer science, visualization, applied mathematics, and computational science to create a flexible modeling environment for energy systems.
 
-Users running this benchamrk will be interacting primarily with `PowerSystems.jl` and `PowerSimulations.jl` packages from the Sienna framework.
+Users running this benchmark will be interacting primarily with `PowerSystems.jl` and `PowerSimulations.jl` packages from the Sienna framework.
 `PowerSystem.jl` is the package that is used for creating and storing the power system that is being modeled. It stores the system as a JSON file and uses an H5 file to store timeseries data.
 `PowerSimulations.jl` uses the `sys.json` created and loaded into the memory by PowerSystems.jl to create a simulation model and solve it using an MILP or NLP solver such as HiGHS, IPOPT, or Xpress Optimizer.
 
@@ -90,7 +90,7 @@ README.md, run
 
 At the very least,
 
-- The Benchmarks are single node only and not must be run sequentially so as to not fight for resources.
+- The Benchmarks are single node only and must be run sequentially so as to not fight for resources.
 - GPU-compatible Optimizers that are compatible with Julia JuMP may be exercised on GPU nodes. 
 
 ## Benchmark test results to report and files to return
