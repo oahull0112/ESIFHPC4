@@ -10,6 +10,7 @@ Important Notes:
 - This is an in-progress draft release.
 	- Different benchmarks in the suite are at various states of "in-progress"
 	- Most benchmarks do not have finalized inputs or run requirements as of 5/29/2025
+ - Please see the [Planned Changes](#planned-changes) section of this README for changes that we are planning to make/are in development, but have not yet integrated into this repo.
 - Benchmarks are divided into "Class A" and "Class B". 
 	- "Class A" - Performance-required benchmarks: set of benchmarks for which specific performance targets must be met or exceeded. 
 	- "Class B" - Functionality benchmarks: set of benchmarks intended to demonstrate and baseline the functionality, scalability, and software readiness of specific workloads or system features, but no specific performance level will be required. 
@@ -48,11 +49,20 @@ Important Notes:
 
 \*** benchmark still in early development; not yet in repo.
 
+## Planned Changes
+We have planned/upcoming changes to the suite that have not yet been integrated but are currently in development. We list any major not-yet-integrated changes here. Please note that this list is subject to change, and we make no guarantee that these changes are reflected in the finalized benchmark suite.
+
+- AI/ML: We plan to change the AI application-level benchmark from MLPerf's 3DUnet to MLPerf's DeepCAM benchmark.
+- WRF: We plan to remove the AceCAST/GPU portion of WRF, along with any requests for simultaneous/concurrent runs on test hardware.
+- VASP: Bench 1 will now focus only on the HSE calculation, with the supercell increased from 16 atoms to 128 atoms. Bench 2 will be a vasp_gam single-kpoint GGA calculation with 1149 atoms, increased from 519 atoms.
+- LAMMPS: We are developing an "extra large" size input that should better utilize future hardware.
+- AMR-Wind: We plan to remove any requests for simultaneous/concurrent runs on test hardware.
+
 ## Changelog
+
+### September 22, 2025
+- Removed HPGMG from the suite
 
 ### July 29, 2025
 - Removed Q-Chem from the suite
 - Moved BerkeleyGW from "Class B" to "Class A"
-
-### September 22, 2025
-- Removed HPGMG from the suite
