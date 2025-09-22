@@ -18,7 +18,7 @@ Important Notes:
 - Until the official release, we may add or subtract benchmarks, change run requirements, etc.
 
 **"Class A" Applications:**
-| Application | Standard | Accelerated | Optimized | As-is |
+| Application | Standard | Accelerated | Optimized | Baseline |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [VASP](https://github.com/NREL/ESIFHPC4/tree/main/VASP)        | Yes      | Yes         | Optional  | Yes   |
 | [WRF](https://github.com/NREL/ESIFHPC4/tree/main/WRF)         | Yes      | Yes*        | Optional  | Yes   |
@@ -32,12 +32,12 @@ Important Notes:
 \** MLPerf-3DUnet can be chosen to run *either* standard or accelerated, though accelerated is preferred.
 
 **"Class B" Applications - functionality only**
-| Application | Standard | Accelerated | Optimized | As-is |
+| Application | Standard | Accelerated | Optimized | Baseline |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [Sienna](https://github.com/NREL/ESIFHPC4/tree/main/Sienna-Ops)      | Yes      | No          | No        | Yes   |
 
 **Microbenchmarks:**
-| Application | Standard | Accelerated | Optimized | As-is |
+| Application | Standard | Accelerated | Optimized | Baseline |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [OSU](https://github.com/NREL/ESIFHPC4/tree/main/OSU)         | Yes      | No          | Optional  | Yes   |
 | [HPL](https://github.com/NREL/ESIFHPC4/tree/main/HPL)         | Yes      | Yes         | Optional  | Yes   |
@@ -48,6 +48,14 @@ Important Notes:
 | FIO***         | Yes      | No          | Optional  | Yes   |
 
 \*** benchmark still in early development; not yet in repo.
+
+## Draft definitions for baseline(as-is), ported, and optimized runs
+
+We have established the following draft definitions for baseline, ported, and optimized runs. These broad "run rules" will apply to all benchmarks, with any exceptions noted in the corresponding benchmark's README. Runs will be categorized according to the following three (draft) categories:
+- Baseline (as-is): no code modifications permitted. Library substitutions permitted if these libraries will be available to us at the time of machine arrival. Changes to compilation options generally permitted (some edge cases exist. For example, stream’s compilation option to use custom functions in place of the ones in the stream source would not be allowed) 
+- Ported: only source code modifications necessary to port the code to the new architecture are permitted, in addition to allowed baseline changes. This would include addition or modification of directives or pragmas, and/or replacement of existing architecture-specific language constructs (e.g., CUDA <-> HIP) with another well-documented language or interface. Ported should not be reported without baseline, unless baseline is not possible. Changes must be minimal and reproducible. 
+- Optimized: in addition to what is allowed for baseline and ported, additional source code changes are permitted under the condition that these changes are made available in a maintainable form by the time of machine arrival. For each benchmark, newer versions of the benchmark source code may be used if these versions are publicly available at the time of machine arrival. Using surrogate models is not permitted. Floating point precision-related optimizations will be handled on a per-benchmark basis. 
+- A baseline result is required whenever possible. A ported result may be provided in place of a baseline result if the baseline result is not possible. Ported in addition to baseline is optional and optimized is fully optional. 
 
 ## Planned Changes
 We have planned/upcoming changes to the suite that have not yet been integrated but are currently in development. We list any major not-yet-integrated changes here. Please note that this list is subject to change, and we make no guarantee that these changes are reflected in the finalized benchmark suite.
@@ -62,6 +70,8 @@ We have planned/upcoming changes to the suite that have not yet been integrated 
 
 ### September 22, 2025
 - Removed HPGMG from the suite
+- Added "planned changes" section to README
+- Added draft definitions for baseline/ported/optimized runs to README
 
 ### July 29, 2025
 - Removed Q-Chem from the suite
