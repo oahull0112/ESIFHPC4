@@ -44,7 +44,6 @@ Important Notes:
 | [IOR](https://github.com/NREL/ESIFHPC4/tree/main/IOR)         | Yes      | No          | Optional  | Yes   |
 | [mdtest](https://github.com/NREL/ESIFHPC4/tree/main/mdtest)      | Yes      | No          | Optional  | Yes   |
 | [GPU-GPU collective](https://github.com/NREL/ESIFHPC4/tree/main/AI-ML/microbenchmark)| No | Yes         | Optional  | Yes   |
-| [HPGMG](https://github.com/NREL/ESIFHPC4/tree/main/HPGMG)       | Yes      | Yes         | Optional  | Yes   |
 | FIO***         | Yes      | No          | Optional  | Yes   |
 
 \*** benchmark still in early development; not yet in repo.
@@ -55,3 +54,5 @@ Important Notes:
 - Removed Q-Chem from the suite
 - Moved BerkeleyGW from "Class B" to "Class A"
 
+### September 22, 2025
+- Removed HPGMG from the suite
