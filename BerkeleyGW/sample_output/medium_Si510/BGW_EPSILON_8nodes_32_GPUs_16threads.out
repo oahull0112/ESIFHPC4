@@ -1,9 +1,6 @@
-Slurm_JobID:  5954701
-[ Sat Nov  2 06:46:22 MDT 2024 ] gm: logging nvidia-smi results every 0.1 seconds.
-[ Sat Nov  2 06:46:23 MDT 2024 ] gm: Launching nvidia-smi on 8 node(s).
 
  BerkeleyGW version 4.0+git 8511836-dirty by Jacob Clary <jacl0659@ed1.ib0.cm.hpc.nrel.gov> at 2024-03-13 16:03:19 -0600
- Epsilon code, Complex version, run on 02-Nov-2024 at 06:46:33 -0600
+ Epsilon code, Complex version, run on 28-Aug-2025 at 22:51:58 -0600
 
                                                                  ..o.          
                                                                 .oxxo.         
@@ -115,7 +112,7 @@ Slurm_JobID:  5954701
  Number of conduction bands per processor: 1754
  Number of valence bands per processor: 255
 
- Memory available: 93813.7 MB per PE
+ Memory available: 239168.3 MB per PE
  Memory required for execution: 45518.2 MB per PE
  Memory required for vcoul: 0.0 MB per PE
 
@@ -164,7 +161,7 @@ Slurm_JobID:  5954701
  - Number of k-points in the full BZ of WFN: 1
 
 ================================================================================
- 06:46:58   Dealing with q =  0.000000  0.000000  0.100000                 1 / 1
+ 22:52:06   Dealing with q =  0.000000  0.000000  0.100000                 1 / 1
 ================================================================================
 
  This is the special q->0 point.
@@ -184,38 +181,38 @@ Slurm_JobID:  5954701
  Using GPU support via OpenACC/OMP-Target implementation
  Using batch implementation, batch size:    20
  
- Started calculation of matrix elements with 53 transition(s) at 06:47:01.
- [ 06:47:01 |   0% ] transition  1 / 53.
- [ 06:47:02 |   4% ] transition  3 / 53, remaining: 11 s.
- [ 06:47:03 |   9% ] transition  6 / 53, remaining: 11 s.
- [ 06:47:04 |  19% ] transition 11 / 53, remaining: 9 s.
- [ 06:47:05 |  28% ] transition 16 / 53, remaining: 9 s.
- [ 06:47:07 |  40% ] transition 22 / 53, remaining: 7 s.
- [ 06:47:08 |  49% ] transition 27 / 53, remaining: 6 s.
- [ 06:47:09 |  58% ] transition 32 / 53, remaining: 5 s.
- [ 06:47:10 |  70% ] transition 38 / 53, remaining: 4 s.
- [ 06:47:11 |  79% ] transition 43 / 53, remaining: 2 s.
- [ 06:47:12 |  89% ] transition 48 / 53, remaining: 1 s.
- [ 06:47:14 |  98% ] transition 53 / 53, remaining: 0 s.
- Finished calculation of matrix elements at 06:47:14.
- Elapsed time: 13 s.
+ Started calculation of matrix elements with 53 transition(s) at 22:52:09.
+ [ 22:52:09 |   0% ] transition  1 / 53.
+ [ 22:52:10 |   4% ] transition  3 / 53, remaining: 11 s.
+ [ 22:52:11 |   9% ] transition  6 / 53, remaining: 10 s.
+ [ 22:52:12 |  19% ] transition 11 / 53, remaining: 9 s.
+ [ 22:52:13 |  28% ] transition 16 / 53, remaining: 8 s.
+ [ 22:52:14 |  40% ] transition 22 / 53, remaining: 7 s.
+ [ 22:52:16 |  49% ] transition 27 / 53, remaining: 6 s.
+ [ 22:52:17 |  58% ] transition 32 / 53, remaining: 5 s.
+ [ 22:52:18 |  70% ] transition 38 / 53, remaining: 3 s.
+ [ 22:52:19 |  79% ] transition 43 / 53, remaining: 2 s.
+ [ 22:52:20 |  89% ] transition 48 / 53, remaining: 1 s.
+ [ 22:52:21 |  98% ] transition 53 / 53, remaining: 0 s.
+ Finished calculation of matrix elements at 22:52:21.
+ Elapsed time: 12 s.
  
- CHI summation GPU algorithm offloading only submatrices to device.
+ CHI summation GPU algorithm offloading all matrix elements to device.
  
- Started building polarizability matrix with 32 processor(s) at 06:47:14.
- [ 06:47:14 |   0% ] processor  1 / 32.
- [ 06:47:17 |   6% ] processor  3 / 32, remaining: 42 s.
- [ 06:47:18 |   9% ] processor  4 / 32, remaining: 41 s.
- [ 06:47:22 |  19% ] processor  7 / 32, remaining: 36 s.
- [ 06:47:27 |  28% ] processor 10 / 32, remaining: 32 s.
- [ 06:47:31 |  38% ] processor 13 / 32, remaining: 28 s.
- [ 06:47:36 |  50% ] processor 17 / 32, remaining: 22 s.
- [ 06:47:40 |  59% ] processor 20 / 32, remaining: 18 s.
- [ 06:47:45 |  69% ] processor 23 / 32, remaining: 14 s.
- [ 06:47:49 |  78% ] processor 26 / 32, remaining: 10 s.
- [ 06:47:53 |  88% ] processor 29 / 32, remaining: 6 s.
- Finished building polarizability matrix at 06:47:59.
- Elapsed time: 45 s.
+ Started building polarizability matrix with 32 processor(s) at 22:52:22.
+ [ 22:52:23 |   0% ] processor  1 / 32.
+ [ 22:52:24 |   6% ] processor  3 / 32, remaining: 17 s.
+ [ 22:52:25 |   9% ] processor  4 / 32, remaining: 16 s.
+ [ 22:52:27 |  19% ] processor  7 / 32, remaining: 14 s.
+ [ 22:52:28 |  28% ] processor 10 / 32, remaining: 13 s.
+ [ 22:52:30 |  38% ] processor 13 / 32, remaining: 11 s.
+ [ 22:52:32 |  50% ] processor 17 / 32, remaining: 9 s.
+ [ 22:52:34 |  59% ] processor 20 / 32, remaining: 7 s.
+ [ 22:52:35 |  69% ] processor 23 / 32, remaining: 5 s.
+ [ 22:52:37 |  78% ] processor 26 / 32, remaining: 4 s.
+ [ 22:52:38 |  88% ] processor 29 / 32, remaining: 2 s.
+ Finished building polarizability matrix at 22:52:41.
+ Elapsed time: 19 s.
  
  Done With Block Number:     1
  -----------------------------
@@ -227,38 +224,38 @@ Slurm_JobID:  5954701
  Using GPU support via OpenACC/OMP-Target implementation
  Using batch implementation, batch size:    20
  
- Started calculation of matrix elements with 53 transition(s) at 06:48:02.
- [ 06:48:02 |   0% ] transition  1 / 53.
- [ 06:48:03 |   4% ] transition  3 / 53, remaining: 11 s.
- [ 06:48:04 |   9% ] transition  6 / 53, remaining: 11 s.
- [ 06:48:05 |  19% ] transition 11 / 53, remaining: 10 s.
- [ 06:48:06 |  28% ] transition 16 / 53, remaining: 9 s.
- [ 06:48:07 |  40% ] transition 22 / 53, remaining: 7 s.
- [ 06:48:08 |  49% ] transition 27 / 53, remaining: 6 s.
- [ 06:48:09 |  58% ] transition 32 / 53, remaining: 5 s.
- [ 06:48:11 |  70% ] transition 38 / 53, remaining: 4 s.
- [ 06:48:12 |  79% ] transition 43 / 53, remaining: 2 s.
- [ 06:48:13 |  89% ] transition 48 / 53, remaining: 1 s.
- [ 06:48:14 |  98% ] transition 53 / 53, remaining: 0 s.
- Finished calculation of matrix elements at 06:48:14.
- Elapsed time: 13 s.
+ Started calculation of matrix elements with 53 transition(s) at 22:52:44.
+ [ 22:52:44 |   0% ] transition  1 / 53.
+ [ 22:52:45 |   4% ] transition  3 / 53, remaining: 11 s.
+ [ 22:52:45 |   9% ] transition  6 / 53, remaining: 11 s.
+ [ 22:52:47 |  19% ] transition 11 / 53, remaining: 9 s.
+ [ 22:52:48 |  28% ] transition 16 / 53, remaining: 8 s.
+ [ 22:52:49 |  40% ] transition 22 / 53, remaining: 7 s.
+ [ 22:52:50 |  49% ] transition 27 / 53, remaining: 6 s.
+ [ 22:52:51 |  58% ] transition 32 / 53, remaining: 5 s.
+ [ 22:52:52 |  70% ] transition 38 / 53, remaining: 4 s.
+ [ 22:52:54 |  79% ] transition 43 / 53, remaining: 2 s.
+ [ 22:52:55 |  89% ] transition 48 / 53, remaining: 1 s.
+ [ 22:52:56 |  98% ] transition 53 / 53, remaining: 0 s.
+ Finished calculation of matrix elements at 22:52:56.
+ Elapsed time: 12 s.
  
- CHI summation GPU algorithm offloading only submatrices to device.
+ CHI summation GPU algorithm offloading all matrix elements to device.
  
- Started building polarizability matrix with 32 processor(s) at 06:48:16.
- [ 06:48:16 |   0% ] processor  1 / 32.
- [ 06:48:19 |   6% ] processor  3 / 32, remaining: 42 s.
- [ 06:48:20 |   9% ] processor  4 / 32, remaining: 42 s.
- [ 06:48:24 |  19% ] processor  7 / 32, remaining: 37 s.
- [ 06:48:29 |  28% ] processor 10 / 32, remaining: 33 s.
- [ 06:48:33 |  38% ] processor 13 / 32, remaining: 28 s.
- [ 06:48:39 |  50% ] processor 17 / 32, remaining: 23 s.
- [ 06:48:43 |  59% ] processor 20 / 32, remaining: 18 s.
- [ 06:48:47 |  69% ] processor 23 / 32, remaining: 14 s.
- [ 06:48:51 |  78% ] processor 26 / 32, remaining: 10 s.
- [ 06:48:56 |  88% ] processor 29 / 32, remaining: 6 s.
- Finished building polarizability matrix at 06:49:01.
- Elapsed time: 45 s.
+ Started building polarizability matrix with 32 processor(s) at 22:52:56.
+ [ 22:52:58 |   0% ] processor  1 / 32.
+ [ 22:52:59 |   6% ] processor  3 / 32, remaining: 16 s.
+ [ 22:52:59 |   9% ] processor  4 / 32, remaining: 16 s.
+ [ 22:53:01 |  19% ] processor  7 / 32, remaining: 14 s.
+ [ 22:53:03 |  28% ] processor 10 / 32, remaining: 13 s.
+ [ 22:53:04 |  38% ] processor 13 / 32, remaining: 11 s.
+ [ 22:53:06 |  50% ] processor 17 / 32, remaining: 9 s.
+ [ 22:53:08 |  59% ] processor 20 / 32, remaining: 7 s.
+ [ 22:53:10 |  69% ] processor 23 / 32, remaining: 5 s.
+ [ 22:53:11 |  78% ] processor 26 / 32, remaining: 4 s.
+ [ 22:53:13 |  88% ] processor 29 / 32, remaining: 2 s.
+ Finished building polarizability matrix at 22:53:15.
+ Elapsed time: 19 s.
  
  Done With Block Number:     2
  -----------------------------
@@ -270,38 +267,38 @@ Slurm_JobID:  5954701
  Using GPU support via OpenACC/OMP-Target implementation
  Using batch implementation, batch size:    20
  
- Started calculation of matrix elements with 53 transition(s) at 06:49:04.
- [ 06:49:04 |   0% ] transition  1 / 53.
- [ 06:49:05 |   4% ] transition  3 / 53, remaining: 12 s.
- [ 06:49:06 |   9% ] transition  6 / 53, remaining: 11 s.
- [ 06:49:07 |  19% ] transition 11 / 53, remaining: 10 s.
- [ 06:49:08 |  28% ] transition 16 / 53, remaining: 8 s.
- [ 06:49:10 |  40% ] transition 22 / 53, remaining: 7 s.
- [ 06:49:11 |  49% ] transition 27 / 53, remaining: 6 s.
- [ 06:49:12 |  58% ] transition 32 / 53, remaining: 5 s.
- [ 06:49:13 |  70% ] transition 38 / 53, remaining: 4 s.
- [ 06:49:14 |  79% ] transition 43 / 53, remaining: 2 s.
- [ 06:49:16 |  89% ] transition 48 / 53, remaining: 1 s.
- [ 06:49:17 |  98% ] transition 53 / 53, remaining: 0 s.
- Finished calculation of matrix elements at 06:49:17.
- Elapsed time: 13 s.
+ Started calculation of matrix elements with 53 transition(s) at 22:53:18.
+ [ 22:53:18 |   0% ] transition  1 / 53.
+ [ 22:53:19 |   4% ] transition  3 / 53, remaining: 11 s.
+ [ 22:53:20 |   9% ] transition  6 / 53, remaining: 11 s.
+ [ 22:53:21 |  19% ] transition 11 / 53, remaining: 9 s.
+ [ 22:53:22 |  28% ] transition 16 / 53, remaining: 8 s.
+ [ 22:53:23 |  40% ] transition 22 / 53, remaining: 7 s.
+ [ 22:53:24 |  49% ] transition 27 / 53, remaining: 6 s.
+ [ 22:53:26 |  58% ] transition 32 / 53, remaining: 5 s.
+ [ 22:53:27 |  70% ] transition 38 / 53, remaining: 4 s.
+ [ 22:53:28 |  79% ] transition 43 / 53, remaining: 2 s.
+ [ 22:53:29 |  89% ] transition 48 / 53, remaining: 1 s.
+ [ 22:53:30 |  98% ] transition 53 / 53, remaining: 0 s.
+ Finished calculation of matrix elements at 22:53:30.
+ Elapsed time: 12 s.
  
- CHI summation GPU algorithm offloading only submatrices to device.
+ CHI summation GPU algorithm offloading all matrix elements to device.
  
- Started building polarizability matrix with 32 processor(s) at 06:49:17.
- [ 06:49:17 |   0% ] processor  1 / 32.
- [ 06:49:20 |   6% ] processor  3 / 32, remaining: 42 s.
- [ 06:49:22 |   9% ] processor  4 / 32, remaining: 42 s.
- [ 06:49:26 |  19% ] processor  7 / 32, remaining: 37 s.
- [ 06:49:30 |  28% ] processor 10 / 32, remaining: 33 s.
- [ 06:49:34 |  38% ] processor 13 / 32, remaining: 28 s.
- [ 06:49:40 |  50% ] processor 17 / 32, remaining: 23 s.
- [ 06:49:44 |  59% ] processor 20 / 32, remaining: 18 s.
- [ 06:49:49 |  69% ] processor 23 / 32, remaining: 14 s.
- [ 06:49:53 |  78% ] processor 26 / 32, remaining: 10 s.
- [ 06:49:57 |  88% ] processor 29 / 32, remaining: 6 s.
- Finished building polarizability matrix at 06:50:03.
- Elapsed time: 45 s.
+ Started building polarizability matrix with 32 processor(s) at 22:53:31.
+ [ 22:53:32 |   0% ] processor  1 / 32.
+ [ 22:53:33 |   6% ] processor  3 / 32, remaining: 16 s.
+ [ 22:53:34 |   9% ] processor  4 / 32, remaining: 16 s.
+ [ 22:53:35 |  19% ] processor  7 / 32, remaining: 14 s.
+ [ 22:53:37 |  28% ] processor 10 / 32, remaining: 12 s.
+ [ 22:53:39 |  38% ] processor 13 / 32, remaining: 11 s.
+ [ 22:53:41 |  50% ] processor 17 / 32, remaining: 9 s.
+ [ 22:53:42 |  59% ] processor 20 / 32, remaining: 7 s.
+ [ 22:53:44 |  69% ] processor 23 / 32, remaining: 5 s.
+ [ 22:53:46 |  78% ] processor 26 / 32, remaining: 4 s.
+ [ 22:53:47 |  88% ] processor 29 / 32, remaining: 2 s.
+ Finished building polarizability matrix at 22:53:49.
+ Elapsed time: 19 s.
  
  Done With Block Number:     3
  -----------------------------
@@ -313,38 +310,38 @@ Slurm_JobID:  5954701
  Using GPU support via OpenACC/OMP-Target implementation
  Using batch implementation, batch size:    20
  
- Started calculation of matrix elements with 53 transition(s) at 06:50:06.
- [ 06:50:06 |   0% ] transition  1 / 53.
- [ 06:50:07 |   4% ] transition  3 / 53, remaining: 11 s.
- [ 06:50:08 |   9% ] transition  6 / 53, remaining: 11 s.
- [ 06:50:09 |  19% ] transition 11 / 53, remaining: 9 s.
- [ 06:50:10 |  28% ] transition 16 / 53, remaining: 8 s.
- [ 06:50:11 |  40% ] transition 22 / 53, remaining: 7 s.
- [ 06:50:12 |  49% ] transition 27 / 53, remaining: 6 s.
- [ 06:50:13 |  58% ] transition 32 / 53, remaining: 5 s.
- [ 06:50:15 |  70% ] transition 38 / 53, remaining: 4 s.
- [ 06:50:16 |  79% ] transition 43 / 53, remaining: 2 s.
- [ 06:50:17 |  89% ] transition 48 / 53, remaining: 1 s.
- [ 06:50:18 |  98% ] transition 53 / 53, remaining: 0 s.
- Finished calculation of matrix elements at 06:50:18.
- Elapsed time: 13 s.
+ Started calculation of matrix elements with 53 transition(s) at 22:53:53.
+ [ 22:53:53 |   0% ] transition  1 / 53.
+ [ 22:53:54 |   4% ] transition  3 / 53, remaining: 11 s.
+ [ 22:53:55 |   9% ] transition  6 / 53, remaining: 11 s.
+ [ 22:53:56 |  19% ] transition 11 / 53, remaining: 10 s.
+ [ 22:53:57 |  28% ] transition 16 / 53, remaining: 8 s.
+ [ 22:53:58 |  40% ] transition 22 / 53, remaining: 7 s.
+ [ 22:53:59 |  49% ] transition 27 / 53, remaining: 6 s.
+ [ 22:54:00 |  58% ] transition 32 / 53, remaining: 5 s.
+ [ 22:54:02 |  70% ] transition 38 / 53, remaining: 4 s.
+ [ 22:54:03 |  79% ] transition 43 / 53, remaining: 2 s.
+ [ 22:54:04 |  89% ] transition 48 / 53, remaining: 1 s.
+ [ 22:54:05 |  98% ] transition 53 / 53, remaining: 0 s.
+ Finished calculation of matrix elements at 22:54:05.
+ Elapsed time: 12 s.
  
- CHI summation GPU algorithm offloading only submatrices to device.
+ CHI summation GPU algorithm offloading all matrix elements to device.
  
- Started building polarizability matrix with 32 processor(s) at 06:50:19.
- [ 06:50:19 |   0% ] processor  1 / 32.
- [ 06:50:22 |   6% ] processor  3 / 32, remaining: 42 s.
- [ 06:50:23 |   9% ] processor  4 / 32, remaining: 42 s.
- [ 06:50:28 |  19% ] processor  7 / 32, remaining: 37 s.
- [ 06:50:32 |  28% ] processor 10 / 32, remaining: 33 s.
- [ 06:50:36 |  38% ] processor 13 / 32, remaining: 28 s.
- [ 06:50:42 |  50% ] processor 17 / 32, remaining: 23 s.
- [ 06:50:46 |  59% ] processor 20 / 32, remaining: 18 s.
- [ 06:50:50 |  69% ] processor 23 / 32, remaining: 14 s.
- [ 06:50:54 |  78% ] processor 26 / 32, remaining: 10 s.
- [ 06:50:59 |  88% ] processor 29 / 32, remaining: 6 s.
- Finished building polarizability matrix at 06:51:04.
- Elapsed time: 45 s.
+ Started building polarizability matrix with 32 processor(s) at 22:54:05.
+ [ 22:54:07 |   0% ] processor  1 / 32.
+ [ 22:54:08 |   6% ] processor  3 / 32, remaining: 16 s.
+ [ 22:54:09 |   9% ] processor  4 / 32, remaining: 16 s.
+ [ 22:54:10 |  19% ] processor  7 / 32, remaining: 14 s.
+ [ 22:54:12 |  28% ] processor 10 / 32, remaining: 13 s.
+ [ 22:54:13 |  38% ] processor 13 / 32, remaining: 11 s.
+ [ 22:54:16 |  50% ] processor 17 / 32, remaining: 9 s.
+ [ 22:54:17 |  59% ] processor 20 / 32, remaining: 7 s.
+ [ 22:54:19 |  69% ] processor 23 / 32, remaining: 5 s.
+ [ 22:54:20 |  78% ] processor 26 / 32, remaining: 4 s.
+ [ 22:54:22 |  88% ] processor 29 / 32, remaining: 2 s.
+ Finished building polarizability matrix at 22:54:24.
+ Elapsed time: 19 s.
  
  Done With Block Number:     4
  -----------------------------
@@ -356,36 +353,36 @@ Slurm_JobID:  5954701
  Using GPU support via OpenACC/OMP-Target implementation
  Using batch implementation, batch size:    20
  
- Started calculation of matrix elements with 53 transition(s) at 06:51:07.
- [ 06:51:07 |   0% ] transition  1 / 53.
- [ 06:51:08 |   4% ] transition  3 / 53, remaining: 11 s.
- [ 06:51:09 |   9% ] transition  6 / 53, remaining: 11 s.
- [ 06:51:10 |  19% ] transition 11 / 53, remaining: 10 s.
- [ 06:51:11 |  28% ] transition 16 / 53, remaining: 9 s.
- [ 06:51:13 |  40% ] transition 22 / 53, remaining: 7 s.
- [ 06:51:14 |  49% ] transition 27 / 53, remaining: 6 s.
- [ 06:51:15 |  58% ] transition 32 / 53, remaining: 5 s.
- [ 06:51:16 |  70% ] transition 38 / 53, remaining: 4 s.
- [ 06:51:18 |  79% ] transition 43 / 53, remaining: 2 s.
- Finished calculation of matrix elements at 06:51:18.
+ Started calculation of matrix elements with 53 transition(s) at 22:54:28.
+ [ 22:54:28 |   0% ] transition  1 / 53.
+ [ 22:54:29 |   4% ] transition  3 / 53, remaining: 11 s.
+ [ 22:54:29 |   9% ] transition  6 / 53, remaining: 11 s.
+ [ 22:54:30 |  19% ] transition 11 / 53, remaining: 9 s.
+ [ 22:54:31 |  28% ] transition 16 / 53, remaining: 8 s.
+ [ 22:54:33 |  40% ] transition 22 / 53, remaining: 7 s.
+ [ 22:54:34 |  49% ] transition 27 / 53, remaining: 6 s.
+ [ 22:54:35 |  58% ] transition 32 / 53, remaining: 5 s.
+ [ 22:54:36 |  70% ] transition 38 / 53, remaining: 4 s.
+ [ 22:54:37 |  79% ] transition 43 / 53, remaining: 2 s.
+ Finished calculation of matrix elements at 22:54:38.
  Elapsed time: 10 s.
  
- CHI summation GPU algorithm offloading only submatrices to device.
+ CHI summation GPU algorithm offloading all matrix elements to device.
  
- Started building polarizability matrix with 32 processor(s) at 06:51:18.
- [ 06:51:18 |   0% ] processor  1 / 32.
- [ 06:51:21 |   6% ] processor  3 / 32, remaining: 42 s.
- [ 06:51:22 |   9% ] processor  4 / 32, remaining: 41 s.
- [ 06:51:26 |  19% ] processor  7 / 32, remaining: 36 s.
- [ 06:51:31 |  28% ] processor 10 / 32, remaining: 32 s.
- [ 06:51:35 |  38% ] processor 13 / 32, remaining: 28 s.
- [ 06:51:40 |  50% ] processor 17 / 32, remaining: 22 s.
- [ 06:51:45 |  59% ] processor 20 / 32, remaining: 18 s.
- [ 06:51:49 |  69% ] processor 23 / 32, remaining: 14 s.
- [ 06:51:53 |  78% ] processor 26 / 32, remaining: 10 s.
- [ 06:51:57 |  88% ] processor 29 / 32, remaining: 6 s.
- Finished building polarizability matrix at 06:52:03.
- Elapsed time: 45 s.
+ Started building polarizability matrix with 32 processor(s) at 22:54:38.
+ [ 22:54:39 |   0% ] processor  1 / 32.
+ [ 22:54:40 |   6% ] processor  3 / 32, remaining: 16 s.
+ [ 22:54:41 |   9% ] processor  4 / 32, remaining: 15 s.
+ [ 22:54:43 |  19% ] processor  7 / 32, remaining: 14 s.
+ [ 22:54:44 |  28% ] processor 10 / 32, remaining: 12 s.
+ [ 22:54:46 |  38% ] processor 13 / 32, remaining: 11 s.
+ [ 22:54:48 |  50% ] processor 17 / 32, remaining: 8 s.
+ [ 22:54:49 |  59% ] processor 20 / 32, remaining: 7 s.
+ [ 22:54:51 |  69% ] processor 23 / 32, remaining: 5 s.
+ [ 22:54:53 |  78% ] processor 26 / 32, remaining: 4 s.
+ [ 22:54:54 |  88% ] processor 29 / 32, remaining: 2 s.
+ Finished building polarizability matrix at 22:54:56.
+ Elapsed time: 18 s.
  
  Done With Block Number:     5
  -----------------------------
@@ -433,43 +430,42 @@ Slurm_JobID:  5954701
                                 CPU time (s)          WALL time (s)       Number
  Routine                       min        max        min        max     of calls
  -------------------------  ---------  ---------  ---------  ---------  --------
- - Eps (I/O) Comm                0.06       0.22       0.05       0.22         1
- - Eps (I/O) IO                 17.36      17.50      17.36      17.49         1
- - I/O TOTAL                    40.81      40.91      40.81      40.91         8
- - INPUT                        14.81      14.84      14.81      14.84         1
- - INPUT_Q                       9.16       9.26       9.16       9.26         1
+ - Eps (I/O) Comm                0.04       0.20       0.04       0.20         1
+ - Eps (I/O) IO                  6.70       6.74       6.71       6.74         1
+ - I/O TOTAL                    12.57      12.66      12.57      12.66         8
+ - INPUT                         5.03       5.04       5.03       5.04         1
+ - INPUT_Q                       1.43       1.52       1.43       1.52         1
  - FULLBZ                        0.00       0.00       0.00       0.00         1
  - GVEC                          0.00       0.00       0.00       0.00         1
  - SUBGRP                        0.00       0.00       0.00       0.00         1
  - IRRBZ                         0.00       0.00       0.00       0.00         1
- - GENWF                         2.66       2.73       2.65       2.74       255
- - MTXEL                        57.83      58.88      57.83      58.87       255
+ - GENWF                         2.63       2.71       2.62       2.72       255
+ - MTXEL                        55.67      57.01      55.67      57.02       255
  - RQSTAR                        0.00       0.00       0.00       0.00         5
  - GMAP                          0.01       0.01       0.01       0.01         5
- - EPSINV (TOTAL)               35.56      36.18      35.56      36.18         1
- - CHI SUM (COMM)                8.52      10.97       8.51      10.97       480
- - CHI SUM (TOTAL)             227.62     229.13     227.62     229.13         5
- - GENWF (VAL)                   0.18       0.19       0.17       0.21       255
- - GENWF (COND)                  2.47       2.54       2.47       2.54         5
- - EPSINV (VCOUL)                0.00       0.63       0.00       0.63         1
+ - EPSINV (TOTAL)               24.68      25.05      24.68      25.05         1
+ - CHI SUM (COMM)                7.73      10.66       7.74      10.66       480
+ - CHI SUM (TOTAL)              94.57      95.76      94.57      95.77         5
+ - GENWF (VAL)                   0.18       0.20       0.17       0.21       255
+ - GENWF (COND)                  2.45       2.52       2.44       2.52         5
+ - EPSINV (VCOUL)                0.00       0.37       0.00       0.37         1
  - JOB SETUP                     0.00       0.00       0.00       0.00         1
  - Q LOOP SETUP                  0.00       0.00       0.00       0.00         1
  - INIT CUTOFF                   0.00       0.00       0.00       0.00         1
  - INIT SCALAPACK                0.00       0.00       0.00       0.00         1
- - INIT ARRAYS                   5.97       6.26       5.97       6.26         6
- - MTXEL (DENOM)                 0.51       0.58       0.48       0.62    447270
- - MTXEL (FFT)                  57.83      58.88      57.83      58.87       255
+ - INIT ARRAYS                   6.65       7.35       6.65       7.35         6
+ - MTXEL (DENOM)                 0.50       0.52       0.47       0.55    447270
+ - MTXEL (FFT)                  55.67      57.01      55.67      57.02       255
  - GENWF (Ekin)                  0.00       0.01       0.00       0.01        10
- - GENWF (Sort)                  0.03       0.03       0.03       0.03         2
- - CHI SUM (zGEMM)             143.37     145.41     143.37     145.42       160
- - CHI SUM (PREP)               64.68      65.39      64.69      65.40       160
- - CHI SUM (ARRAY ALLOC)         2.11       2.12       2.10       2.12       160
- - EPSINV (I/O)                 17.63      17.64      17.63      17.64         1
- - EPSINV (INVERT)              17.14      17.16      17.14      17.16         1
- - CHI SUM (BAR)                 0.97       3.90       0.97       3.90         5
- - FFT MLTPLY                    9.56      10.09       9.44      10.14    447270
- - TOTAL                       365.95     365.98     365.95     365.98         1
+ - GENWF (Sort)                  0.03       0.04       0.03       0.04         2
+ - CHI SUM (zGEMM)              52.67      54.88      52.67      54.89       160
+ - CHI SUM (PREP)               16.64      17.23      16.64      17.23       160
+ - CHI SUM (ARRAY ALLOC)         2.10       2.12       2.10       2.12       160
+ - EPSINV (I/O)                  6.93       6.94       6.93       6.94         1
+ - EPSINV (INVERT)              16.97      16.99      16.97      16.99         1
+ - CHI SUM (BAR)                 0.08       2.08       0.08       2.09         5
+ - FFT MLTPLY                    8.23       8.72       8.27       8.79    447270
+ - TOTAL                       202.84     202.84     202.84     202.84         1
  
  Job Done
  
-gpu_monitor.parse_xml: 5954701-job.info file not found! This may mean that your job didn't run as expected. Attempting to summarize XML data without verifying data integrity.
