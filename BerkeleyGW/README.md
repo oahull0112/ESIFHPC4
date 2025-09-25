@@ -185,9 +185,9 @@ In addition, these scripts will print several performance results for the job:
 
 ## 3.2 Performance on Kestrel
 
-The sample data in the table below are measured runtimes from NREL's Kestrel CPU and GPU partitions. 
+The sample data in the table below are measured runtimes from NREL's Kestrel CPU and GPU partitions. We also provide a Python script in visualization/plot-times.py (it reads visualization/results-summary.xlsx) that an Offeror may optionally use to plot their results and compare with NREL's baseline performance results. 
 
-### 3.2.1 CPU Performance
+### 3.2.1 Standard (CPU) Node Performance
 
 Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core processors (104 cores total) and 256 GB memory. The CPU-targeted BerkeleyGW executables were built using PrgEnv-gnu. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. The table below summarizes our current best Small and Medium benchmark results for different numbers of Kestrel CPU nodes. We have not run the Large benchmark on Kestrel's CPU nodes. 
 
@@ -200,7 +200,9 @@ Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core proces
 |    CPU    |    Medium    |           64          |    6656   |    8    |              422             |              3             |                420               |
 |    CPU    |    Medium    |           96          |    9984   |    8    |              298             |              3             |                296               |
 
-### 3.2.2 GPU Performance
+![](visualization/bgw-Standard-scaling-summary_NRELonly.png)
+
+### 3.2.2 Accelerated (GPU) Node Performance
 
 Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (128 cores total) and four NVIDIA H100 SXM GPUs with 80 GB memory. Each GPU node job used four MPI tasks per node, each with one GPU and 16 cores. The GPU-accelerated BerkeleyGW executables were built using PrgEnv-nvhpc. Note that the number of OpenMP threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. For example, although most GPU benchmarks shown here run roughly optimally on Kestrel using 16 threads, the Large benchmark on 48 GPU nodes ran faster using 24 threads (see [Section 3.2.2.2](#3222-large-benchmark-gpu-performance-with-openmp-threads) below). The table below summarizes our current best Small, Medium, and Large benchmark results for different numbers of Kestrel GPU nodes. 
 
@@ -222,7 +224,9 @@ Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (
 |    GPU    |     Large    |           64          |    256    |    16   |              409             |             60             |                349               |
 |    GPU    |     Large    |           96          |    384    |    16   |              296             |             61             |                235               |
 
-#### 3.2.2.1 Medium benchmark GPU Performance with OpenMP Threads
+![](visualization/bgw-Accelerated-scaling-summary_NRELonly.png)
+
+#### 3.2.2.1 Medium benchmark Accelerated (GPU) Node Performance with OpenMP Threads
 
 Below we also include timing results comparing the impact of number of OpenMP threads for selected GPU node counts. First, for the Medium benchmark, we find that using 16 MPI threads is approximately optimal across numbers of nodes. 
 
@@ -236,7 +240,7 @@ Below we also include timing results comparing the impact of number of OpenMP th
 |    GPU    |    Medium    |           16          |     64    |    16   |              124             |              9             |                115               |
 |    GPU    |    Medium    |           16          |     64    |    32   |              132             |             26             |                106               |
 
-#### 3.2.2.2 Large benchmark GPU Performance with OpenMP Threads
+#### 3.2.2.2 Large benchmark Accelerated (GPU) Node Performance with OpenMP Threads
 
 Second, for the Large benchmark, we find that 48 nodes runs most optimally using 24 threads while 64 and 96 nodes are not as impacted. 
 
@@ -255,7 +259,7 @@ Second, for the Large benchmark, we find that 48 nodes runs most optimally using
 
 ## 3.3 Reporting
 
-For any problem size, benchmark results should include the Benchmark Time and I/O Time. The hardware configuration (i.e. the number of elements from each pool of computational resources) needed to achieve the estimated timings must also be provided. For example, if the anticipated compute system includes more than one type of compute node, then report the number and type of nodes used to run each stage of the workflow. If the target system enables disaggregation/composability, a finer grained resource list is needed. 
+For any problem size, benchmark results should include the (Max) Total Benchmark Time, (Max) Total I/O Time, and the Benchmark Time (the difference between the first two times), all in seconds. The hardware configuration (i.e. the number of elements from each pool of computational resources) needed to achieve the estimated timings must also be provided. For example, if the anticipated compute system includes more than one type of compute node, then report the number and type of nodes used to run each stage of the workflow. If the target system enables disaggregation/composability, a finer grained resource list is needed. BerkeleyGW summary output files (i.e. the one that actually contains the timing data, and not data files such as eps0mat.h5) should be included for each Offeror reported time.
 
 If providing run files, include all the build environment, source and makefiles used to build on the target platform, and input files and runscripts. Include all standard output files.
 
