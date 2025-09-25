@@ -189,7 +189,7 @@ The sample data in the table below are measured runtimes from NREL's Kestrel CPU
 
 ### 3.2.1 CPU Performance
 
-Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core processors (104 cores total) and 256 GB memory. The CPU-targeted BerkeleyGW executables were built using PrgEnv-gnu. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. The table below summarizes the Small and Medium benchmark results on Kestrel CPU nodes. 
+Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core processors (104 cores total) and 256 GB memory. The CPU-targeted BerkeleyGW executables were built using PrgEnv-gnu. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. The table below summarizes our current best Small and Medium benchmark results for different numbers of Kestrel CPU nodes. We have not run the Large benchmark on Kestrel's CPU nodes. 
 
 | Node Type | Problem Size | CPU or GPU Nodes Used | MPI Tasks | Threads | Epsilon Total Time (seconds) | Epsilon I/O Time (seconds) | Epsilon Benchmark Time (seconds) |
 |:---------:|:------------:|:---------------------:|:---------:|:-------:|:----------------------------:|:--------------------------:|:--------------------------------:|
@@ -202,12 +202,12 @@ Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core proces
 
 ### 3.2.2 GPU Performance
 
-Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (128 cores total) and four NVIDIA H100 SXM GPUs with 80 GB memory. Each GPU node job used four MPI tasks per node, each with one GPU and 16 cores. The GPU-accelerated BerkeleyGW executables were built using PrgEnv-nvhpc. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. For example, although most GPU benchmarks shown here run roughly optimally on Kestrel using 16 threads, the Large benchmark on 48 GPU nodes ran faster using 24 threads (see [Section 3.2.2.2](#3222-large-benchmark-gpu-performance-with-openmpi-threads) below). The table below summarizes the Small, Medium, and Large benchmark results on Kestrel GPU nodes. 
+Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (128 cores total) and four NVIDIA H100 SXM GPUs with 80 GB memory. Each GPU node job used four MPI tasks per node, each with one GPU and 16 cores. The GPU-accelerated BerkeleyGW executables were built using PrgEnv-nvhpc. Note that the number of OpenMP threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. For example, although most GPU benchmarks shown here run roughly optimally on Kestrel using 16 threads, the Large benchmark on 48 GPU nodes ran faster using 24 threads (see [Section 3.2.2.2](#3222-large-benchmark-gpu-performance-with-openmp-threads) below). The table below summarizes our current best Small, Medium, and Large benchmark results for different numbers of Kestrel GPU nodes. 
 
 | Node Type | Problem Size | CPU or GPU Nodes Used | MPI Tasks | Threads | Epsilon Total Time (seconds) | Epsilon I/O Time (seconds) | Epsilon Benchmark Time (seconds) |
 |:---------:|:------------:|:---------------------:|:---------:|:-------:|:----------------------------:|:--------------------------:|:--------------------------------:|
-|    GPU    |     Small    |           1           |     1     |    16   |              455             |             16             |                439               |
-|    GPU    |     Small    |           1           |     2     |    16   |              228             |             21             |                207               |
+|    GPU    |     Small    |          0.25         |     1     |    16   |              455             |             16             |                439               |
+|    GPU    |     Small    |          0.5          |     2     |    16   |              228             |             21             |                207               |
 |    GPU    |     Small    |           1           |     4     |    16   |              102             |              6             |                96                |
 |    GPU    |     Small    |           2           |     8     |    16   |              56              |              3             |                52                |
 |    GPU    |     Small    |           4           |     16    |    16   |              27              |              2             |                25                |
@@ -222,9 +222,9 @@ Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (
 |    GPU    |     Large    |           64          |    256    |    16   |              409             |             60             |                349               |
 |    GPU    |     Large    |           96          |    384    |    16   |              296             |             61             |                235               |
 
-#### 3.2.2.1 Medium benchmark GPU Performance with OpenMPI Threads
+#### 3.2.2.1 Medium benchmark GPU Performance with OpenMP Threads
 
-Below we also include timing results comparing the impact of number of OpenMPI threads for selected GPU node counts. First, for the Medium benchmark, we find that using 16 MPI threads is approximately optimal across numbers of nodes. 
+Below we also include timing results comparing the impact of number of OpenMP threads for selected GPU node counts. First, for the Medium benchmark, we find that using 16 MPI threads is approximately optimal across numbers of nodes. 
 
 | Node Type | Problem Size | CPU or GPU Nodes Used | MPI Tasks | Threads | Epsilon Total Time (seconds) | Epsilon I/O Time (seconds) | Epsilon Benchmark Time (seconds) |
 |:---------:|:------------:|:---------------------:|:---------:|:-------:|:----------------------------:|:--------------------------:|:--------------------------------:|
@@ -236,7 +236,7 @@ Below we also include timing results comparing the impact of number of OpenMPI t
 |    GPU    |    Medium    |           16          |     64    |    16   |              124             |              9             |                115               |
 |    GPU    |    Medium    |           16          |     64    |    32   |              132             |             26             |                106               |
 
-#### 3.2.2.2 Large benchmark GPU Performance with OpenMPI Threads
+#### 3.2.2.2 Large benchmark GPU Performance with OpenMP Threads
 
 Second, for the Large benchmark, we find that 48 nodes runs most optimally using 24 threads while 64 and 96 nodes are not as impacted. 
 
