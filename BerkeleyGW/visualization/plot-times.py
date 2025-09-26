@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 31 07:44:12 2024
-
-@author: jclary
-"""
 
 import pandas as pd
 import matplotlib.pyplot as plt
