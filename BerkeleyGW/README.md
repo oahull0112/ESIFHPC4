@@ -13,8 +13,8 @@ For this BerkeleyGW benchmark, we describe here how different job modifications 
 For Baseline results, the offeror may:
 1. Modify any optimization flags (the "-O#" flags) in the makefile.
 2. Use any libraries (e.g. scalapack vs ELPA as the eigenvalue solver). The environment used to build BerkeleyGW must be provided in the response.
-3. The number of OMP_NUM_THREADS used at runtime.
-4. The directory striping for file I/O.
+3. Change the number of OMP_NUM_THREADS used at runtime.
+4. Change the directory striping for file I/O.
 
 For Ported results, the offeror may:
 1. Modify the BerkeleyGW offloading directives. BerkeleyGW uses OpenACC and OpenMP-target directives, and which are known to run well on multiple types of accelerated nodes. Other directives may be used if they improve performance. 
