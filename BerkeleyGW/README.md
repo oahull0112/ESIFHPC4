@@ -185,9 +185,11 @@ In addition, these scripts will print several performance results for the job:
 
 ## 3.2 Performance on Kestrel
 
-The sample data in the table below are measured runtimes from NREL's Kestrel CPU and GPU partitions. 
+The sample data in the table below are measured runtimes from NREL's Kestrel CPU and GPU partitions. We also provide a Python script in visualization/plot-times.py (it reads visualization/results-summary.xlsx) that an Offeror may optionally use to plot their results and compare with NREL's baseline performance results. 
 
-Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core processors (104 cores total) and 256 GB memory. The CPU-targeted BerkeleyGW executables were built using PrgEnv-gnu. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. The table below summarizes the Small and Medium benchmark results on Kestrel CPU nodes. 
+### 3.2.1 Standard (CPU) Node Performance
+
+Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core processors (104 cores total) and 256 GB memory. The CPU-targeted BerkeleyGW executables were built using PrgEnv-gnu. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. The table below summarizes our current best Small and Medium benchmark results for different numbers of Kestrel CPU nodes. We have not run the Large benchmark on Kestrel's CPU nodes. 
 
 | Node Type | Problem Size | CPU or GPU Nodes Used | MPI Tasks | Threads | Epsilon Total Time (seconds) | Epsilon I/O Time (seconds) | Epsilon Benchmark Time (seconds) |
 |:---------:|:------------:|:---------------------:|:---------:|:-------:|:----------------------------:|:--------------------------:|:--------------------------------:|
@@ -198,37 +200,47 @@ Kestrel has dual socket Intel Xeon Sapphire Rapids CPU nodes with 52-core proces
 |    CPU    |    Medium    |           64          |    6656   |    8    |              422             |              3             |                420               |
 |    CPU    |    Medium    |           96          |    9984   |    8    |              298             |              3             |                296               |
 
-Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (128 cores total) and four NVIDIA H100 SXM GPUs with 80 GB memory. Each GPU node job used four MPI tasks per node, each with one GPU and 16 cores. The GPU-accelerated BerkeleyGW executables were built using PrgEnv-nvhpc. Note that the number of MPI threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. The table below summarizes the Small and Medium benchmark results on Kestrel GPU nodes. 
+![](visualization/bgw-Standard-scaling-summary_NRELonly.png)
+
+### 3.2.2 Accelerated (GPU) Node Performance
+
+Kestrel's GPU nodes have one dual socket AMD Genoa CPU with 64-core processors (128 cores total) and four NVIDIA H100 SXM GPUs with 80 GB memory. Each GPU node job used four MPI tasks per node, each with one GPU and 16 cores. The GPU-accelerated BerkeleyGW executables were built using PrgEnv-nvhpc. Note that the number of OpenMP threads used (as set by OMP_NUM_THREADS) may substantially impact benchmark time-to-solution. For example, although most GPU benchmarks shown here run roughly optimally on Kestrel using 16 threads, the Large benchmark on 48 GPU nodes ran faster using 24 threads (see [Section 3.2.2.2](#3222-large-benchmark-gpu-performance-with-openmp-threads) below). The table below summarizes our current best Small, Medium, and Large benchmark results for different numbers of Kestrel GPU nodes. 
 
 | Node Type | Problem Size | CPU or GPU Nodes Used | MPI Tasks | Threads | Epsilon Total Time (seconds) | Epsilon I/O Time (seconds) | Epsilon Benchmark Time (seconds) |
 |:---------:|:------------:|:---------------------:|:---------:|:-------:|:----------------------------:|:--------------------------:|:--------------------------------:|
-|    GPU    |     Small    |           1           |     1     |    16   |              455             |             16             |                439               |
-|    GPU    |     Small    |           1           |     2     |    16   |              228             |             21             |                207               |
-|    GPU    |     Small    |           1           |     4     |    16   |              109             |             12             |                97                |
-|    GPU    |     Small    |           2           |     8     |    16   |              57              |              5             |                53                |
-|    GPU    |     Small    |           4           |     16    |    16   |              28              |              2             |                25                |
+|    GPU    |     Small    |          0.25         |     1     |    16   |              455             |             16             |                439               |
+|    GPU    |     Small    |          0.5          |     2     |    16   |              228             |             21             |                207               |
+|    GPU    |     Small    |           1           |     4     |    16   |              102             |              6             |                96                |
+|    GPU    |     Small    |           2           |     8     |    16   |              56              |              3             |                52                |
+|    GPU    |     Small    |           4           |     16    |    16   |              27              |              2             |                25                |
 |    GPU    |     Small    |           8           |     32    |    16   |              18              |              2             |                16                |
 |    GPU    |     Small    |           16          |     64    |    16   |              12              |              2             |                10                |
-|    GPU    |    Medium    |           2           |     8     |    16   |              941             |             163            |                778               |
-|    GPU    |    Medium    |           4           |     16    |    16   |              419             |             52             |                368               |
-|    GPU    |    Medium    |           8           |     32    |    16   |              236             |             45             |                190               |
-|    GPU    |    Medium    |           16          |     64    |    16   |              137             |             25             |                112               |
-|    GPU    |    Medium    |           32          |    128    |    16   |              103             |             16             |                87                |
+|    GPU    |    Medium    |           2           |     8     |    16   |              811             |             40             |                771               |
+|    GPU    |    Medium    |           4           |     16    |    16   |              392             |             26             |                366               |
+|    GPU    |    Medium    |           8           |     32    |    16   |              203             |             13             |                190               |
+|    GPU    |    Medium    |           16          |     64    |    16   |              124             |              9             |                115               |
+|    GPU    |    Medium    |           32          |    128    |    16   |              96              |             10             |                86                |
 |    GPU    |     Large    |           48          |    192    |    24   |              441             |             28             |                414               |
 |    GPU    |     Large    |           64          |    256    |    16   |              409             |             60             |                349               |
 |    GPU    |     Large    |           96          |    384    |    16   |              296             |             61             |                235               |
 
-Below we also include timing results comparing the impact of number of OpenMPI threads for selected GPU node counts. First, for the Medium benchmark, we find that using 16 MPI threads is approximately optimal across numbers of nodes. 
+![](visualization/bgw-Accelerated-scaling-summary_NRELonly.png)
+
+#### 3.2.2.1 Medium benchmark Accelerated (GPU) Node Performance with OpenMP Threads
+
+Below we also include timing results comparing the impact of number of OpenMP threads for selected GPU node counts. First, for the Medium benchmark, we find that using 16 MPI threads is approximately optimal across numbers of nodes. 
 
 | Node Type | Problem Size | CPU or GPU Nodes Used | MPI Tasks | Threads | Epsilon Total Time (seconds) | Epsilon I/O Time (seconds) | Epsilon Benchmark Time (seconds) |
 |:---------:|:------------:|:---------------------:|:---------:|:-------:|:----------------------------:|:--------------------------:|:--------------------------------:|
-|    GPU    |    Medium    |           4           |     16    |    1    |             1428             |             71             |               1358               |
-|    GPU    |    Medium    |           4           |     16    |    4    |              631             |             64             |                567               |
-|    GPU    |    Medium    |           4           |     16    |    8    |              493             |             63             |                430               |
-|    GPU    |    Medium    |           4           |     16    |    16   |              419             |             52             |                368               |
-|    GPU    |    Medium    |           4           |     16    |    32   |              413             |             61             |                352               |
-|    GPU    |    Medium    |           16          |     64    |    16   |              137             |             25             |                112               |
-|    GPU    |    Medium    |           16          |     64    |    32   |              146             |             35             |                111               |
+|    GPU    |    Medium    |           4           |     16    |    1    |             1379             |             23             |               1357               |
+|    GPU    |    Medium    |           4           |     16    |    4    |              610             |             46             |                564               |
+|    GPU    |    Medium    |           4           |     16    |    8    |              468             |             39             |                429               |
+|    GPU    |    Medium    |           4           |     16    |    16   |              392             |             26             |                366               |
+|    GPU    |    Medium    |           4           |     16    |    32   |              402             |             63             |                340               |
+|    GPU    |    Medium    |           16          |     64    |    16   |              124             |              9             |                115               |
+|    GPU    |    Medium    |           16          |     64    |    32   |              132             |             26             |                106               |
+
+#### 3.2.2.2 Large benchmark Accelerated (GPU) Node Performance with OpenMP Threads
 
 Second, for the Large benchmark, we find that 48 nodes runs most optimally using 24 threads while 64 and 96 nodes are not as impacted. 
 
@@ -247,7 +259,7 @@ Second, for the Large benchmark, we find that 48 nodes runs most optimally using
 
 ## 3.3 Reporting
 
-For any problem size, benchmark results should include the Benchmark Time and I/O Time. The hardware configuration (i.e. the number of elements from each pool of computational resources) needed to achieve the estimated timings must also be provided. For example, if the anticipated compute system includes more than one type of compute node, then report the number and type of nodes used to run each stage of the workflow. If the target system enables disaggregation/composability, a finer grained resource list is needed. 
+For any problem size, benchmark results should include the (Max) Total Benchmark Time, (Max) Total I/O Time, and the Benchmark Time (the difference between the first two times), all in seconds. The hardware configuration (i.e. the number of elements from each pool of computational resources) needed to achieve the estimated timings must also be provided. For example, if the anticipated compute system includes more than one type of compute node, then report the number and type of each node used to run the benchmark. If the target system enables disaggregation/composability, a finer grained resource list is needed. BerkeleyGW summary output files (i.e. the one that actually contains the timing data, and not data files such as eps0mat.h5) should be included for each Offeror reported time.
 
 If providing run files, include all the build environment, source and makefiles used to build on the target platform, and input files and runscripts. Include all standard output files.
 
