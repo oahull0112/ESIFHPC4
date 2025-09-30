@@ -17,7 +17,7 @@ How to Build
 ------------
 The benchmark results for "As-is" tests must be generated from LAMMPS version 22-Jul-2025. Optional libraries or packages included in the LAMMPS distribution (*e.g.*, OpenMP or Intel) may be used and reported as the "optimized code" in the reporting spreadsheet.
 
-LAMMPS can be built by following the instructions at [https://lammps.sandia.gov/doc/Install.html](https://docs.lammps.org/Build.html). For systems with GPUs, a version should be built with the LAMMPS GPU or KOKKOS package. If the Offeror's chip doesn't support these packages, please contact NREL as soon as possible for possiblilty of using other package such as Kokkos.  
+LAMMPS can be built by following the instructions at [https://lammps.sandia.gov/doc/Install.html](https://docs.lammps.org/Build.html). For systems with GPUs, a version should be built with the LAMMPS GPU or KOKKOS package with the default precision. If the Offeror's chip doesn't support these packages, please contact NREL as soon as possible for possiblilty of using other package such as Kokkos.  
 
 How to Run  
 ----------
