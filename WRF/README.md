@@ -3,7 +3,7 @@
 Weather Research and Forecasting (WRF) benchmarking and building instructions. This document is organized as follows:
 
 1. [Step 1: Building WRF](#step-1-building-wrf): This describes the process required to build the WRF executable from source code.
-2. [Step 2: Submitting Benchmarking Jobs](#step-2-submitting-benchmarking-jobs): This described how to access the benchmarking job and modify it to test our WRF installation.
+2. [Step 2: Submitting Benchmarking Jobs](#step-2-submitting-benchmarking-jobs): This described how to access the benchmarking job and modify it to test the benchmark.
 3. [Step 3: Measuring and Recording Performance](#step-3-measuring-and-recording-performance): This section defines what metrics will be recorded and how to calculate them.
 4. [Run Definitions and Requirements](#run-definitions-and-requirements): We outline what results to include in the response and give examples for comparison.
 
@@ -12,14 +12,11 @@ Weather Research and Forecasting (WRF) benchmarking and building instructions. T
 ## Step 1: Building WRF
 
 > [!NOTE]  
-> The steps described in this section (particularly Step 1.3 and the `PNETCDF` and `HDF5` environment variables in Step 1.4) are specific to building WRF on the Kestrel HPC and current for December 2025. It is expected that minor modifications *will be required* on other systems and/or as the WRF dependencies are updated/available. Using modified versions of these supporting modules and setting the required environment variables appropriately is both acceptable and expected within the context of a "Baseline (as-is)" benchmark.
+> The example steps for building WRF described in this section (particularly Step 1.3 and the `PNETCDF` and `HDF5` environment variables in Step 1.4) are specific to building WRF on the Kestrel HPC and current for December 2025. Using modified versions of the WRF dependencies is acceptable within the context of a "Baseline (as-is)" benchmark.
 
-### 1.0. Request an Interactive Node
-Before starting the build process, you may wish to request an interactive node to parallelize the compilation process, significantly reducing build time. If you don't have access to such resources, proceed immediately to Step 1.1. As a guideline, the entire workflow described in these instructions can be completed within approximately 15 minutes, so requesting a 60-minute session is a safe estimate. Replace `<allocation_name>` with your appropriate allocation name to initiate the session. As an example:
+The build time of WRF is significantly reduced by compiling in parallel. As a guideline, the entire installation workflow described in these instructions can be completed within approximately 15 minutes.
 
-```bash
-salloc -A <allocation_name> -t 60
-```
+Comprehensive build instructions can be found [here](https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compilation_tutorial.php).
 
 ### 1.1: Download WRF and WPS Source Code
 Start by downloading the source code for the WRF model and its companion, the WRF Preprocessing System (WPS). Use the provided links to download the specific versions of WRF (v4.7.1) and WPS (v4.6.0). The commands below will fetch compressed `.tar.gz` archives from the official WRF GitHub repository.
@@ -30,7 +27,7 @@ wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
 ```
 
 ### 1.2: Extract the Source Code
-Once you've downloaded the archives, unpack them to access the source code. The `tar` command extracts the contents of the `.tar.gz` files and creates directories corresponding to the source files. This step produces directories containing WRF (WRFV4.7.1) and WPS (WPS-4.6.0).
+Once you've downloaded the archives, unpack them to access the source code. This step produces directories containing WRF (WRFV4.7.1) and WPS (WPS-4.6.0).
 
 ```bash
 tar -xvzf v4.6.0.tar.gz 
@@ -38,7 +35,7 @@ tar -xvzf v4.7.1.tar.gz
 ```
 
 ### 1.3: Load Necessary Modules
-The next step is loading the required software modules. By purging existing modules and loading specific versions of compilers and libraries, you ensure a clean environment and avoid compatibility issues during compilation. The commands below load GNU compilers (`PrgEnv-gnu/8.5.0`), NetCDF libraries (which automatically loads pnetcdf libraries and hdf5 libraries on the reference system) (`netcdf/4.9.3-cray-mpich-gcc`), and Jasper libraries (`jasper/1.900.1-cray-mpich-gcc`) that support WRF.
+The next step is loading the required dependencies, NetCDF and an MPI. As an example, the commands below load GNU compilers (`PrgEnv-gnu/8.5.0`), NetCDF libraries (which automatically loads pnetcdf libraries and hdf5 libraries on the reference system) (`netcdf/4.9.3-cray-mpich-gcc`), and Jasper libraries (`jasper/1.900.1-cray-mpich-gcc`) that support WRF.
 
 ```bash
 module purge
@@ -46,6 +43,8 @@ module load PrgEnv-gnu/8.5.0
 module load netcdf/4.9.3-cray-mpich-gcc
 module load jasper/1.900.1-cray-mpich-gcc
 ```
+
+In the above example, we use `gcc 12.2.1`, `netcdf 4.9.3`, `cray mpich 8.1.28`, and `jasper 1.900.1`
 
 ### 1.4: Set Environment Variables
 Define environment variables to facilitate the compilation process. These variables specify file paths, library locations, and directory structures required by the build system. Update the paths of `WRF_DIR` and `WPS_DIR` in the example to match your local installation setup. 
@@ -62,7 +61,7 @@ export HDF5=$HDF5_DIR
 ```
 
 ### 1.5: Configure WRF Build Options
-Navigate to the WRF directory specified earlier using the `WRF_DIR` variable. Run the `configure` script, which will ask you to specify build options. At the first prompt, select option `35` for `(dm+sm) GNU (gfortran/gcc)` which compiles WRF with support for shared memory (SM) and distributed memory (DM) parallelism. At the second prompt, specify the type of nesting desired by selecting option `1=basic`. Nesting allows for finer resolution within a defined area.
+Navigate to the WRF directory specified earlier using the `WRF_DIR` variable. Run the `configure` script, which will ask you to specify build options. In our example, we select option `35` for `(dm+sm) GNU (gfortran/gcc)` which compiles WRF with support for shared memory (SM) and distributed memory (DM) parallelism. At the second prompt, specify the type of nesting desired by selecting option `1=basic`. Nesting allows for finer resolution within a defined area.
 
 ```bash
 cd ${WRF_DIR}
@@ -80,7 +79,7 @@ Compile for nesting? (1=basic, 2=preset moves, 3=vortex following) [default 1]:1
 ```
 
 ### 1.6: Compile WRF
-Compile WRF with parallel processing to reduce build time. The `-j` flag specifies the number of cores to use during compilation; select up to 20 cores (you may use fewer if resources are limited). Upon successful compilation, you should see a summary of executables created in the `main` directory (e.g., `wrf.exe`, `real.exe`).
+Compile WRF with parallel processing to reduce build time. The `-j` flag specifies the number of cores to use during compilation. Upon successful compilation, you should see a summary of executables created in the `main` directory (e.g., `wrf.exe`, `real.exe`).
 
 ```bash
 ./compile -j 16 em_real
@@ -137,7 +136,7 @@ Run the WPS compile process to generate the necessary executables. If successful
 ## Step 2: Submitting Benchmarking Jobs
 
 ### 2.1: Create Copies of Run Directories 
-Create multiple versions of the run directory to accommodate different benchmarking cases. For example, suffix `mpi-02` and `mpi-04` denote pure MPI runs on 2 nodes and 4 nodes respectively. Naming these directories helps distinguish settings and save independent results for different benchmarking scenarios.
+In our example, we create multiple versions of the run directory to accommodate different benchmarking cases. For example, suffix `mpi-02` and `mpi-04` denote pure MPI runs on 2 nodes and 4 nodes respectively.
 
 ```bash
 cp -r ${WRF_DIR}/run/ ${WRF_DIR}/conus2.5km-mpi-02
@@ -173,8 +172,8 @@ cp *.dat *.input *_d01 ${WRF_DIR}/conus2.5km-mpi-04
 ...
 ```
 
-### 2.5: Create Job Submission Script
-Within each run directory, create a submission script named `submit_job.sbatch`. This script provides the configuration needed to run WRF using Slurm. Below is the example for a 2-node, pure-MPI case (i.e., one thread per MPI task, `OMP_NUM_THREADS=1`), which utilizes 92% of the cores on each node. You can update the `--nodes`, `num_cores`, and `OMP_NUM_THREADS` values for additional configurations as described in [Run Definitions and Requirements](#run-definitions-and-requirements). Save the file to the respective run directory, e.g., `${WRF_DIR}/conus2.5km-mpi-02/submit_job.sbatch`.
+### 2.5: Running the job (example with Slurm)
+ We provide below an example Slurm submission script for a 2-node, pure-MPI case (i.e., one thread per MPI task, `OMP_NUM_THREADS=1`), which utilizes 92% of the cores on each Kestrel node.
 
 ```bash
 #!/bin/bash
@@ -209,7 +208,7 @@ Once benchmarking jobs finish successfully, the configured run directories will 
 
 ### 3.1: Run the Timing Script
 
-For each of the run directories created above, we will examine the timings reported in the `rsl.error.0000` file. This human-readable file contains lots of valuable information, but we will focus primarily on the execution time. A parsing script, [`get_timing.py`](get_timing.py), is supplied here and can be executed like:
+For each of the run directories created above, we will examine the timings reported in the `rsl.error.0000` file, which is human-readable and contains the execution timings. A parsing script, [`get_timing.py`](get_timing.py), is supplied here and can be executed like:
 
 ```bash
 python get_timing.py --rsl_file=${WRF_DIR}/conus2.5km-mpi-02/rsl.error.0000 --rsl_file=${WRF_DIR}/conus2.5km-mpi-04/rsl.error.0000
@@ -222,9 +221,9 @@ This script combs through the rsl.error.0000 file(s) specified with the `--rsl_f
 ## Run Definitions and Requirements
 
 
-Benchmarking WRF requires reporting these timing results from two sets of runs each comprised of 5 test cases for a total of 10 runs. The first set of runs uses pure MPI parallelism (i.e., one OpenMP thread per MPI task) and tests strong scaling performance across 1, 2, 4, 8, and 16 nodes. The Offeror may adjust the total number of MPI tasks, but note that in each case, *at least 80% of the available cores per every node must be utilized.* The second set of runs uses hybrid OpenMP + MPI parallelism (i.e., 4 threads per MPI task) and tests strong scaling performance across the same 1, 2, 4, 8, and 16 node jobs. Note that since each MPI task uses 4 threads, the requirement for the total number of MPI tasks per every node is reduced to 20%.
+Benchmarking WRF requires reporting these timing results from two sets of runs each comprised of 5 test cases for a total of 10 runs. The first set of runs uses pure MPI parallelism (i.e., one OpenMP thread per MPI task) and tests strong scaling performance across 1, 2, 4, 8, and 16 nodes.  The second set of runs uses hybrid OpenMP + MPI parallelism (i.e., 4 threads per MPI task) and tests strong scaling performance across the same 1, 2, 4, 8, and 16 node jobs. The Offeror may adjust the total number of MPI tasks and OpenMP threads per task, but note that in each case, at least 80% of the available physical cores per every node must be utilized.
 
-For these required cases, report the number of MPI tasks, number of threads, number of iterations during the calculation, total write time, and total time in the reporting spreadsheet (the `get_timing.py` script provides all these outputs). Optionally, the Offeror may include a set of additional "Optimized" cases that use different OpenMP:MPI ratios, node saturations, `namelist.input` specifications, building instructions, etc., provided any details and/or instructions necessary to reproduce these results are provided as explained in the [definition of "Optimized"](../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs).
+For these required cases, report the number of MPI tasks, number of threads, number of iterations during the calculation, total write time, and total time in the reporting spreadsheet (the `get_timing.py` script provides all these outputs). Optionally, the Offeror may optionally include a set of additional "Optimized" cases that use different OpenMP:MPI ratios, node saturations, `namelist.input` specifications, building instructions, etc., provided any details and/or instructions necessary to reproduce these results are provided as explained in the [definition of "Optimized"](../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs).
 
 For clarity and comparison, we include the summarized results of carrying out the required benchmarks on the Kestrel HPC below. The output of running the `get_timing.py` script on the 5 `rsl.error.0000` files for the pure MPI tests is:
 
