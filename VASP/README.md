@@ -32,11 +32,11 @@ As a high level overview, building VASP typically involves:
 
 VASP is run by simply calling the appropriate parallel launcher (e.g. `srun`, `mpirun`, etc.) on the appropriate executable (`vasp_std` or `vasp_gam`) in a folder in which the appropriate four input files can be found: `INCAR`, `KPOINTS`, `POSCAR`, `POTCAR`.
 
-We have included a sample Slurm submission script `job.slurm` for each benchmark within the `NREL-results` folders, however, other systems using Slurm may need different `#SBATCH` parameters. 
+We have included a sample Slurm submission script `job.slurm` for each benchmark within the `NLR-results` folders, however, other systems using Slurm may need different `#SBATCH` parameters. 
 
 The benchmarks should be run with the Linux `time` command as illustrated in the sample submission scripts and this is the time that must be reported.
 
-The benchmark results must be validated against the results supplied in the `NREL-results` folder. 
+The benchmark results must be validated against the results supplied in the `NLR-results` folder, see validation section below. 
 
 ## Run Definitions and Requirements
 
@@ -51,7 +51,7 @@ The benchmark results must be validated against the results supplied in the `NRE
 * Required: Results must be reported for accelerated nodes and optionally for standard nodes.
 
 ### Node counts
-* Required: For each of the above, report results on 1 and 2 nodes/accelerators.
+* Required: For each of the above, report results on the smallest possible hardware configuration (e.g., one compute node or one device), 2x this configuration, and 4x this configuration.
 
 ### OpenMP usage
 * Required: For each of the above, always report performance without OpenMP (pure MPI). 
@@ -73,9 +73,19 @@ In addition to content enumerated in the General Instructions, please return fil
 Parallelization parameters (`KPAR`, `NCORE`, `NSIM`) can have a significant impact on performance. The Offeror is allowed to vary these parameters to determine the optimal settings. 
 *Note:* Because Benchmark 2 is a Gamma-point-only calculation, `KPAR` should be set to 1.
 
+While fully converged runs are required for final reporting, shorter runs may be desired during performance tuning (e.g. of parallelization parameters or other testing). In such cases, the maximum number of SCF iterations may be reduced (e.g., to 5 by setting `NELM = 5` in the INCAR file) to reduce time-to-solution during testing. Note that the input `NELMIN = 3` enforces a minimum of 3 SCF steps. **Important: the results from these truncated runs will not be suitable for validation.**
+
+To check if a calculation has converged, search for "aborting loop because EDIFF is reached" in the OUTCAR. 
+
 ## Validation
 
 1. **Required Files:** The Offeror will provide `OUTCAR` and `VASP.xml` for each calculation. These files will be used to verify that the Offeror followed the prescribed instructions and did not modify any calculation settings beyond those explicitly permitted (i.e., `KPAR` and `NCORE`).
-2. **Validation Method:** Validation will consist of comparing the reported final electronic energy and, where applicable, the band gap from the submitted outputs against the corresponding reference values.
-3. **Acceptance Criteria:** A calculation will be considered valid if the final energy and, when relevant, the band gap agree with the reference values within a tolerance of 1E-3 eV.
+2. **Validation Method:** Validation will consist of comparing the reported final electronic energy (TOTEN) and, for bench 1, the band gap (fundamental gap) from the submitted OUTCAR files against the corresponding reference values.
+3. **Acceptance Criteria:** A converged calculation will be considered valid if the final energy and, when relevant, the band gap agree with the reference values within a tolerance of 1E-3 eV.
 4. **Reference Data:** The reference data will be provided to the Offeror for comparison purposes but may not be modified without prior written authorization. The reference directory may be transferred to another system if needed for convenience.
+
+Below is a summary of the results that can be found in the `NLR-results` folder for each benchmark:
+| Property            | Bench 1 (eV) | Bench 2 (eV) |
+|---------------------|--------------|--------------|
+| TOTEN               | -666.3571    | -2531.9038   |
+| fundamental gap     | 1.0514       | N/A          |
