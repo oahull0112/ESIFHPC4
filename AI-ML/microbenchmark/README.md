@@ -18,9 +18,7 @@ Exact build instructions will depend on the chosen CCL implementation and hardwa
 
 ## Run Definitions and Requirements
 
-On Kestrel, the maximum out-of-place bus bandwidth for 16 nodes (64 total GPU devices) is ~45.7 GB/s as measured by NCCL AllReduce. See "Benchmark test results to report and files to return" below for reference.
-
-## How to run
+### How to run
 
 See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` on Kestrel from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository. 
 
@@ -54,20 +52,20 @@ To demonstrate inter-node CCL performance, each collective should be run in two 
 
 **15% of nodes proposed by offeror. If this number exceeds the total number of nodes on the test system, then running the CCL benchmark on all accelerated test nodes satisfies this requirement.
 
-## Run Rules
+### Run Rules
 
-Any run must utilize all available accelerators on each node. For all configurations described above, the collective test should scan message sizes between 256B to 4GB, increasing by a factor of 2. For example (launched via Slurm):
+Any run must utilize all available accelerators on each node. For all configurations described above, the collective test should scan message sizes between 8B to 4GB, increasing by a factor of 2. For example (replace `<launcher>` accordingly):
 
 ```
-srun all_reduce_perf -b 8 -e 4G -f 2
+<launcher> all_reduce_perf -b 8 -e 4G -f 2
 ```
+
+*Note: any scheduler/launcher (e.g., `srun`, `mpirun`, etc.) is appropriate to run this benchmark across multiple nodes.`*
 
 **Options:**
 - `-b`: Minumum size in bytes
 - `-e`: Maximum size in bytes
 - `-f`: Increment factor
-
-*Note: This example is launched with `srun`, but any scheduler/launcher is appropriate to run this benchmark across multiple nodes.*
 
 ## Benchmark test results to report and files to return
 
@@ -75,6 +73,7 @@ srun all_reduce_perf -b 8 -e 4G -f 2
 
 **Spreadsheet response:** We request the out-of-place and in-place bandwidth and latencies, as well as high-level information about the system the benchmark was run on, to be reported in a spreadsheet (template [below](#spreadsheet-template)) for the following message sizes:
 
+- 8
 - 524288
 - 33554432
 - 4294967296
@@ -85,11 +84,12 @@ Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https:
 
 #### Spreadsheet Template 
 
-|System|Replicate|Collective Operation|Command|Number of devices|Number of nodes|NICs per node| Message size (B)|Out-of-Place Latency (uS)|Out-of-Place Algorithmic Bandwidth (GB/s)|Out-of-Place Bus Bandwidth (GB/s)|In-Place Latency (uS)|In-Place Algorithmic Bandwidth (GB/s)|In-Place Bus Bandwidth (GB/s)|
-|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
-|Reference (Kestrel)|1|AllReduce|all_reduce_perf -b 8 -e 4G -f 2|64|16|2|524288|835.3|0.63|1.24|462.2|1.13|2.23|
-|Reference (Kestrel)|1|AllReduce|all_reduce_perf -b 8 -e 4G -f 2|64|16|2|33554432|2973.4|11.29|22.22|2636.4|12.73|25.06|
-|Reference (Kestrel)|1|AllReduce|all_reduce_perf -b 8 -e 4G -f 2|64|16|2|4294967296|184959|23.22|45.72|185005|23.22|45.71|
+|System|Replicate|Collective Operation|Min byte size|Max byte size|Increment factor|Number of devices|Number of nodes|NICs per node| Message size (B)|Out-of-Place Time (uS)|Out-of-Place Algorithmic Bandwidth (GB/s)|Out-of-Place Bus Bandwidth (GB/s)|In-Place Time (uS)|In-Place Algorithmic Bandwidth (GB/s)|In-Place Bus Bandwidth (GB/s)|
+|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
+|Reference (Kestrel)|1|AllReduce|8B|4G|2|64|16|2|8|59.83|0.00|50.15|462.2|0.00|0.00|
+|Reference (Kestrel)|1|AllReduce|8B|4G|2|64|16|2|524288|835.3|0.63|1.24|462.2|1.13|2.23|
+|Reference (Kestrel)|1|AllReduce|8B|4G|2|64|16|2|33554432|2973.4|11.29|22.22|2636.4|12.73|25.06|
+|Reference (Kestrel)|1|AllReduce|8B|4G|2|64|16|2|4294967296|184959|23.22|45.72|185005|23.22|45.71|
 
 #### Logfile Example
 
