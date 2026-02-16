@@ -18,18 +18,25 @@ IOR is licensed under GPLv2, see [here](https://github.com/hpc/ior?tab=License-1
 
 Documentation on installation [here](https://ior.readthedocs.io/en/latest/userDoc/install.html).
 
-See example build script used to build IOR on Kestrel, `kestrel-example-build-script.sh`
+See `kestrel_example_build_script.sh` used to build IOR on Kestrel.
 
 These tests require MPI and HDF5.
 
+**Note on versions used:** 
+* IOR v3.3.0
+* MPI cray-mpich v8.1.28
+* HDF5 hdf5-parallel v1.12.2.9
+
+
+
 ## Run Definitions and Requirements
 
-We define four IOR tests. Sample input files for these tests can be found in the IOR-tests folder. Note that test 4 is under development and not yet available as of August 1, 2025.
+We define four IOR tests. Sample input files for these tests can be found in the IOR-tests folder. 
 
 1. Fully sequential, large-transaction reads and writes, file-per-process, POSIX and MPI-IO
 2. Fully sequential, large-transaction reads and writes, single file, MPI-IO only
 3. Random, small transaction reads and writes, file-per-process, POSIX-only
-4. HDF5 test meant to replicate the IO patterns of the [Rev](https://github.com/NREL/reV) application
+4. HDF5 test meant to replicate the IO patterns of the [Rev](https://github.com/NREL/reV) application. Similar to Test 2, but with api=HDF5 and each MPI task writing/reading to/from its own dataset in the HDF5 file.
 
 For all tests:
 - Repeat for each offered filesystem
@@ -38,15 +45,15 @@ For all tests:
 - Only the maximum, reproducible transfer rate achieved should be reported.
 - Optimizations that would allow for page caching are not allowed.
 
-For tests 1 and 2:
-- Execute on a single node, 15% of offered nodes, and the number of nodes that results in max bandwidth.
-- The single node test and the 15% of nodes test must be run with 80% of available cores subscribed. In addition, the vendor can optionally execute these tests with an optimal number of available cores, if this number is less than 80% of available cores.
+For tests 1 and 2, and 4:
+- Execute on a single node, 10% of offered nodes, and the number of nodes that results in max bandwidth.
+- The single node test and the 10% of nodes test must be run with 80% of available cores subscribed. In addition, the vendor can optionally execute these tests with an optimal number of available cores, if this number is less than 80% of available cores.
 - Transfer and block size can be changed to achieve optimal performance
 - At least 80% of the node's RAM must be pre-populated (i.e. `memoryPerNode = 80%` or higher)
 
 For test 3:
 - Execute with POSIX only
-- Execute on 15% of offered nodes only
+- Execute on 10% of offered nodes only
 - Transfer and block size cannot be changed
 - At least 80% of the node's RAM must be pre-populated (i.e. `memoryPerNode = 80%` or higher)
 
@@ -57,6 +64,36 @@ In all cases, changes related to tuning must be practical for production utiliza
 A sample input for each of the four tests is provided in the `IOR/IOR-tests/` folder.
 
 For a full set of IOR inputs, see [IOR options](https://ior.readthedocs.io/en/latest/userDoc/options.html)
+
+See an example `kestrel_example_sbatch_script.sh` used to submit, e.g., `test1_nn_mpi_io.ior` job on one node. 
+
+Kestrel `module list` output before running tests on CPU nodes:
+```
+Currently Loaded Modules:
+  1) craype-x86-spr    4) cray-dsmml/0.2.2     7) cray-mpich/8.1.28    10) cray-hdf5-parallel/1.12.2.9
+  2) gcc-native/12.1   5) libfabric/1.15.2.0   8) cray-libsci/23.12.5
+  3) craype/2.7.30     6) craype-network-ofi   9) PrgEnv-gnu/8.5.0
+```
+
+PFL striping commands on Kestrel to create target test directories:
+* kfs2 
+```
+cd /projects/<project>/ior-tests/
+mkdir kfs2
+lfs setstripe -p disk1 -E 8M -c 1 -E 256M -c 4 -S 4M -E -1 -c -1 -S 4M ./kfs2
+```
+* kfs3-disk
+```
+cd /scratch/<username>/ior-tests/
+mkdir kfs3-disk
+lfs setstripe -p disk2 -E 8M -c 1 -E 256M -c 4 -S 4M -E -1 -c -1 -S 4M ./kfs3-disk
+```
+* kfs3-flash
+```
+cd /scratch/<username>/ior-tests/
+mkdir kfs3-flash
+lfs setstripe -p flash -E 8M -c 1 -E 256M -c 4 -S 4M -E -1 -c -1 -S 4M ./kfs3-flash
+```
 
 ## Benchmark test results to report and files to return
 

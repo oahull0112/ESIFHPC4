@@ -2,136 +2,136 @@
 
 ## Purpose and Description
 
-The purpose of this benchmark is to capture a 'typical scientific AI' workload performed by researchers at NREL, in which image segmentation tasks are common for various scientific purposes. As such, we employ [the 3D-UNet model implementation from MLCommons](https://github.com/mlcommons/training/tree/master/retired_benchmarks/unet3d/pytorch) to segment three-dimensional images from the publicly available [KiTS19 dataset](https://github.com/neheller/kits19). This benchmark is currently single-node only and does not have multi-node capabilities.
+The purpose of this benchmark is to capture a 'typical scientific AI' workload performed by researchers at NLR, in which image segmentation tasks are common for various scientific purposes. As such, we employ a [DeepCAM model training implementation from MLCommons](https://github.com/mlcommons/hpc/tree/main/deepcam) to segment climate data from HDF5-formatted files. 
 
 ## How to build
 
-Submitters are welcome to install PyTorch and 3D-UNet into any reproducible environment that is desired (e.g., Anaconda virtual environments or a container). The instructions here describe a typical approach using `conda`.
+Submitters are welcome to install PyTorch and the dependencies for DeepCAM into any reproducible environment (e.g., Python/conda virtual environments, containers, etc.). The instructions here describe a typical approach installing Python 3.12 within a baremetal `conda` environment as an example.
 
-First, create a conda virtual environment:
+First, create a conda environment:
 
 ```
+ENV_NAME=./deepcam-env
 ml mamba
-mamba create --prefix=./pytorch-3dunet-env 
+mamba create -y \
+    --prefix $ENV_NAME \
+    python=3.12
 ```
 
-Next, activate the environment and choose **one** of the following approaches based on your hardware configuration to install PyTorch into your environment (taken from the [PyTorch documentation](https://pytorch.org/get-started/locally/)). Note that if CUDA or ROCM versions of PyTorch are targeted, the appropriate GPU software environment should also be made available:
+Next, activate the environment and choose **one** of the following approaches based on your hardware configuration to install PyTorch into your environment (taken from the [PyTorch documentation](https://pytorch.org/get-started/locally/)). If CUDA or ROCm versions of PyTorch are targeted, the appropriate GPU software environment should also be made available. **Note: although specific versions are listed in the `--index-url` as examples, we do not require any particular version of PyTorch or its dependencies to satisfy this benchmark.**
 
 ```
 # Activate environment
-conda activate ./pytorch-3dunet-env
+conda activate $ENV_NAME
 
 # Approach 1: NVIDIA CUDA-compatible torch
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 
-# Approach 2: AMD ROCM-compatible torch
+# Approach 2: AMD ROCm-compatible torch
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.3
 
-# Approach 3: CPU-only torch
+# Approach 3: Intel XPU-compatible torch
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/xpu
+
+# Approach 4: CPU-only torch
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
 
-Finally, install 3D-UNet from conda-forge based on instructions from the [3D-UNet source code](https://github.com/wolny/pytorch-3dunet?tab=readme-ov-file#installation).
+*Any version of PyTorch that might be optimized for a targeted hardware architecture is acceptable for this benchmark, as long as the distribution is widely available and its results can be reproduced on any system hosting the hardware in question.*
+
+Finally, install the DeepCAM Python package dependencies from pip and/or conda:
 
 ```
-conda install pytorch-3dunet
+conda activate $ENV_NAME
+echo "
+apex
+h5py
+warmup-scheduler @ git+https://github.com/ildoonet/pytorch-gradual-warmup-lr
+mlperf-logging @ git+https://github.com/mlperf/logging.git
+" > deepcam-ref-requirements.txt
+pip install -r deepcam-ref-requirements.txt
 ```
 
-Submitters may find the Kestrel Build Example below to be a helpful starting point for implementing this benchmark.
+### Download and preprocess training data
+
+Input training data can be downloaded via Globus using the [endpoint linked here](https://app.globus.org/file-manager?origin_id=0b226e2c-4de0-11ea-971a-021304b0cca7&origin_path=%2F). Note that the training data requires roughly 10TB of storage and contains HDF5-formatted files for training, validation, and test splits.
 
 ### Kestrel build example
 
-To concretely demonstrate how to build and run this benchmark, we provide step-by-step instructions we used for our system. Note that on Kestrel, this benchmark targets NVIDIA H100s running with CUDA 12.4-compatible GPU drivers. As such, the installation commands used were the following:
-
-<!-- ```
-ml mamba
-mamba create --prefix=./pytorch-3dunet-env
-conda activate ./pytorch-3dunet-env
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 
-pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger nibabel scipy
-mamba install pytorch-3dunet -y
-``` -->
-
-```
-ml mamba
-eval "$(conda shell.bash hook)"
-mamba create --prefix=./pytorch-3dunet-env python
-conda activate ./pytorch-3dunet-env
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
-pip3 install git+https://github.com/NVIDIA/dllogger#egg=dllogger tqdm requests nibabel scipy https://github.com/mlcommons/logging/archive/refs/tags/1.1.0-rc4.zip
-```
-
-Once the environment is built, the KiTS19 dataset needs to be downloaded onto the test machine and preprocessed for model training. Please refer to the [MLCommons 3D-UNet benchmark page](https://github.com/mlcommons/training/tree/master/retired_benchmarks/unet3d/pytorch#steps-to-download-and-verify-data) for step-by-step instructions for how to do so.
-
-These were the commands that were used to download KiTS19 data:
-
-```
-conda activate ./pytorch-3dunet
-mkdir raw-data-dir
-cd raw-data-dir
-git clone https://github.com/neheller/kits19
-cd kits19
-python3 -m starter_code.get_imaging
-cd ../..
-```
-
-These were the commands that were used to preprocess data. 
-
-**NOTE**: We change the hard-coded location of results from the root-level `/results` folder to `./results` in `main.py` as well as `/data/` to `./data` in `run_and_time.sh`. We have also encountered the error `AssertionError: Invalid hash for case_XXXXX_x.npy.` for several cases when running `preprocess_dataset.py`. As a temporary workaround, we remove the dataset verification entirely, as the benchmark will still run on the unverified cases. Finally, to avoid errors associated with old versions of `scipy` referencing the outdated method `scipy.signal.gaussian`, we update the call to that method in  `runtime/inference.py` to reflect `scipy.signal.windows.gaussian`:
-
-```
-conda activate ./pytorch-3dunet
-git clone git@github.com:mlcommons/training.git
-cd training/retired_benchmarks/unet3d/pytorch
-sed -i 's|/results|./results|' main.py
-sed -i 's|DATASET_DIR="/data"|DATASET_DIR="./data"|' run_and_time.sh
-sed -i 's|verify_dataset(args.results_dir)|print("NOTE: Skipping dataset verification.")|' preprocess_dataset.py
-sed -i 's|signal.gaussian|signal.windows.gaussian|' runtime/inference.py
-mkdir data
-mkdir results
-python3 preprocess_dataset.py --data_dir ../../../../raw-data-dir/kits19/data --results_dir ./data
-```
-
-On Kestrel, these were the commands that were used to run the benchmark. Note that we change the hard-coded location of data from the root-level `/data` folder to `./data` in run_and_time.sh:
-
-```
-bash run_and_time.sh 0
-```
-
-Please refer to [`prep-kestrel.sh`](./prep-kestrel.sh) for an example Slurm script to create the appropriate environment on Kestrel following these instructions. Similarly, [`run-kestrel.sh`](./run-kestrel.sh) is an example Slurm script to run the 3D-UNet benchmark on an H100 on Kestrel after `prep-kestrel.sh` successfully completes.
-
+See the Slurm script [`prep-env-kestrel.sh`](prep-env-kestrel.sh) for reference instructions on how we created the appropriate PyTorch environment to run the DeepCAM benchmark following the general guidance above. Note that on Kestrel, we explicitly compile torch against a system module for NCCL that is configured to work with the HPE Slingshot network (`nccl/2.21.5_cuda124`) rather than using a precompiled version from pip. This step may not be necessary depending on your hardware and network configuration.
 
 ## Run Definitions and Requirements
 
 ## How to run
 
-Please follow [the instructions from MLCommons](https://github.com/mlcommons/training/tree/master/retired_benchmarks/unet3d/pytorch#steps-to-run-and-time) on how to run this benchmark once the environment is configured and training data are downloaded and preprocessed.
+Once the training dataset has been prepared and the PyTorch environment has been set up, submitters may follow [`run-deepcam-kestrel.sh`](./run-deepcam-kestrel.sh) as an example for how to run the model. We require that submitters run this benchmark in a multi-node fashion using all available accelerators per node. Specifically, we require a submission using *N* nodes\*, 2\**N* nodes, and 4\**N* nodes to demonstrate multi-node scaling. 
+
+\* *N* = The smallest possible number of nodes that can fit a DeepCAM training run. *N* is allowed to equal 1.
 
 ### Tests
 
-There are two types of tests for this benchmark: as-is and optimized. For as-is tests, use the `run_and_time.sh` script with the default parameters listed below. For optimized tests, these parameters-along with the code-can be changed to optimize performance and demonstrate hardware capabilities.  
-
-Parameters set in `run_and_time.sh`:
-
-```
-MAX_EPOCHS=4000
-QUALITY_THRESHOLD="0.908"
-START_EVAL_AT=500
-EVALUATE_EVERY=20
-LEARNING_RATE="0.8"
-LR_WARMUP_EPOCHS=200
-DATASET_DIR="./data"
-BATCH_SIZE=2
-GRADIENT_ACCUMULATION_STEPS=1
-```
-
 ## Run Rules
 
-Noting the time required to reach a mean DICE score of `0.908` from a single-node run of 3D-UNet satisfies this benchmark's requirements.
+There are three types of tests possible for this benchmark: *baseline*, *ported*, and *optimized*. Please see the ESIFHPC4 repo's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs) for the constraints associated with each type of run.
+
+### Baseline submissions
+
+For *baseline* submissions, please use the following default runtime parameters, which is what we deploy on Kestrel. You will need to set the placeholder variables appropriately.
+
+Training scripts for *baseline* submissions must be forked from the [DeepCAM model training implementation hosted by MLCommons](https://github.com/mlcommons/hpc/tree/main/deepcam). Using additional Python packages (i.e., anything other than what is required for PyTorch and the DeepCAM training scripts) is *not* allowed for baseline submissions.
+
+**For baseline submissions, submitters are welcome to modify the `--wireup_method` runtime option as necessary.**
+
+```
+# Local batch size
+LOCAL_BATCH_SIZE=8
+# Number of data loader workers
+workers_per_gpu=4
+
+# Run training
+srun --overlap -u -N ${SLURM_NNODES} -n ${totalranks} -c ${cpus_per_task} --cpu_bind=cores --gres=gpu:$SLURM_GPUS_ON_NODE \
+     python train.py \
+     --wireup_method "nccl-slurm-pmi" \
+     --run_tag ${run_tag} \
+     --data_dir_prefix ${data_dir_prefix} \
+     --output_dir ${output_dir} \
+     --max_inter_threads ${workers_per_gpu} \
+     --model_prefix "classifier" \
+     --optimizer "AdamW" \
+     --start_lr ${START_LR} \
+     --lr_schedule type="multistep",milestones="1200",decay_rate="0.5" \
+     --lr_warmup_steps 0 \
+     --lr_warmup_factor $(( ${SLURM_NNODES} / $LOCAL_BATCH_SIZE )) \
+     --weight_decay 1e-2 \
+     --logging_frequency 0 \
+     --save_frequency 400 \
+     --max_epochs 200 \
+     --local_batch_size $LOCAL_BATCH_SIZE |& tee -a ${output_dir}/train.out
+```
+
+### Ported submissions
+
+For *ported* submissions, the *baseline* parameters must be used, though training code modifications necessary to port the code to a new/different device architecture are also permitted. As described in the repository's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), *ported* submissions should not be reported without *baseline*, unless *baseline* is not possible.
+
+### Optimized submissions
+
+*Optimized* submissions are encouraged (though optional). For *optimized* submissions, the parameters used above, "mutable" hyperparameters (see below), and the code itself are allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable.
+
+"Mutable" hyperparameters are allowed to be changed for optimized submissions. These hyperparameters include: `--optimizer`, `--start_lr`, `--lr_schedule`, `--lr_warmup_steps`, `--lr_warmup_factor`, and `--weight_decay`. Additionally, the `--max_inter_threads` option is allowed to be changed for optimized submissions. By contrast, "fixed" hyperparameters are *not* allowed to be changed from the baseline options; these include: `--save_frequency`, `--gradient_accumulation_frequency`, `--logging_frequency` and `--batchnorm_group_size`.
 
 ## Benchmark test results to report and files to return
 
-For as-is tests, report the node class (e.g., standard vs. accelerated), run time, and the last recorded DICE score. For optimized tests, report node class, parameters (both updated and unchanged) in `run_and_time.sh`, run time, last recorded DICE score, and also include run notes describing changes made to the run scripts and/or code.
+Noting the time required (in minutes) to reach 82% validation accuracy satisfies this benchmark. For each submission, we request the following information (using unoptimized Kestrel reference data as an example):
 
-For both as-is and optimized tests, also include the `unet3d.log` file.
+| Run Type  | Nodes used | Accelerators per node | Local Batch Size | LR Scheduler | Start LR | Optimizer   | Time Required* (minutes) | Epochs Required* |
+| :---      | :---       | :---                  | :---             | :---         | :---     | :---        | :---                     | :--              |
+| baseline  | 4          | 4                     | 8                | multistep    | 1e-3     | AdamW       | 276                      | 26               |
+| optimized | *N*        | *N*                   | *N*              | *scheduler*  | *N*      | *optimizer* | *N*                      | *N*              |
 
+\* Time or epochs required to reach 82% evaluation accuracy target.
+
+## References and useful links
+
+* [Unoptimized (baseline) DeepCAM implementation from MLCommons](https://github.com/mlcommons/hpc/tree/main/deepcam)
+* [Exascale Deep Learning for Climate Analytics paper](https://arxiv.org/pdf/1810.01993)
+* [NERSC10 DeepCAM reference](https://gitlab.com/NERSC/N10-benchmarks/deepcam)
