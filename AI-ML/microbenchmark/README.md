@@ -20,19 +20,17 @@ Exact build instructions will depend on the chosen CCL implementation and hardwa
 
 ### How to run
 
-See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` on Kestrel from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository. 
-
 The specific implementation of the CCL benchmark depends on the proposed hardware. If the vendor has published an open-source implementation of tests that utilize their corresponding CCL, this implementation should be used in the baseline response. For example:
 
 * NCCL tests: https://github.com/NVIDIA/nccl-tests 
-* RCCL tests: https://github.com/ROCm/rccl-tests
+* RCCL tests: https://github.com/ROCm/rocm-systems/tree/develop/projects/rccl-tests
 * Intel OneCCL tests: https://www.intel.com/content/www/us/en/docs/oneccl/benchmark-user-guide/2021-14/benchmark.html
 
 If an open-source implementation of CCL tests is not available, then the offeror may provide another implementation, but must report exactly how it was built & run, including the source code and any relevant scripts. The implementation must follow the rules outlined in the "baseline/ported/optimized" definitions in the technical specifications. Specifically, the implementation cannot use unknown or unpublished libraries, and any language interface or architecture-specific language constructs used must be well-documented and publically available at the time of machine arrival. Offerors may choose another implementation, but must report exactly how it was built & run, including relevant scripts.
 
 ### Tests
 
-Two types of runs are requested to satisfy this benchmark: single-node and multi-node. In total, the requirements from 5 individual CCL configurations are described below. For each configuration, we ask for 5 replicate runs, for a total of 25 AllReduce runs.
+Two types of runs are requested to satisfy this benchmark: single-node and multi-node. In total, the requirements from 3 individual CCL configurations are described below. For each configuration, we ask for 5 replicate runs, for a total of 15 AllReduce runs.
 
 #### Single-node
 
@@ -54,18 +52,7 @@ To demonstrate inter-node CCL performance, each collective should be run in two 
 
 ### Run Rules
 
-Any run must utilize all available accelerators on each node. For all configurations described above, the collective test should scan message sizes between 8B to 4GB, increasing by a factor of 2. For example (replace `<launcher>` accordingly):
-
-```
-<launcher> all_reduce_perf -b 8 -e 4G -f 2
-```
-
-*Note: any scheduler/launcher (e.g., `srun`, `mpirun`, etc.) is appropriate to run this benchmark across multiple nodes.`*
-
-**Options:**
-- `-b`: Minumum size in bytes
-- `-e`: Maximum size in bytes
-- `-f`: Increment factor
+Any run must utilize all available accelerators on each node. For all configurations described above, the collective test should scan message sizes between 8B to 4GB, increasing by a factor of 2. See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` on Kestrel from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository. 
 
 ## Benchmark test results to report and files to return
 
