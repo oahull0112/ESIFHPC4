@@ -2,7 +2,7 @@
 
 ## Purpose and Description
 
-This benchmark is intended to stress *GPU-GPU* (or more generally, *accelerator-accelerator*) network communication relevant to AI training through the use of an appropriate collective communication library (CCL). The exact implementation of this benchmark depends on the target's hardware architecture. For example, because Kestrel (NREL's current flagship system) hosts NVIDIA H100 GPUs, our AllReduce tests utilize [NCCL](https://developer.nvidia.com/nccl). Running AllReduce utilizing any equivalent, readily available, and actively maintained CCL is satisfactory for this benchmark (e.g., NCCL, RCCL, or OneCCL). For guidelines on specific benchmark test implementations, please see [How to run](#how-to-run).
+This benchmark is intended to stress *GPU-GPU* (or more generally, *accelerator-accelerator*) network communication relevant to AI training through the use of an appropriate collective communication library (CCL). The exact implementation of this benchmark depends on the target's hardware architecture. For example, because Kestrel (our current flagship system) hosts NVIDIA H100 GPUs, our AllReduce tests utilize [NCCL](https://developer.nvidia.com/nccl). Running AllReduce utilizing any equivalent, readily available, and actively maintained CCL is satisfactory for this benchmark (e.g., NCCL, RCCL, or OneCCL). For guidelines on specific benchmark test implementations, please see [How to run](#how-to-run).
 
 ## Licensing Requirements
 
@@ -115,4 +115,6 @@ Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https:
   1073741824     268435456     float     sum      -1    49081   21.88   43.07      0    46386   23.15   45.57      0
   2147483648     536870912     float     sum      -1    92587   23.19   45.66      0    92579   23.20   45.67      0
   4294967296    1073741824     float     sum      -1   184959   23.22   45.72      0   185005   23.22   45.71      0
+
 ```
+

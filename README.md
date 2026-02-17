@@ -1,19 +1,19 @@
 # [DRAFT] ESIF-HPC-4 Benchmark Suite 
 
-Contains benchmarks to be run for NREL's ESIF-HPC-4 procurement.
+Contains benchmarks to be run for NLR's ESIF-HPC-4 procurement.
 
-The purpose of the "draft release" on 5/29/2025 is so that we can make our RFP benchmarking plans transparent to all vendors ahead of the RFP. Our hope is that this early draft release will give vendors additional time to work with our team on the benchmarks, especially as we have a few "in-house" codes represented in the suite that may be unfamiliar to vendors.
+The purpose of this draft release is so that we can make our RFP benchmarking plans transparent to all vendors ahead of the RFP. Our hope is that this early draft release will give vendors additional time to work with our team on the benchmarks, especially as we have a few "in-house" codes represented in the suite that may be unfamiliar to vendors.
 
 This early draft release does not represent or guarantee any final form of the suite.
 
 Important Notes:
 - This is an in-progress draft release.
 	- Different benchmarks in the suite are at various states of "in-progress"
-	- Most benchmarks do not have finalized inputs or run requirements as of 5/29/2025
+	- Most benchmarks do not have finalized inputs or run requirements
  - Please see the [Planned Changes](#planned-changes) section of this README for changes that we are planning to make/are in development, but have not yet integrated into this repo.
 - Benchmarks are divided into "Class A" and "Class B". 
-	- "Class A" - Performance-required benchmarks: set of benchmarks for which specific performance targets must be met or exceeded. 
-	- "Class B" - Functionality benchmarks: set of benchmarks intended to demonstrate and baseline the functionality, scalability, and software readiness of specific workloads or system features, but no specific performance level will be required. 
+	- "Class A" - Benchmarks that will be included in the figure of merit
+	- "Class B" - Benchmarks that will not be included in the figure of merit, but that are intended to demonstrate and baseline the functionality, scalability, and software readiness of specific workloads or system features. In some cases, a performance level on-par with the reference system may be required.
 - The official version of the benchmark suite will be provided with the RFP.
 - Until the official release, we may add or subtract benchmarks, change run requirements, etc.
 
@@ -21,52 +21,68 @@ Important Notes:
 | Application | Standard | Accelerated | Optimized | Baseline |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [VASP](https://github.com/NREL/ESIFHPC4/tree/main/VASP)        | Yes      | Yes         | Optional  | Yes   |
-| [WRF](https://github.com/NREL/ESIFHPC4/tree/main/WRF)         | Yes      | Yes*        | Optional  | Yes   |
-| [MLPerf-3DUnet**](https://github.com/NREL/ESIFHPC4/tree/main/AI-ML/app-level-benchmark)| Yes      | Yes         | Optional  | Yes   |
-| [AMR-Wind](https://github.com/NREL/ESIFHPC4/tree/main/AMR-Wind)    | Yes      | Yes         | Optional  | Yes   |
+| [MLPerf-DeepCAM](https://github.com/NREL/ESIFHPC4/tree/main/AI-ML/app-level-benchmark)| Optional      | Yes         | Optional  | Yes   |
 | [LAMMPS](https://github.com/NREL/ESIFHPC4/tree/main/LAMMPS)      | Yes      | Yes         | Optional  | Yes   |
-| [BerkeleyGW](https://github.com/NREL/ESIFHPC4/tree/main/BerkeleyGW)  | Yes      | Yes         | Optional        | Yes   |
 
-\* WRF acceleration via AceCAST
 
-\** MLPerf-3DUnet can be chosen to run *either* standard or accelerated, though accelerated is preferred.
-
-**"Class B" Applications - functionality only**
+**"Class B" Applications:**
 | Application | Standard | Accelerated | Optimized | Baseline |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
 | [Sienna](https://github.com/NREL/ESIFHPC4/tree/main/Sienna-Ops)      | Yes      | No          | No        | Yes   |
+| [AMR-Wind](https://github.com/NREL/ESIFHPC4/tree/main/AMR-Wind)    | Optional      | Yes         | Optional  | Yes   |
+| [BerkeleyGW](https://github.com/NREL/ESIFHPC4/tree/main/BerkeleyGW)  | Optional      | Yes         | Optional        | Yes   |
+| [WRF](https://github.com/NREL/ESIFHPC4/tree/main/WRF)         | Yes      | No        | Optional  | Yes   |
+
+Please note that while specific benchmark READMEs may include instructions and reference results for both CPU-only and accelerated hardware, for all Class B applications, results are requested from only one of CPU-only *or* accelerated hardware, as designated in the above table. Results from the non-requested hardware type may be optionally provided.
 
 **Microbenchmarks:**
 | Application | Standard | Accelerated | Optimized | Baseline |
 |:-----------:|:--------:|:-----------:|:---------:|:-----:|
-| [OSU](https://github.com/NREL/ESIFHPC4/tree/main/OSU)         | Yes      | No          | Optional  | Yes   |
+| [OSU](https://github.com/NREL/ESIFHPC4/tree/main/OSU)         | Yes      | Yes          | Optional  | Yes   |
 | [HPL](https://github.com/NREL/ESIFHPC4/tree/main/HPL)         | Yes      | Yes         | Optional  | Yes   |
 | [Stream](https://github.com/NREL/ESIFHPC4/tree/main/stream)      | Yes      | Yes         | Optional  | Yes   |
 | [IOR](https://github.com/NREL/ESIFHPC4/tree/main/IOR)         | Yes      | No          | Optional  | Yes   |
 | [mdtest](https://github.com/NREL/ESIFHPC4/tree/main/mdtest)      | Yes      | No          | Optional  | Yes   |
 | [GPU-GPU collective](https://github.com/NREL/ESIFHPC4/tree/main/AI-ML/microbenchmark)| No | Yes         | Optional  | Yes   |
-| FIO***         | Yes      | No          | Optional  | Yes   |
+| FIO*         | Yes      | No          | Optional  | Yes   |
 
-\*** benchmark still in early development; not yet in repo.
+\* benchmark still in early development; not yet in repo.
 
 ## Draft definitions for baseline(as-is), ported, and optimized runs
 
 We have established the following draft definitions for baseline, ported, and optimized runs. These broad "run rules" will apply to all benchmarks, with any exceptions noted in the corresponding benchmark's README. Runs will be categorized according to the following three (draft) categories:
 - Baseline (as-is): no code modifications permitted. Library substitutions permitted if these libraries will be available to us at the time of machine arrival. Changes to compilation options generally permitted (some edge cases exist. For example, stream’s compilation option to use custom functions in place of the ones in the stream source would not be allowed) 
 - Ported: only source code modifications necessary to port the code to the new architecture are permitted, in addition to allowed baseline changes. This would include addition or modification of directives or pragmas, and/or replacement of existing architecture-specific language constructs (e.g., CUDA <-> HIP) with another well-documented language or interface. Ported should not be reported without baseline, unless baseline is not possible. Changes must be minimal and reproducible. 
-- Optimized: in addition to what is allowed for baseline and ported, additional source code changes are permitted under the condition that these changes are made available in a maintainable form by the time of machine arrival. For each benchmark, newer versions of the benchmark source code may be used if these versions are publicly available at the time of machine arrival. Using surrogate models is not permitted. Floating point precision-related optimizations will be handled on a per-benchmark basis. 
+- Optimized: in addition to what is allowed for baseline and ported, additional source code changes are permitted under the condition that these changes are made available in a maintainable form by the time of machine arrival. For each benchmark, newer versions of the benchmark source code may be used if these versions are publicly available at the time of machine arrival. Using surrogate models is not permitted. Floating point precision-related optimizations are not allowed unless specifically stated otherwise in the corresponding benchmark README.md.
+
 - A baseline result is required whenever possible. A ported result may be provided in place of a baseline result if the baseline result is not possible. Ported in addition to baseline is optional and optimized is fully optional. 
 
 ## Planned Changes
 We have planned/upcoming changes to the suite that have not yet been integrated but are currently in development. We list any major not-yet-integrated changes here. Please note that this list is subject to change, and we make no guarantee that these changes are reflected in the finalized benchmark suite.
 
-- AI/ML: We plan to change the AI application-level benchmark from MLPerf's 3DUnet to MLPerf's DeepCAM benchmark.
-- WRF: We plan to remove the AceCAST/GPU portion of WRF, along with any requests for simultaneous/concurrent runs on test hardware.
-- VASP: Bench 1 will now focus only on the HSE calculation, with the supercell increased from 16 atoms to 128 atoms. Bench 2 will be a vasp_gam single-kpoint GGA calculation with 1149 atoms, increased from 519 atoms.
-- LAMMPS: We are developing an "extra large" size input that should better utilize future hardware.
-- AMR-Wind: We plan to remove any requests for simultaneous/concurrent runs on test hardware.
+- The Sienna benchmark will be pared down into two functionality runs only.
 
 ## Changelog
+
+### Feb 13, 2026
+- Modified VASP Bench1 benchmark by reducing the k-point grid size
+
+### Feb 11, 2026
+- Updated the definitions of "Class A" and "Class B", and moved VASP, AMR-Wind, and BerkeleyGW from Class A to Class B.
+- Added planned change info for VASP Bench1
+
+### December 10, 2025
+- Better clarified that most application benchmarks now request results for one of CPU-only or accelerated nodes, rather than both, though both may be optionally provided.
+
+### December 8, 2025
+- VASP: Bench 1 will now focus only on the HSE calculation (removing the GGA and GW components), with the supercell increased from 16 atoms to 128 atoms. Bench 2 will be a vasp_gam single-kpoint GGA calculation with 1149 atoms, increased from 519 atoms.
+
+### December 5, 2025
+- Changed the AI application-level benchmark from MLPerf's 3DUnet to MLPerf's DeepCAM benchmark.
+- Removed the AceCAST/GPU portion of WRF, along with any requests for simultaneous/concurrent runs on test hardware.
+- Removed 12 km input case from WRF
+- Overhauled AMR-Wind benchmark, simplifying and clarifying build instructions, inputs, and run requirements, and removed any requests for simultaneous/concurrent runs on test hardware for AMR-Wind
+- Added "extra large" size input to LAMMPS that should better utilize future hardware; removed any requirement to run "small" and "large" LAMMPS input sizes.
 
 ### September 22, 2025
 - Removed HPGMG from the suite
@@ -76,3 +92,5 @@ We have planned/upcoming changes to the suite that have not yet been integrated 
 ### July 29, 2025
 - Removed Q-Chem from the suite
 - Moved BerkeleyGW from "Class B" to "Class A"
+
+
