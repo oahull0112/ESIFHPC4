@@ -44,7 +44,9 @@ Reporting Results
 For the Spreadsheet response, the target performance numbers are "s/timestep" (the inverse of "timesteps/s") as reported in the LAMMPS standard output stream. In addition to these values, the MPItasks, total number of steps that have been run, Loop time (s), and % CPU Usage must be included as well. Example logfile output looks like:
 
 `Loop time of 105.823 on 96 procs for 2500 steps with 744000 atoms`
+
 `Performance: 2.041 ns/day, 11.758 hours/ns, 23.624 timesteps/s, 17.576 Matom-step/s`
+
 `93.8% CPU use with 96 MPI tasks x 1 OpenMP threads`
 
 In this case, the MPI tasks is 96, number-of-steps is 2500, % CPU usage is 93.8, the loop time is 105.823 seconds, the speed is 23.624 timesteps/s, and the performance is 1/23.624 = 0.0423 s/timestep.
