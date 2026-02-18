@@ -133,7 +133,7 @@ def main(paths: list[str]) -> int:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: ./collect-results.py file1.log file2.log ...")
+        print("Usage: ./collect-results.py file1.out file2.out ...")
         raise SystemExit(1)
     main(sys.argv[1:])
 

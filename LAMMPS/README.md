@@ -53,7 +53,7 @@ In this case, the MPI tasks is 96, number-of-steps is 2500, % CPU usage is 93.8,
 
 We have provided a collection script that facilitates reporting by reading in a list of LAMMPS output file paths and printing a summary table:
 
-`./collect-results.py file1.log file2.log ...`
+`./collect-results.py file1.out file2.out ...`
 
 ## What Must be Returned
 In addition to the performance benchmark LAMMPS output log files, LAMMPS output log files from the two validation runs should also be included in the File response.
