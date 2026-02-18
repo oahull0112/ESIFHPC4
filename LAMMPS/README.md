@@ -41,12 +41,17 @@ This script will print the average temperature and energy for the reference NLR 
 
 Reporting Results
 -----------------
-For the Spreadsheet response, the target performance numbers are "timesteps/s" as reported in the LAMMPS standard output stream. In addition to these values, the total number-of-steps that have been run and the reported "Loop time" must be included as well. Example logfile output looks like
+For the Spreadsheet response, the target performance numbers are "s/timestep" (the inverse of "timesteps/s") as reported in the LAMMPS standard output stream. In addition to these values, the MPItasks, total number of steps that have been run, Loop time (s), and % CPU Usage must be included as well. Example logfile output looks like:
 
-`Loop time of 317.023 on 128 procs for 8000 steps with 5952000 atoms`  
-`Performance: 2.180 ns/day, 11.008 hours/ns, 25.235 timesteps/s, 150.198 Matom-step/s`
+`Loop time of 105.823 on 96 procs for 2500 steps with 744000 atoms`
+`Performance: 2.041 ns/day, 11.758 hours/ns, 23.624 timesteps/s, 17.576 Matom-step/s`
+`93.8% CPU use with 96 MPI tasks x 1 OpenMP threads`
 
-In this case, the number-of-steps is 8000, the loop-time is 317.023 seconds, and the performance is 25.235 timesteps/s.
+In this case, the MPI tasks is 96, number-of-steps is 2500, % CPU usage is 93.8, the loop time is 105.823 seconds, the speed is 23.624 timesteps/s, and the performance is 1/23.624 = 0.0423 s/timestep.
+
+We have provided a collection script that facilitates reporting by reading in a list of LAMMPS output file paths and printing a summary table:
+
+`./collect-results.py file1.log file2.log ...`
 
 ## What Must be Returned
 In addition to the performance benchmark LAMMPS output log files, LAMMPS output log files from the two validation runs should also be included in the File response.

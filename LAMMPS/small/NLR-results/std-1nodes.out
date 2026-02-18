@@ -1,0 +1,118 @@
+LAMMPS (22 Jul 2025 - Update 1)
+  using 1 OpenMP thread(s) per MPI task
+variable        run_name string "Small NLR LAMMPS benchmark"
+print           "--- Starting run: ${run_name} ---"
+--- Starting run: Small NLR LAMMPS benchmark ---
+
+variable 	thermo_print equal 250
+variable	total_step equal ${thermo_print}*10
+variable	total_step equal 250*10
+
+units		real
+boundary	p p p
+neighbor        2.0 bin
+neigh_modify    delay 10 every 1
+atom_style	full
+bond_style      harmonic
+angle_style     harmonic
+dihedral_style  harmonic
+pair_style      lj/cut/coul/long 10.0
+pair_modify     mix arithmetic
+kspace_style    pppm 1e-4
+read_data       ../data.begin
+Reading data file ...
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
+  4 by 4 by 6 MPI processor grid
+  reading atoms ...
+  744000 atoms
+  reading velocities ...
+  744000 velocities
+  scanning bonds ...
+  2 = max bonds/atom
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
+  4 by 4 by 6 MPI processor grid
+  reading bonds ...
+  648000 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     2 = max # of 1-3 neighbors
+     4 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 0.039 seconds
+  read_data CPU = 5.713 seconds
+fix		microcanonical all nve
+timestep	1
+thermo          ${thermo_print}
+thermo          250
+thermo_modify   flush yes
+run             ${total_step}
+run             2500
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb
+  G vector (1/distance) = 0.26392422
+  grid = 108 108 108
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.034660511
+  estimated relative force accuracy = 0.0001043791
+  using double precision FFTW3
+  3d grid and FFT values/proc = 28900 13608
+Generated 6 of 6 mixed pair_coeff terms from arithmetic mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 10 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 12
+  ghost atom cutoff = 12
+  binsize = 6, bins = 35 35 35
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut/coul/long, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 27.63 | 28.01 | 28.46 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   299.89414     -12160492       267174.94     -11228236       40.182647    
+       250   299.99505     -12162630       269090.01     -11228235      -3.6271309    
+       500   300.11779     -12162961       269131.99     -11228252       9.9765874    
+       750   299.34032     -12160801       268711.52     -11228237      -13.121232    
+      1000   300.07591     -12162489       268757.76     -11228247       25.918377    
+      1250   300.1231      -12162773       268950.08     -11228234      -5.098593     
+      1500   299.90155     -12162851       269520.18     -11228234      -45.949969    
+      1750   300.18076     -12163133       269168.97     -11228247       6.4272676    
+      2000   299.79497     -12163040       269918.68     -11228260      -35.356388    
+      2250   300.17763     -12163894       269913.61     -11228271      -2.3446586    
+      2500   299.93453     -12163742       270323.38     -11228247      -83.909135    
+Loop time of 105.823 on 96 procs for 2500 steps with 744000 atoms
+
+Performance: 2.041 ns/day, 11.758 hours/ns, 23.624 timesteps/s, 17.576 Matom-step/s
+93.8% CPU use with 96 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 56.592     | 58.735     | 62.856     |  16.9 | 55.50
+Bond    | 0.14408    | 0.16966    | 0.23332    |   4.6 |  0.16
+Kspace  | 28.143     | 32.244     | 34.44      |  22.8 | 30.47
+Neigh   | 9.2855     | 9.3603     | 9.4219     |   1.0 |  8.85
+Comm    | 4.0439     | 4.3397     | 4.6902     |   6.0 |  4.10
+Output  | 0.0019488  | 0.0042128  | 0.011934   |   1.6 |  0.00
+Modify  | 0.24691    | 0.33977    | 0.50136    |  11.0 |  0.32
+Other   |            | 0.6315     |            |       |  0.60
+
+Nlocal:           7750 ave        7844 max        7637 min
+Histogram: 2 3 8 11 16 19 8 16 10 3
+Nghost:        20172.9 ave       20351 max       20006 min
+Histogram: 5 8 8 11 16 17 15 8 7 1
+Neighs:    2.29591e+06 ave 2.38467e+06 max 2.22587e+06 min
+Histogram: 4 8 17 15 14 17 9 6 1 5
+
+Total # of neighbors = 2.2040709e+08
+Ave neighs/atom = 296.24609
+Ave special neighs/atom = 1.7419355
+Neighbor list builds = 184
+Dangerous builds = 0
+
+
+Total wall time: 0:01:52
