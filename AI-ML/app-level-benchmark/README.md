@@ -113,11 +113,18 @@ To run the DeepCAM benchmark, modify/rename the provided `run_and_time_kestrel.s
 
 ### Baseline submissions
 
-For *baseline* submissions, please use the following default runtime parameters set in [`config_kestrel.sh`](./config_kestrel.sh), which is what we deploy on Kestrel. You will need to set the variables marked under `# user inputs` appropriately (e.g., input/output locations for the run). 
+For *baseline* submissions, please use the following default runtime parameters set in [`config_kestrel.sh`](./config_kestrel.sh), which is what we deploy on Kestrel. You will need to set the variables marked under the `# user inputs` sections appropriately (e.g., input/output locations for the run). 
 
 Training scripts for *baseline* submissions must be forked from a [DeepCAM model training implementation hosted by MLCommons HPC Results v3.0](https://github.com/mlcommons/hpc_results_v3.0/tree/main). Using additional Python packages (i.e., anything other than what is required for PyTorch and the DeepCAM training scripts) is *not* allowed for baseline submissions.
 
-The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **can** be freely modified as necessary for *baseline* submissions (and are marked with `# CAN CHANGE FOR BASELINE`):
+We ask for **two** types of *baseline* submissions:
+
+- Scenario 1. The *local* (i.e., per-device) batch size is fixed to `8`. In this scenario, the reported metric is the average time required per training step over 20 epochs. Device-level "weak scaling" is intended to be measured in this scenario; this test should span *N*, *2N*, and *8N* nodes (in which *N*>=1) accordingly. Model convergence is **not** required in this scenario. This scenario requires enabling verbose logging via the environment variable `LOGGING_FREQUENCY` - see the [table below](#baseline-scenario-1).
+- Scenario 2. The *global* batch size is fixed to `1024`, with no specific requirement on the local batch size accordingly. In this scenario, the reported metric is the time required to reach an evaluation accuracy of 82%. **Scenario 2 is what will be considered as part of the overall throughput metric.**
+
+#### Baseline Scenario 1
+
+The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **can** be freely modified as necessary for *baseline* Scenario 1 submissions:
 
 | Variable           | Description                    | Default Kestrel value  |
 | :--                | :--                            | :--            |
@@ -125,20 +132,49 @@ The following environment variables set in [`config_kestrel.sh`](./config_kestre
 | `WIREUP_METHOD`    | Method for distributed process communication | Options are 'nccl-slurm' (default), 'nccl-openmpi', 'nccl-file', 'mpi', or 'dummy' |
 | `DGXNGPU`          | Number of accelerators per node | `4` |
 
+The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **must be set** for *baseline* Scenario 1 submissions:
+
+| Variable            | Description                                              | Required value         |
+| :--                 | :--                                                      | :--                    |
+| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`) | `1`                    |
+
+#### Baseline Scenario 2
+
+The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **can** be freely modified as necessary for *baseline* Scenario 1 submissions:
+
+| Variable           | Description                    | Value  |
+| :--                | :--                            | :--    |
+| `STAGE_DIR_PREFIX` | Path to data staging directory | Stages input data to this directory (e.g., one on a faster filesystem or local node SSD.) If this variable is not set, then data staging does not occur (**default**). |
+| `WIREUP_METHOD`    | Method for distributed process communication | Options are 'nccl-slurm' (**default**), 'nccl-openmpi', 'nccl-file', 'mpi', or 'dummy' |
+| `DGXNGPU`          | Number of accelerators per node | `4` |
+| `LOCAL_BATCH_SIZE` | Per-accelerator batch size      | Depends on number of GPUs used. `DGXNGPU`*`LOCAL_BATCH_SIZE` must equal `1024` |
+
+The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **must be set** for *baseline* Scenario 2 submissions:
+
+| Variable            | Description                                              | Required value         |
+| :--                 | :--                                                      | :--                    |
+| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`) | `0`                    |
+
 ### Ported submissions
 
 For *ported* submissions, the *baseline* parameters must be used, though training code modifications necessary to port the code to a new/different device architecture are also permitted. As described in the repository's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), *ported* submissions should not be reported without *baseline*, unless *baseline* is not possible.
 
 ### Optimized submissions
 
-*Optimized* submissions are encouraged (though optional). For *optimized* submissions, the parameters used above, "mutable" hyperparameters (see below), and the code itself are allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable.
+#### Optimized Scenario 1
 
-"Mutable" hyperparameters are allowed to be changed in [`config_kestrel.sh`](./config_kestrel.sh) for optimized submissions. These hyperparameters include: 
+*Optimized* submissions are encouraged (though optional) as part of Scenario 1. The same environmental variables set in [*baseline* Scenario 1](#baseline-scenario-1) must be used in an *optimized* Scenario 2 submission, although the code itself is allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable. **Note that only results from Scenario 2 will be considered for the overall throughput metric.**
+
+#### Optimized Scenario 2
+
+*Optimized* submissions are encouraged (though optional) as part of Scenario 2. For *optimized* Scenario 2 submissions, the parameters used for [*baseline* Scenario 2 submissions](#baseline-scenario-2), other hyperparameters (see below), and the code itself are allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable. **Note that only results from Scenario 2 will be considered for the overall throughput metric.**
+
+Other hyperparameters that are allowed to be changed in [`config_kestrel.sh`](./config_kestrel.sh) for optimized Scenario 2 submissions include: 
 
 | Variable           | Description                               | Default Kestrel value  |
 | :--                | :--                                       | :--                    |
 | `LOCAL_BATCH_SIZE` | Per-accelerator batch size                | `8`                    |
-| `OPTIMIZER`        | Learning rate optimizer                   | `MixedPrecisionLAMB`   |
+| `OPTIMIZER`        | Learning rate optimizer                   | `AdamW`                |
 | `START_LR`         | Starting learning rate                    | `0.001`                |
 | `LR_SCHEDULE_TYPE` | Learning rate scheduler type              | `cosine_annealing`     |
 | `LR_WARMUP_STEPS`  | Number of LR warmup steps                 | `0`                    |
@@ -146,18 +182,34 @@ For *ported* submissions, the *baseline* parameters must be used, though trainin
 | `WEIGHT_DECAY`     | Strength of L2 regularization             | `0.2`                  | 
 | `MAX_THREADS`      | Number of data loading threads            | `4`                    |
 
-By contrast, "fixed" hyperparameters are *not* allowed to be changed from the baseline options; these include `LOGGING_FREQUENCY` and `BATCHNORM_GROUP_SIZE`.
-
 ## Benchmark test results to report and files to return
 
-Noting the time required (in minutes) to reach 82% validation accuracy satisfies this benchmark. 
+### Scenario 1 submissions
 
-For each submission, we request the following information (using unoptimized Kestrel reference data as an example):
+Noting the average time required per training step (in seconds) across 10 epochs satisfies this submission. 
 
-| Run Type  | Nodes used | Accelerators per node | Local Batch Size | LR Scheduler     | Start LR | Optimizer          | Time Required* (minutes) | Epochs Required* |
-| :---      | :---       | :---                  | :---             | :---             | :---     | :---               | :---                     | :--              |
-| baseline  | 4          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | 83                       | 9                |
-| optimized | *N*        | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                      | *N*              |
+For each run following Scenario 2 rules, we request the following information (using unoptimized Kestrel reference data as an example):
+
+| Run Type  | Scenario | Nodes used | Accelerators per node | Local Batch Size | LR Scheduler     | Start LR | Optimizer          | Time per training step* (seconds) |
+| :---      | :---     | :---       | :---                  | :---             | :---             | :---     | :---               | :---                              |
+| baseline  | 1        | 4          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | *N*                               |
+| baseline  | 1        | 8          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | *N*                               |
+| baseline  | 1        | 32         | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | *N*                               |
+| optimized | 1        | *N*        | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                               |
+| optimized | 1        | *2N*       | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                               |
+| optimized | 1        | *8N*       | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                               |
+
+
+### Scenario 2 submissions
+
+Noting the time required (in minutes) to reach 82% validation accuracy satisfies this submission. 
+
+For each run following Scenario 2 rules, we request the following information (using unoptimized Kestrel reference data as an example):
+
+| Run Type  | Scenario | Nodes used | Accelerators per node | Local Batch Size | LR Scheduler     | Start LR | Optimizer          | Time Required* (minutes) | Epochs Required* |
+| :---      | :---     | :---       | :---                  | :---             | :---             | :---     | :---               | :---                     | :--              |
+| baseline  | 2        | 4          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | 83                       | 9                |
+| optimized | 2        | *N*        | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                      | *N*              |
 
 \* Time or epochs required to reach 82% evaluation accuracy target.
 

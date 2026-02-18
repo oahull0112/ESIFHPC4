@@ -5,13 +5,13 @@ export DATA_DIR_PREFIX="/scratch/$USER/deepcam/numpy" # path to preprocessed num
 export OUTPUT_DIR="/scratch/$USER/DeepCAM-testing/results/$SLURM_JOB_ID" # output directory for training logs
 
 # system parameters
-export DGXNGPU=4            # CAN CHANGE FOR BASELINE: Number of accelerators per node 
+export DGXNGPU=4
 export DGXSYSTEM=$(basename $(readlink -f ${BASH_SOURCE[0]}) | sed 's/^config_//' | sed 's/\.sh$//' )
 export BASE_COMP_CLOCK=1980 # for logging purposes only - obtained via nvidia-smi for SXM H100 HBM3
 export BASE_MEM_CLOCK=2619  # for logging purposes only - obtained via nvidia-smi for SXM H100 HBM3
 
 # hyperparameters
-export WIREUP_METHOD="nccl-slurm" # CAN CHANGE FOR BASELINE
+export WIREUP_METHOD="nccl-slurm"
 export LOCAL_BATCH_SIZE=8
 export START_LR=0.001
 export OPTIMIZER="MixedPrecisionLAMB"
@@ -31,7 +31,7 @@ export PRECISION_MODE="amp"
 export LOCAL_VALIDATION_BATCH_SIZE=8
 
 # staging parameter
-export STAGE_DIR_PREFIX= # CAN CHANGE FOR BASELINE
+export STAGE_DIR_PREFIX= # if empty, there will be no data staging
 export STAGE_BATCH_SIZE=8
 export STAGE_MODE="global"
 export STAGE_VERIFY=0
