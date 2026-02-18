@@ -1,5 +1,9 @@
-variable 	thermo_print equal 2
-variable	total_step equal ${thermo_print}*10
+variable        run_name string "Medium NLR LAMMPS benchmark"
+print           "--- Starting run: ${run_name} ---"
+
+variable 	thermo_print equal 200
+variable	total_step equal ${thermo_print}*100
+
 units		real
 boundary	p p p
 neighbor        2.0 bin
@@ -12,12 +16,10 @@ pair_style      lj/cut/coul/long 10.0
 pair_modify     mix arithmetic
 kspace_style    pppm 1e-4
 read_data       ../data.begin
-replicate	8 8 8
+replicate	2 2 2
 fix             microcanonical all nve
 timestep	1
 thermo          ${thermo_print}
-#restart		${total_step} large
 run             ${total_step}
-#write_data	data.large
 
 
