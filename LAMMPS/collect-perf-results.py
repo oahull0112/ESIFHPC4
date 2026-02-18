@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Usage:
-  ./collect-results.py path/to/log1 path/to/log2 ...
+  ./collect-perf-results.py path/to/log1 path/to/log2 ...
 """
 
 from __future__ import annotations
@@ -133,7 +133,7 @@ def main(paths: list[str]) -> int:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: ./collect-results.py file1.out file2.out ...")
+        print("Usage: ./collect-perf-results.py file1.out file2.out ...")
         raise SystemExit(1)
     main(sys.argv[1:])
 
