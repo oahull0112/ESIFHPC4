@@ -10,9 +10,9 @@
 # Load required modules
 module load julia
 
-export OMP_NUM_THREADS=1
+export OMP_NUM_THREADS=$1
 
-JULIA_THREADS=2
+JULIA_THREADS=$2
 
 # Set working directory to the benchmarks folder
 cd /scratch/mreynold/ESIFHPC4/Sienna-Ops/benchmarks
