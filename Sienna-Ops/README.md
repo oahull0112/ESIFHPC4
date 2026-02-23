@@ -23,10 +23,10 @@ Sienna requires Julia as the primary programming language and depends on several
 
 Instructions to build and install Sienna components:
 
-1. Install Julia from [JuliaLang.org](https://julialang.org/).
+1. Install Julia from [JuliaLang.org](https://julialang.org/). Specifically, we recommend using the [Manual Downloads](https://julialang.org/downloads/manual-downloads/), and selecting the current stable release (v1.12.5 as of February 9, 2026) appropriate for the target architecture.   
 
 ### Option 1: Use an existing Project.toml file
-2. Instantiate the `Project.toml` file in this directory. On 
+2. Instantiate the `Project.toml` and `Manifest.toml` files in this directory. On 
 the terminal, assuming that you are in the same directory as this
 README.md, run
    ```shell
@@ -53,10 +53,9 @@ README.md, run
    ] add HiGHS IPOPT
    ```
 
-5. Run the benchmarks as follows
+5. Run the benchmark as follows
    ```shell
    julia --threads=auto --project=. small/run_RTS_UC-ED.jl
-   julia --threads=auto --project=. medium/run_CATS.jl
    ```
 
 ### Option 3:

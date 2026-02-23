@@ -1,19 +1,18 @@
 #!/bin/bash
 #SBATCH --job-name=sienna
-#SBATCH --partition=short
+#SBATCH --partition=debug
 #SBATCH --time=01:00:00
 #SBATCH --account=hpcapps
 #SBATCH --nodes=1
 #SBATCH --output=sienna_benchmarks_%j.out
 #SBATCH --error=sienna_benchmarks_%j.err
-##SBATCH --qos=high
 
 # Load required modules
 module load julia
 
-export OMP_NUM_THREADS=$1
+export OMP_NUM_THREADS=1
 
-JULIA_THREADS=$2
+JULIA_THREADS=2
 
 # Set working directory to the benchmarks folder
 cd /scratch/mreynold/ESIFHPC4/Sienna-Ops/benchmarks
