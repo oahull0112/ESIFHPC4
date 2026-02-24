@@ -27,13 +27,13 @@
 #   run_and_time.sh
 
 # Load DeepCAM environment
-module load mamba nccl/2.21.5_cuda124 cudnn openmpi/4.1.6-gcc
-DEEPCAM_WORK_DIR=/scratch/$USER/DeepCAM-testing
+module load mamba nccl/2.23.4_cuda124 cudnn
+DEEPCAM_WORK_DIR=/projects/esifapps/$USER/DeepCAM-testing_torch2.9
 mkdir -p $DEEPCAM_WORK_DIR
 cd $DEEPCAM_WORK_DIR
-PYTHON_VERSION=3.12
+PYTHON_VERSION=3.11
 PYTORCH_VERSION=2.9.0
-ENV_NAME=`pwd`/deepcam-torch${PYTORCH_VERSION}-env-py${PYTHON_VERSION}
+ENV_NAME=`pwd`/deepcam-torch${PYTORCH_VERSION}-env-py${PYTHON_VERSION}_HPC-v3
 eval "$(conda shell.bash hook)"
 conda activate $ENV_NAME
 
