@@ -83,23 +83,23 @@ cd apex
 APEX_CPP_EXT=1 APEX_CUDA_EXT=1 pip install -v --no-build-isolation --disable-pip-version-check .
 ```
 
-The training scripts for DeepCAM do not require any special installation once the above environment is created. For convenience, this repository contains a lightly modified version of [the NVIDIA submission to MLCommons HPC Results v3.0](https://github.com/mlcommons/hpc_results_v3.0/tree/main/NVIDIA/benchmarks/deepcam/implementations/pytorch) (`./deepcam-mlcommons-hpcv3`) to enable DeepCAM to run with newer versions (>=2.3.0) of PyTorch (specifically, by updating `MultiStepLRWarmup` in `schedulers.py` to reflect the newer API). As demonstrated in the chunk above, the `io_helpers` package can also be installed from the submitted NVIDIA implementation folder.
+The training scripts for DeepCAM do not require any special installation once the above environment is created. For convenience, this repository contains a lightly modified version of [the NVIDIA submission to MLCommons HPC Results v3.0](https://github.com/mlcommons/hpc_results_v3.0/tree/main/NVIDIA/benchmarks/deepcam/implementations/pytorch) (`./deepcam-mlcommons-hpcv3`) to enable DeepCAM to run with newer versions (>=2.3.0) of PyTorch (specifically, by updating the calls to `MultiStepLRWarmup` and `CosineAnnealingLRWarmup` in `schedulers.py` to reflect the newer API). As demonstrated in the chunk above, the `io_helpers` package can also be installed from the submitted NVIDIA implementation folder.
 
 ### Step 3: Download and preprocess training data
 
 Input training data can be downloaded via Globus using the [endpoint linked here](https://app.globus.org/file-manager?origin_id=0b226e2c-4de0-11ea-971a-021304b0cca7&origin_path=%2F). Note that the training data requires roughly 10TB of storage and contains HDF5-formatted files for training, validation, and test splits. 
 
-Before a training run following MLCommons HPC Results v3.0, note that the HDF5-formatted input data must be preprocessed into numpy format. Please see [`preprocess-deepcam-data.sh`](./preprocess-deepcam-data.sh) for instructions on how to preprocess the input data accordingly.
+Note that before training can occur, submitters must convert the HDF5-formatted input data into numpy format, following guidance from MLCommons HPC Results v3.0. Please see [`preprocess-deepcam-data.sh`](./preprocess-deepcam-data.sh) for instructions on how to preprocess the input data accordingly.
 
 ### Kestrel build example
 
-See the Slurm script [`prep-env-kestrel.sh`](prep-env-kestrel.sh) for reference instructions on how we created the appropriate PyTorch environment to run the DeepCAM benchmark following the general guidance above. Note that on Kestrel, we explicitly compile torch against a system module for NCCL that is configured to work with the HPE Slingshot network (`nccl/2.21.5_cuda124`) rather than using a precompiled version from pip. This step may not be necessary depending on your hardware and network configuration.
+See the Slurm script [`prep-env-kestrel.sh`](prep-env-kestrel.sh) for reference instructions on how we created the appropriate PyTorch environment to run the DeepCAM benchmark following the general guidance above. Note that on Kestrel, we explicitly compile PyTorch against a system module for NCCL that is configured to work with the HPE Slingshot network (`nccl/2.23.4_cuda124`) rather than using a precompiled version from pip. This step may not be necessary depending on your hardware and network configuration.
 
 ## Run Definitions and Requirements
 
 ## How to run
 
-Once the training dataset has been prepared and the PyTorch environment has been set up, submitters may follow [`run-deepcam-kestrel.sh`](./run-deepcam-kestrel.sh) as an example for how to run the model. We require that submitters run this benchmark in a multi-node fashion using all available accelerators per node. Specifically, we require a submission using *N* nodes\*, 2\**N* nodes, and 4\**N* nodes to demonstrate multi-node scaling. 
+Once the training dataset has been prepared and the PyTorch environment has been set up, submitters may adapt from [`run_and_time_kestrel.sh`](./run_and_time_kestrel.sh) as an example for how to run the model. We require that submitters scale this benchmark across multiple nodes while using all available accelerators per node. Specifically, we require a submission using *N* nodes\*, 4*N* nodes, and 8*N* nodes to demonstrate multi-node scaling. 
 
 \* *N* = The smallest possible number of nodes that can fit a DeepCAM training run. *N* is allowed to equal 1.
 
@@ -107,53 +107,83 @@ Once the training dataset has been prepared and the PyTorch environment has been
 
 ## Run Rules
 
-There are three types of tests possible for this benchmark: *baseline*, *ported*, and *optimized*. Please see the ESIFHPC4 repo's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs) for the constraints associated with each type of run.
+There are three types of submissions possible for this benchmark: *baseline*, *ported*, and *optimized*. Please see the ESIFHPC4 repo's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs) for the constraints associated with each type of submission.
 
-To run the DeepCAM benchmark, modify/rename the provided `run_and_time_kestrel.sh` script and `config_kestrel.sh` file appropriately based on guidance below. Note that this script assumes access to a Slurm scheduler and is launched as a job via `sbatch submit_kestrel.sh`. **If an alternative job scheduler is instead preferred, submitters are welcome to modify the launcher line `srun --overlap -u -N ${SLURM_NNODES} -n ${SLURM_NTASKS} -c ${SLURM_CPUS_PER_TASK} --cpu_bind=cores --gres=gpu:${SLURM_GPUS_ON_NODE}` as needed.** Lines under `# Load DeepCAM environment` will need to be modified to reflect the submitter's specific DeepCAM environment setup.
+The ESIF-HPC-4 DeepCAM benchmark encompasses **two** types of scenarios:
+
+- **Scenario 1.** The *local* (i.e., per-device) batch size is fixed to `12`. In this scenario, the reported metric is the average time required per training step over 5 epochs. Device-level "weak scaling" is intended to be measured in this scenario; this test should span *N*, *4N*, and *8N* nodes (in which *N* may equal 1) accordingly. We ask for 3 replicates for each node size, for a total of 15 runs. Model convergence is **not** required in this scenario. This scenario requires enabling verbose, per-step logging via the environment variable `LOGGING_FREQUENCY` - see [below](#baseline-scenario-1).
+- **Scenario 2.** The *global* batch size is fixed to `1024`, with no specific requirement on the local batch size accordingly. In this scenario, the reported metric is the time required to reach an evaluation accuracy of 82%. This test should span *M*, *4M*, and *8M* nodes (in which *M* may equal 1) accordingly (*N* and *M* may vary between Scenario 1 and Scenario 2). We ask for 3 replicates for each node size, for a total of 15 runs. **Results from scenario 2 are what will be considered as part of the overall throughput metric.**
+
+**Summary of tests**
+
+| Scenario | Number of nodes | Number of replicates |
+| :---     | :---            | :---                 |
+| 1        | *N*             | 3                    |
+| 1        | *4N*            | 3                    |
+| 1        | *8N*            | 3                    |
+| 2        | *M*             | 3                    |
+| 2        | *4M*            | 3                    |
+| 2        | *8M*            | 3                    |
+
+For convenience, we provide configuration file templates for Scenario 1 ([`config_scenario1.sh`](./config_scenario1.sh)) and Scenario 2 ([`config_scenario2.sh`](./config_scenario2.sh)). Environment variables that are either allowed to be freely changed or are required to be fixed for a [baseline submission](#baseline-submissions) are grouped accordingly in each file.
+
+To run the DeepCAM benchmark, modify the provided `run_and_time_kestrel.sh` script and the appropriate config file based on the guidance below. Note that this script assumes access to a Slurm scheduler and is launched as a job via `sbatch -N <number_of_nodes> [submit_kestrel.sh](./submit_kestrel.sh)`. **If an alternative job scheduler is instead preferred, submitters are welcome to modify the launcher line `srun --overlap -u -N ${SLURM_NNODES} -n ${SLURM_NTASKS} -c ${SLURM_CPUS_PER_TASK} --cpu_bind=cores --gres=gpu:${SLURM_GPUS_ON_NODE}` as needed.** Lines under `# Load DeepCAM environment` will need to be modified to reflect the submitter's specific DeepCAM environment setup. Further, note that the appropriate config file will have to be sourced based on the scenario intended to be run.
 
 ### Baseline submissions
 
-For *baseline* submissions, please use the following default runtime parameters set in [`config_kestrel.sh`](./config_kestrel.sh), which is what we deploy on Kestrel. You will need to set the variables marked under the `# user inputs` sections appropriately (e.g., input/output locations for the run). 
+For *baseline* submissions, please use the following default runtime parameters set in [`config_scenario1.sh`](./config_scenario1.sh) or [`config_scenario2.sh`](./config_scenario2.sh) (see above), which is what we deploy on Kestrel. You will need to set the variables marked under the `# user inputs` sections appropriately (e.g., input/output locations for the run). 
 
 Training scripts for *baseline* submissions must be forked from a [DeepCAM model training implementation hosted by MLCommons HPC Results v3.0](https://github.com/mlcommons/hpc_results_v3.0/tree/main). Using additional Python packages (i.e., anything other than what is required for PyTorch and the DeepCAM training scripts) is *not* allowed for baseline submissions.
 
-We ask for **two** types of *baseline* submissions:
-
-- Scenario 1. The *local* (i.e., per-device) batch size is fixed to `8`. In this scenario, the reported metric is the average time required per training step over 20 epochs. Device-level "weak scaling" is intended to be measured in this scenario; this test should span *N*, *2N*, and *8N* nodes (in which *N*>=1) accordingly. Model convergence is **not** required in this scenario. This scenario requires enabling verbose logging via the environment variable `LOGGING_FREQUENCY` - see the [table below](#baseline-scenario-1).
-- Scenario 2. The *global* batch size is fixed to `1024`, with no specific requirement on the local batch size accordingly. In this scenario, the reported metric is the time required to reach an evaluation accuracy of 82%. **Scenario 2 is what will be considered as part of the overall throughput metric.**
-
 #### Baseline Scenario 1
 
-The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **can** be freely modified as necessary for *baseline* Scenario 1 submissions:
+The following environment variables set in [`config_scenario1.sh`](./config_scenario1.sh) **can** be freely modified as necessary for *baseline* Scenario 1 submissions:
 
-| Variable           | Description                    | Default Kestrel value  |
-| :--                | :--                            | :--            |
-| `STAGE_DIR_PREFIX` | Path to data staging directory | Stages input data to this directory (e.g., one on a faster filesystem or local node SSD.) If this variable is not set, then data staging does not occur (default). |
+| Variable           | Description                              | Default Kestrel value  |
+| :--                | :--                                      | :--                    |
+| `STAGE_DIR_PREFIX` | Path to data staging directory           | Stages input data to this directory (e.g., one on a faster filesystem or local node SSD.) If this variable is not set, then data staging does not occur (default). |
 | `WIREUP_METHOD`    | Method for distributed process communication | Options are 'nccl-slurm' (default), 'nccl-openmpi', 'nccl-file', 'mpi', or 'dummy' |
-| `DGXNGPU`          | Number of accelerators per node | `4` |
+| `DGXNGPU`          | Number of accelerators per node          | `4`                    |
+| `MAX_THREADS`      | Number of data loading threads per node  | `4`                    |
 
-The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **must be set** for *baseline* Scenario 1 submissions:
 
-| Variable            | Description                                              | Required value         |
-| :--                 | :--                                                      | :--                    |
-| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`) | `1`                    |
+The following environment variables set in [`config_scenario1.sh`](./config_scenario1.sh) **must be set** for *baseline* **Scenario 1** submissions:
+
+| Variable            | Description                                                         | Required value     |
+| :--                 | :--                                                                 | :--                |
+| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `1`                |
+| `MAX_EPOCHS`        | Number of epochs at which training ends, regardless of convergence. | `5`                |
+| `LOCAL_BATCH_SIZE`  | Per-accelerator batch size                                          | `12`               |
+| `START_LR`          | Starting learning rate                                              | `0.0005`           |
+| `LR_SCHEDULE_TYPE`  | Learning rate scheduler type                                        | `cosine_annealing` |
+| `LR_WARMUP_STEPS`   | Number of LR warmup steps                                           | `0`                |
+| `OPTIMIZER`         | Learning rate optimizer                                             | `AdamW`            |
+| `WEIGHT_DECAY`      | Strength of L2 regularization                                       | `0.2`              | 
+
 
 #### Baseline Scenario 2
 
-The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **can** be freely modified as necessary for *baseline* Scenario 1 submissions:
+The following environment variables set in [`config_scenario2.sh`](./config_scenario2.sh) **can** be freely modified as necessary for *baseline* Scenario 2 submissions:
 
-| Variable           | Description                    | Value  |
-| :--                | :--                            | :--    |
-| `STAGE_DIR_PREFIX` | Path to data staging directory | Stages input data to this directory (e.g., one on a faster filesystem or local node SSD.) If this variable is not set, then data staging does not occur (**default**). |
-| `WIREUP_METHOD`    | Method for distributed process communication | Options are 'nccl-slurm' (**default**), 'nccl-openmpi', 'nccl-file', 'mpi', or 'dummy' |
-| `DGXNGPU`          | Number of accelerators per node | `4` |
-| `LOCAL_BATCH_SIZE` | Per-accelerator batch size      | Depends on number of GPUs used. `DGXNGPU`*`LOCAL_BATCH_SIZE` must equal `1024` |
+| Variable           | Description                              | Default Kestrel value  |
+| :--                | :--                                      | :--                    |
+| `STAGE_DIR_PREFIX` | Path to data staging directory           | Stages input data to this directory (e.g., one on a faster filesystem or local node SSD.) If this variable is not set, then data staging does not occur (default). |
+| `WIREUP_METHOD`    | Method for distributed process communication | Options are 'nccl-slurm' (default), 'nccl-openmpi', 'nccl-file', 'mpi', or 'dummy' |
+| `DGXNGPU`          | Number of accelerators per node          | `4`                    |
+| `MAX_THREADS`      | Number of data loading threads per node  | `4`                    |
+| `LOCAL_BATCH_SIZE` | Per-accelerator batch size               | Depends on number of GPUs used (`DGXNGPU`\*`Number of nodes`\*`LOCAL_BATCH_SIZE` must equal `1024`). |
 
-The following environment variables set in [`config_kestrel.sh`](./config_kestrel.sh) **must be set** for *baseline* Scenario 2 submissions:
+The following environment variables set in [`config_scenario2.sh`](./config_scenario2.sh) **must be set** for *baseline* Scenario 2 submissions:
 
-| Variable            | Description                                              | Required value         |
-| :--                 | :--                                                      | :--                    |
-| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`) | `0`                    |
+| Variable            | Description                                                         | Required value     |
+| :--                 | :--                                                                 | :--                |
+| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `0`                |
+| `MAX_EPOCHS`        | Number of epochs at which training ends, regardless of convergence. | `50`               | 
+| `START_LR`          | Starting learning rate                                              | `0.0005`           |
+| `LR_SCHEDULE_TYPE`  | Learning rate scheduler type                                        | `cosine_annealing` |
+| `LR_WARMUP_STEPS`   | Number of LR warmup steps                                           | `0`                |
+| `OPTIMIZER`         | Learning rate optimizer                                             | `AdamW`            |
+| `WEIGHT_DECAY`      | Strength of L2 regularization                                       | `0.2`              | 
 
 ### Ported submissions
 
@@ -163,60 +193,49 @@ For *ported* submissions, the *baseline* parameters must be used, though trainin
 
 #### Optimized Scenario 1
 
-*Optimized* submissions are encouraged (though optional) as part of Scenario 1. The same environmental variables set in [*baseline* Scenario 1](#baseline-scenario-1) must be used in an *optimized* Scenario 2 submission, although the code itself is allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable. **Note that only results from Scenario 2 will be considered for the overall throughput metric.**
+*Optimized* submissions are encouraged (though optional) as part of Scenario 1. The same environmental variables set in [*baseline* Scenario 1](#baseline-scenario-1) must be used in an *optimized* Scenario 1 submission, although the code itself is allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable. **Note that only results from Scenario 2 will be considered for the overall throughput metric.**
 
 #### Optimized Scenario 2
 
-*Optimized* submissions are encouraged (though optional) as part of Scenario 2. For *optimized* Scenario 2 submissions, the parameters used for [*baseline* Scenario 2 submissions](#baseline-scenario-2), other hyperparameters (see below), and the code itself are allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable. **Note that only results from Scenario 2 will be considered for the overall throughput metric.**
+*Optimized* submissions are encouraged (though optional) as part of Scenario 2. For *optimized* Scenario 2 submissions, the required parameters used for [*baseline* Scenario 2 submissions](#baseline-scenario-2), all other hyperparameters (see in [`config_scenario2.sh`](./config_scenario2.sh)), and the training code itself are allowed to be modified to best optimize performance and demonstrate hardware capabilities. We require that any of these changes are reported and reproduceable. **Note that only results from Scenario 2 will be considered for the overall throughput metric.**
 
-Other hyperparameters that are allowed to be changed in [`config_kestrel.sh`](./config_kestrel.sh) for optimized Scenario 2 submissions include: 
-
-| Variable           | Description                               | Default Kestrel value  |
-| :--                | :--                                       | :--                    |
-| `LOCAL_BATCH_SIZE` | Per-accelerator batch size                | `8`                    |
-| `OPTIMIZER`        | Learning rate optimizer                   | `AdamW`                |
-| `START_LR`         | Starting learning rate                    | `0.001`                |
-| `LR_SCHEDULE_TYPE` | Learning rate scheduler type              | `cosine_annealing`     |
-| `LR_WARMUP_STEPS`  | Number of LR warmup steps                 | `0`                    |
-| `LR_WARMUP_FACTOR` | Learning rate multiplier for warmup stage | `1`                    |
-| `WEIGHT_DECAY`     | Strength of L2 regularization             | `0.2`                  | 
-| `MAX_THREADS`      | Number of data loading threads            | `4`                    |
 
 ## Benchmark test results to report and files to return
 
+**We will provide a convenience wrapper script to extract the data requested to be reported from each DeepCAM submission scenario at a later date.**
+
 ### Scenario 1 submissions
 
-Noting the average time required per training step (in seconds) across 10 epochs satisfies this submission. 
+Noting the median time required per training step (in seconds) across 5 epochs satisfies this submission. This time should **solely** reflect the time spent during training itself. In other words, this excludes the time required for model initiation and the time spent staging data to local disks for faster I/O. 
 
-For each run following Scenario 2 rules, we request the following information (using unoptimized Kestrel reference data as an example):
+For each run following Scenario 1 rules, we request the following information in the table below. 
 
-| Run Type  | Scenario | Nodes used | Accelerators per node | Local Batch Size | LR Scheduler     | Start LR | Optimizer          | Time per training step* (seconds) |
-| :---      | :---     | :---       | :---                  | :---             | :---             | :---     | :---               | :---                              |
-| baseline  | 1        | 4          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | *N*                               |
-| baseline  | 1        | 8          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | *N*                               |
-| baseline  | 1        | 32         | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | *N*                               |
-| optimized | 1        | *N*        | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                               |
-| optimized | 1        | *2N*       | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                               |
-| optimized | 1        | *8N*       | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                               |
+| Run Type  | Scenario | Nodes used | Replicate | Accelerators per node | Total Accelerators | Local Batch Size | Data staged | Median time per training step (seconds)  |
+| :---      | :---     | :---       | :---      | :---                  | :---               | :---             | :---        | :---                                     |
+| baseline  | 1        | 1          | 1         | 4                     | 4                  | 12               | No          | 0.732                                    |
+| baseline  | 1        | 4          | 1         | 4                     | 16                 | 12               | No          | 0.749                                    |
+| baseline  | 1        | 8          | 1         | 4                     | 32                 | 12               | No          | 0.756                                    |
+| optimized | 1        | *N*        | *R*       | *X*                   | :---               | *Y*              | *<Yes/No>*  | *T*                                      |
+| optimized | 1        | *4N*       | *R*       | *X*                   | :---               | *Y*              | *<Yes/No>*  | *T*                                      |
+| optimized | 1        | *8N*       | *R*       | *X*                   | :---               | *Y*              | *<Yes/No>*  | *T*                                      |
 
 
 ### Scenario 2 submissions
 
-Noting the time required (in minutes) to reach 82% validation accuracy satisfies this submission. 
+Noting the time required (in minutes) to reach 82% validation accuracy satisfies this submission. As with Scenario 1, this time should **solely** reflect the time spent during training itself. In other words, this excludes the time required for model initiation and the time spent staging data to local disks for faster I/O. 
 
 For each run following Scenario 2 rules, we request the following information (using unoptimized Kestrel reference data as an example):
 
-| Run Type  | Scenario | Nodes used | Accelerators per node | Local Batch Size | LR Scheduler     | Start LR | Optimizer          | Time Required* (minutes) | Epochs Required* |
-| :---      | :---     | :---       | :---                  | :---             | :---             | :---     | :---               | :---                     | :--              |
-| baseline  | 2        | 4          | 4                     | 8                | cosine_annealing | 0.001    | MixedPrecisionLAMB | 83                       | 9                |
-| optimized | 2        | *N*        | *N*                   | *N*              | *scheduler*      | *N*      | *optimizer*        | *N*                      | *N*              |
+| Run Type  | Scenario | Nodes used | Replicate | Accelerators per node | Total Accelerators | Local Batch Size | LR Scheduler     | Start LR  | Optimizer   | Median timing per epoch (minutes) | Total Time Required* (minutes) | Epochs Required* |
+| :---      | :---     | :---       | :---      | :---                  | :---               | :---             | :---             | :---      | :---        | :---                              | :---                           | :--              |
+| baseline  | 2        | 16         | 1         | 4                     | 64                 | 16               | cosine_annealing | 0.0005    | AdamW       | X                                 | 118.12                         | 49               |
+| baseline  | 2        | 32         | 1         | 4                     | 128                | 8                | cosine_annealing | 0.0005    | AdamW       | X                                 | 68.63                          | 48               |
+| optimized | 2        | *M*        | *R*       | *X*                   | *X\*M*             | *Y*              | *scheduler*      | *Z*       | *optimizer* |                                   | *T*                            | *E*              |
 
 \* Time or epochs required to reach 82% evaluation accuracy target.
 
-**We will provide a convenience wrapper script to extract the data requested to be reported from a DeepCAM submission at a later date.**
-
 ## References and useful links
 
-* [Unoptimized (baseline) DeepCAM implementation from MLCommons](https://github.com/mlcommons/hpc/tree/main/deepcam)
+* [MLCommons HPC v3.0 Results](https://github.com/mlcommons/hpc_results_v3.0)
 * [Exascale Deep Learning for Climate Analytics paper](https://arxiv.org/pdf/1810.01993)
 * [NERSC10 DeepCAM reference](https://gitlab.com/NERSC/N10-benchmarks/deepcam)

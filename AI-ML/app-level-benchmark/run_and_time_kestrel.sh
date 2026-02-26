@@ -37,8 +37,10 @@ ENV_NAME=`pwd`/deepcam-torch${PYTORCH_VERSION}-env-py${PYTHON_VERSION}_HPC-v3
 eval "$(conda shell.bash hook)"
 conda activate $ENV_NAME
 
-# config*.sh controls many environment variables worth modifying
-source config_kestrel.sh
+# config*.sh controls many environment variables
+# make sure the correct config file for the intended scenario is loaded!
+source config_scenario1.sh
+# source config_scenario2.sh 
 
 # start timing
 start=$(date +%s)

@@ -18,10 +18,9 @@ if [ ! -d $ENV_NAME ]; then
     mamba create -y \
         --prefix $ENV_NAME \
         python=$PYTHON_VERSION mpi4py h5py
-    conda activate $ENV_NAME
-else
-    conda activate $ENV_NAME
 fi
+
+conda activate $ENV_NAME
 
 # Convert data from HDF5 to numpy format
 DATA_IN=/projects/hpcapps/mselensk/deepcam/All-Hist/
