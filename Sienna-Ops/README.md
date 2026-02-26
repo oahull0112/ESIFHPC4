@@ -41,7 +41,7 @@ README.md, run
 
 2. Add the required packages using the Julia package manager:
    ```julia
-   ] add PowerSimulations PowerSystems HydroPowerSimulations
+   ] add PowerSimulations PowerSystems@4 HydroPowerSimulations
    ```
 
 3. For the latest development version, use:
