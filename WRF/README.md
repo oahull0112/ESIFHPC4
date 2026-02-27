@@ -21,42 +21,41 @@ Before starting the build process, you may wish to request an interactive node t
 salloc -A <allocation_name> -t 60
 ```
 
-### 1.1: Download WRF and WPS Source Code
-Start by downloading the source code for the WRF model and its companion, the WRF Preprocessing System (WPS). Use the provided links to download the specific versions of WRF (v4.7.1) and WPS (v4.6.0). The commands below will fetch compressed `.tar.gz` archives from the official WRF GitHub repository.
+### 1.1: Download WRF Source Code
+Start by downloading the source code for the WRF model. Use the provided links to download the latest version of WRF (v4.7.1 at the time of this writing, newer versions are acceptable for this benchmark). The command below will fetch a compressed `.tar.gz` archive from the official WRF GitHub repository.
 
 ```bash
 wget https://github.com/wrf-model/WRF/releases/download/v4.7.1/v4.7.1.tar.gz
-wget https://github.com/wrf-model/WPS/archive/refs/tags/v4.6.0.tar.gz
 ```
 
 ### 1.2: Extract the Source Code
-Once you've downloaded the archives, unpack them to access the source code. The `tar` command extracts the contents of the `.tar.gz` files and creates directories corresponding to the source files. This step produces directories containing WRF (WRFV4.7.1) and WPS (WPS-4.6.0).
+Once you've downloaded the archive, unpack it to access the source code. The `tar` command extracts the contents of the `.tar.gz` files and creates directories corresponding to the source files, in this case, WRF (WRFV4.7.1).
 
 ```bash
-tar -xvzf v4.6.0.tar.gz 
 tar -xvzf v4.7.1.tar.gz 
 ```
 
 ### 1.3: Load Necessary Modules
-The next step is loading the required software modules. By purging existing modules and loading specific versions of compilers and libraries, you ensure a clean environment and avoid compatibility issues during compilation. The commands below load GNU compilers (`PrgEnv-gnu/8.5.0`), NetCDF libraries (which automatically loads pnetcdf libraries and hdf5 libraries on the reference system) (`netcdf/4.9.3-cray-mpich-gcc`), and Jasper libraries (`jasper/1.900.1-cray-mpich-gcc`) that support WRF.
+The next step is loading the required software modules. By purging existing modules and loading specific versions of compilers and libraries, you ensure a clean environment and avoid compatibility issues during compilation. You will need to load PnetCDF, NetCDF, and HDF5 along with GNU compilers. As previously mentioned, the commands below are specific to the modules and versions available on the reference system; it is expected that minor alterations to enable these same functionalities on the offered system.
+
+For the reference system, the commands below load the GNU compilers (`PrgEnv-gnu/8.5.0`) and NetCDF libraries (which automatically loads pnetcdf libraries and hdf5 libraries) (`netcdf/4.9.3-cray-mpich-gcc`) that support WRF.
 
 ```bash
 module purge
 module load PrgEnv-gnu/8.5.0 
 module load netcdf/4.9.3-cray-mpich-gcc
-module load jasper/1.900.1-cray-mpich-gcc
 ```
 
 ### 1.4: Set Environment Variables
-Define environment variables to facilitate the compilation process. These variables specify file paths, library locations, and directory structures required by the build system. Update the paths of `WRF_DIR` and `WPS_DIR` in the example to match your local installation setup. 
+Define environment variables to facilitate the compilation process. These variables specify file paths, library locations, and directory structures required by the build system. Update the path of `WRF_DIR` in the example to match your local installation setup. 
 
 ```bash
 export PATH="/usr/bin:${PATH}"
 export LD_LIBRARY_PATH="/usr/lib64:${LD_LIBRARY_PATH}"
 
 export WRF_DIR=/scratch/<user>/<benchmark_folder>/WRFV4.7.1/
-export WPS_DIR=/scratch/<user>/<benchmark_folder>/WPS-4.6.0/
 
+# Specific to reference system
 export PNETCDF=$PNETCDF_DIR 
 export HDF5=$HDF5_DIR
 ```
@@ -99,38 +98,9 @@ build completed: Wed Nov 12 15:17:30 MST 2025
 -rwxrwxr-x 1 <user> <user> 45807024 Nov 12 15:17 main/wrf.exe
 ```
 
-### 1.7: Configure WPS Build Options
-Move to the WPS directory specified in the `WPS_DIR` variable. Similar to the WRF configuration, we begin by running the `configure` script first. Select option `3` at the prompt, which is suitable for `Linux x86_64, gfortran (dmpar)` setups. This configuration prepares WPS for parallel processing.
+> [!TIP]  
+> The configuration log produced by carrying out the above sequence of operations on the reference system is included here: [configure.wrf](build_logs/configure.wrf).
 
-```bash
-cd ${WPS_DIR}
-./configure
-```
-
-First prompt:
-```bash
-Enter selection [1-44] : 3
-```
-
-### 1.8: Modify and Save WPS Configuration
-After running the `configure` script, locate the file `configure.wps` in the WPS directory. Open this file using a text editor and search for the `WRF_LIB` variable on line 44. Modify the last line of this assignment to include the `-fopenmp` flag as shown below, which enables OpenMP support during compilation. This step ensures compatibility between WRF and WPS.
-
-```bash
-WRF_LIB         =       -L$(WRF_DIR)/external/io_grib1 -lio_grib1 \
-                        -L$(WRF_DIR)/external/io_grib_share -lio_grib_share \
-                        -L$(WRF_DIR)/external/io_int -lwrfio_int \
-                        -L$(WRF_DIR)/external/io_netcdf -lwrfio_nf \
-                        -L$(NETCDF)/lib -lnetcdff -lnetcdf -fopenmp
-```
-
-Save the file and exit the editor.
-
-### 1.9: Compile WPS
-Run the WPS compile process to generate the necessary executables. If successful, the `compile` script will create the executables `geogrid.exe`, `ungrib.exe`, and `metgrid.exe`.
-
-```bash
-./compile
-```
 
 ---
 
@@ -187,7 +157,6 @@ Within each run directory, create a submission script named `submit_job.sbatch`.
 module purge
 module load PrgEnv-gnu/8.5.0
 module load netcdf/4.9.3-cray-mpich-gcc
-module load jasper/1.900.1-cray-mpich-gcc
 
 export OMP_NUM_THREADS=1
 
@@ -222,7 +191,7 @@ This script combs through the rsl.error.0000 file(s) specified with the `--rsl_f
 ## Run Definitions and Requirements
 
 
-Benchmarking WRF requires reporting these timing results from two sets of runs each comprised of 5 test cases for a total of 10 runs. The first set of runs uses pure MPI parallelism (i.e., one OpenMP thread per MPI task) and tests strong scaling performance across 1, 2, 4, 8, and 16 nodes. The Offeror may adjust the total number of MPI tasks, but note that in each case, *at least 80% of the available cores per every node must be utilized.* The second set of runs uses hybrid OpenMP + MPI parallelism (i.e., 4 threads per MPI task) and tests strong scaling performance across the same 1, 2, 4, 8, and 16 node jobs. Note that since each MPI task uses 4 threads, the requirement for the total number of MPI tasks per every node is reduced to 20%.
+Benchmarking WRF requires reporting these timing results from two sets of runs each comprised of 5 test cases for a total of 10 runs. The first set of runs uses pure MPI parallelism (i.e., one OpenMP thread per MPI task) and tests strong scaling performance across 1, 2, 4, 8, and 16 nodes. The Offeror may adjust the total number of MPI tasks, but note that in each case, *at least 80% of the physical cores per every node must be utilized.* The second set of runs uses hybrid OpenMP + MPI parallelism (i.e., 4 threads per MPI task) and tests strong scaling performance across the same 1, 2, 4, 8, and 16 node jobs. Note that since each MPI task uses 4 threads mapping to 4 physical cores, the requirement for the total number of physical cores per every node is reduced to 20%.
 
 For these required cases, report the number of MPI tasks, number of threads, number of iterations during the calculation, total write time, and total time in the reporting spreadsheet (the `get_timing.py` script provides all these outputs). Optionally, the Offeror may include a set of additional "Optimized" cases that use different OpenMP:MPI ratios, node saturations, `namelist.input` specifications, building instructions, etc., provided any details and/or instructions necessary to reproduce these results are provided as explained in the [definition of "Optimized"](../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs).
 
