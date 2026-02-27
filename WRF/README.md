@@ -36,7 +36,7 @@ tar -xvzf v4.7.1.tar.gz
 ```
 
 ### 1.3: Load Necessary Modules
-The next step is loading the required software modules. By purging existing modules and loading specific versions of compilers and libraries, you ensure a clean environment and avoid compatibility issues during compilation. You will need to load PnetCDF, NetCDF, and HDF5 along with GNU compilers. As previously mentioned, the commands below are specific to the modules and versions available on the reference system; it is expected that minor alterations to enable these same functionalities on the offered system.
+The next step is loading the required software modules. By purging existing modules and loading specific versions of compilers and libraries, you ensure a clean environment and avoid compatibility issues during compilation. You will need to load PnetCDF, NetCDF, and HDF5 along with GNU compilers. As previously mentioned, the commands below are specific to the modules and versions available on the reference system; it is expected that minor alterations to enable these same functionalities on the offered system will be required.
 
 For the reference system, the commands below load the GNU compilers (`PrgEnv-gnu/8.5.0`) and NetCDF libraries (which automatically loads pnetcdf libraries and hdf5 libraries) (`netcdf/4.9.3-cray-mpich-gcc`) that support WRF.
 
