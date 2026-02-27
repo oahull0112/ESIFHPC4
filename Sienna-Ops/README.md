@@ -41,12 +41,11 @@ README.md, run
 
 2. Add the required packages using the Julia package manager:
    ```julia
-   ] add PowerSimulations PowerSystems@4 HydroPowerSimulations
+   ] add PowerSimulations PowerSystems@4 HydroPowerSimulations PowerSystemCaseBuilder
    ```
-
-3. For the latest development version, use:
+3. Addtional tools used in the benchmark:
    ```julia
-   ] add PowerSimulations
+   ] add BenchmarkTools CSV DataFrames
    ```
 4. Add requisite solvers
    ```julia
