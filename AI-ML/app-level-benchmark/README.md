@@ -43,7 +43,7 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 ### Step 2: DeepCAM
 
-Install the DeepCAM Python package dependencies from pip and/or conda on inside the PyTorch environment from step 1:
+Install the DeepCAM Python package dependencies from pip and/or conda on inside the PyTorch environment from step 1. For example, since Kestrel (NLR's reference system) uses NVIDIA hardware, we install the following. Note that the specific packages may change depending on the type of accelerator being tested. As per our [general baseline run rules](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), the Offeror may freely substitute publicly available packages/libraries as necessary for baseline submissions.
 
 ```
 conda activate $ENV_NAME
