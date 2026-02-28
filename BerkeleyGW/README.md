@@ -53,12 +53,12 @@ The instructions below can be used to build BerkeleyGW for the GPU-accelerated n
 
 ## 1.0 Build Environment
 
-Before beginning, it is convenient to store the path to directory that contains this README.md file in the `E4_BGW` environment variable:
+Before beginning, it is convenient to store the path to the directory that contains this README.md file in the `E4_BGW` environment variable:
 
 ```
 E4_BGW=$(pwd)
 ```
-AND update the `E4_BGW` variable line in `$E4_BGW/benchmarks/site_path_config.sh`.
+AND be sure to update the `E4_BGW` variable line in `$E4_BGW/benchmarks/site_path_config.sh` to be the same path!
 
 BerkeleyGW depends on multiple external software packages, and has been tested extensively with various configurations. BerkeleyGW might perform better due to math library optimization. Other math libraries may also be used, such as using ELPA instead of ScaLAPACK for matrix diagonalization. 
 
@@ -85,18 +85,17 @@ module load python
 
 ## 1.1 Downloading BerkeleyGW
 
-To compile BerkeleyGW yourself, the latest code version can be downloaded from the BerkeleyGW website: [https://berkeleygw.org/download/](https://berkeleygw.org/download/) or using this [direct download link](https://app.box.com/s/22edl07muvhfnd900tnctsjjftbtcqc4). The current release (4.0 at the time of this writing) is recommended due to the many performance improvements as compared to the 3.x versions. Enter the `$E4_BGW` directory, which is assumed to already contain `BerkeleyGW-4.0.tar.gz`, then untar the BerkeleyGW source code:
+To compile BerkeleyGW yourself, the latest code version can be downloaded from the BerkeleyGW website: [https://berkeleygw.org/download/](https://berkeleygw.org/download/) or using this [direct download link](https://app.box.com/s/22edl07muvhfnd900tnctsjjftbtcqc4). The current release (4.0 at the time of this writing) is recommended due to the many performance improvements as compared to the 3.x versions. In the directory containing `BerkeleyGW-4.0.tar.gz`, untar the BerkeleyGW source code:
 ```
-cd $E4_BGW
 tar -xvf BerkeleyGW-4.0.tar.gz
 ```
+and descend into the source code directory. We will be working in this directory for sections 1.2 and 1.3 below. 
 
 ## 1.2 Configuring BerkeleyGW
 
-The BerkeleyGW build system is based on `make` and requires manual configuration by editing an architecture-specific make file named `arch.mk`. Example `arch.mk` files for various supercomputers are provided in the `$E4_BGW/BerkeleyGW/config` directory.
-* Select the file most closely related to the target environment and copy it. For example:
+The BerkeleyGW build system is based on `make` and requires manual configuration by editing an architecture-specific make file named `arch.mk`. Example `arch.mk` files for various supercomputers are provided in the source code's `config` directory.
+* Select the file most closely related to the target environment and copy it to the name `arch.mk`. For example:
 ```bash
-cd $E4_BGW/BerkeleyGW
 cp config/perlmutter.nersc.gov-nvhpc-openacc.mk arch.mk
 ```
 * Edit the `arch.mk` file to fit your needs, for example, by adding the appropriate library paths.
@@ -104,12 +103,12 @@ Refer to the [BerkeleyGW manual](http://manual.berkeleygw.org/4.0/compilation-fl
 
 ## 1.3 Compiling BerkeleyGW
 
-Stay in the `BerkeleyGW` directory to compile the various BerkeleyGW modules. (Many modules could optionally be compiled, but this benchmark only uses Epsilon.) The following command will generate the complex (`cplx`) version of the code.
+Stay in this directory to compile the `epsilon` BerkeleyGW module (many modules could optionally be compiled, but this benchmark only uses Epsilon). The following command will generate the complex (`cplx`) version of the code.
 ```
 cp flavor_cplx.mk flavor.mk
 make -j epsilon
 ```
-After compilation, the executable (`epsilon.cplx.x`) will be in the source directory. Symbolic links with the same name will be in the `BerkeleyGW/bin` directory.
+After compilation, the executable (`epsilon.cplx.x`) will be created in the `Epsilon/` directory. Symbolic links with the same name will now be in the `bin/` directory.
 
 # 2. Running the BerkeleyGW benchmark
 
@@ -125,11 +124,11 @@ Each benchmark simulates a silicon divacancy defect embedded in a series of prog
 
 **Only benchmark runs for the Large size are required for the response.**
 
-The offeror should return results for a strong scaling series of N, 2N, and 4N, where N is the smallest number of nodes that the Large benchmark can fit on. 
+The offeror should return results for a strong scaling series of N, 2N, and 4N jobs, where N is the smallest number of nodes that the Large benchmark can fit on. 
 
 ## 2.1 Download wave-function data
 
-Each benchmark requires potentially Large wave-function (`XXXX.WFN`) data files that must be downloaded separately prior to running any jobs. Each benchmark size requires separate WFN files. For example, to run the Large benchmark, only the Large benchmark files need to be downloaded.
+Each benchmark requires potentially large wave-function (`XXXX.WFN`) data files that must be downloaded separately prior to running any jobs. Each benchmark size requires separate WFN files. For example, to run the Large benchmark, only the Large benchmark files need to be downloaded.
 
 The data files should be downloaded to the `Si_WFN_folder` directory. Note that it may be possible to reduce I/O time by moving the `Si_WFN_folder` to a high performance filesystem prior to the download and distributing the directory over multiple disks (striping). Explicit striping instructions are not provided here because the commands and optimal settings are not transferable to other filesystems.
 
@@ -146,9 +145,10 @@ $ ./wget_WFN.sh --help
 
 ## 2.2 Update site-specific files
 
-If you haven't already, enter the `$E4_BGW/benchmarks` directory and edit the `site_path_config.sh` script to specify the location of required libraries, BerkeleyGW executable (`bin/`) directory, and directories with the Large Si WFN I/O files. In particular:
+Now, returning to the `$E4_BGW/benchmarks` directory, edit the `site_path_config.sh` script to specify the location of required libraries you built BerkeleyGW with, store the BerkeleyGW executable (`bin/`) directory as the `BGW_DIR` variable, and verify the directory names with the Si WFN I/O files for each benchmark size. In particular:
+* Make sure you have set the `E4_BGW` variable as per the instructions at the start of section 1.0 above. 
 * `HDF_LIBPATH=` path to the location of libraries, if any. May not be necessary if a module is loaded instead.
-* `BGW_DIR=` path to epsilon.cplx.x (i.e., the `BerkeleyGW/bin` directory created in the previous section).
+* `BGW_DIR=` path to epsilon.cplx.x (i.e., the `BerkeleyGW_source_code/bin/` directory created in the previous section).
 * `Si_WFN_folder=` path to Large I/O downloaded files (`$Si_WFN_folder/` from the previous section).
 
 ## 2.3 Submit
@@ -159,9 +159,11 @@ cd $E4_BGW/benchmarks/large_Si998/
 sbatch run_epsilon_Si998.sh 
 ```
 
-Note that a script called stripe_large has been included that on Kestrel allows striping of a particular directory. This script can optionally be called by each `run_epsilon_XXXX.sh` Slurm script and can be modified if alternative striping is used. The I/O performance of the Medium and Large benchmarks in particular might benefit from striping the Si wavefunction and run directories across ~24-72 OSTs on Lustre file systems, as the wavefunctions and epsilon matrix files are dozens of GB in size. 
+Note that a script called `stripe_large.sh` has been included that on Kestrel allows striping of a particular directory. This script can optionally be called by each `run_epsilon_XXXX.sh` Slurm script and can be modified if alternative striping is used. The I/O performance of the Medium and Large benchmarks in particular might benefit from striping the Si wavefunction and run directories across ~24-72 OSTs on Lustre file systems, as the wavefunctions and epsilon matrix files are dozens of GB in size. 
 
 Each Kestrel GPU node has 4 NVIDIA H100 GPUs (80 GB memory each) and dual socket AMD Genoa CPUs. The parallel configuration for all runs on Kestrel used 4 MPI tasks per node, and each MPI task used 1 GPU and 16 CPU cores. To run on systems different than Kestrel, modify the run scripts to reflect the hardware specifics of the architecture of interest. The number of MPI tasks are allowed to be adjusted to improve performance. The input file (`epsilon.inp`) may not be modified **except** to optimize `max_mem_nv_block_algo` for accelerated runs, which sets the maximum GPU memory per MPI rank (in GB) to use for Epsilon's chi summation phase. This flag can have a strong influence on time to solution: more memory typically improves performance. The Kestrel GPU results shown below were all generated using `max_mem_nv_block_algo 80`.
+
+There are `epsilon-cpu.inp` files provided for each benchmark size that should be used for standard node runs without accelerators, which specify that different non-offloaded internal BerkeleyGW routines are used.
 
 The `run_epsilon_XXXX.sh` scripts will generate the `BGW_EPSILON_$SLURM_JOBID` folder where the calculations will run, and all output files will be written to this directory. The `$SLURM_JOB_ID` variable will be defined by Slurm when the job is submitted. The main results, including timing information, are directed to standard output, which will be directed to `BGW_EPSILON_$SLURM_JOBID.out`. This file will be used to determine the correctness and performance for each calculation.
 
@@ -169,29 +171,26 @@ The `run_epsilon_XXXX.sh` scripts will generate the `BGW_EPSILON_$SLURM_JOBID` f
 
 ## 3.1 Correctness & Timing
 
-Correctness can be verified using the `benchmarks/BGW_validate.sh` script, which compares values from the output to their expected output. The result of the validation test is printed on the first line of the script output. For example:
+Correctness can be verified using the `$E4_BGW/benchmarks/validate.py` script, which compares values from the output to their expected output. The result of the validation test is printed on the first line of the script output. For example:
 ```
-$ ../BGW_validate.sh: test output correctness for the ESIF-HPC-4 BerkeleyGW benchmark.
-|  Usage: BGW_validate.sh <app> <size> <output_file>
-|  Allowed apps: [ epsilon ]
-|  Allowed sizes: [ small, medium, large ]
-|  Example: BGW_validate.sh epsilon small BGW_EPSILON.out
+Usage:
+  ./BGW_validate.py <size> <output_file>
+Allowed sizes: small, medium, large
 
-$ ../BGW_validate.sh: epsilon small BGW_EPSILON.out
-|  Testing epsilon small
-|  Validation:    PASSED
-|  Total Time:     62.45
-|  I/O Time:        5.33
-|  Benchmark Time: 57.12
+$ Validating epsilon job for size: small
+  Validation:     PASSED
+  Total Time:     395.65
+  I/O Time:       6.60
+  Benchmark Time: 389.05
 ```
-In addition, these scripts will print several performance results for the job:
+In addition, this script will print performance results for the job:
 * Total Time corresponds to the full duration of the executed job.
 * I/O Time is the time spent writing data to disk.
 * Benchmark Time is computed by subtracting the I/O times from the Total Time.
 
 ## 3.2 Performance on Kestrel
 
-The sample data in the table below are measured runtimes from NLR's Kestrel CPU and GPU partitions. We also provide a Python script in visualization/plot-times.py (it reads visualization/results-summary.xlsx) that an Offeror may optionally use to plot their results and compare with NLR's baseline performance results. 
+The sample data in the table below are measured runtimes from NLR's Kestrel CPU and GPU partitions. We also provide a Python script in `$E4_BGW/visualization/plot-times.py` (this script reads the `$E4_BGW/visualization/results-summary.xlsx` file) that an Offeror may optionally use to plot their results and compare with NLR's baseline performance results. Sample output files for the large benchmark are also located in `$E4_BGW/benchmarks/large_Si998/NLR-results/`.
 
 ### 3.2.1 Standard (CPU) Node Performance
 
@@ -266,3 +265,4 @@ For the Large benchmark, we find that 48 nodes runs faster with 24 threads than 
 ## 3.3 Reporting
 
 For any benchmark size, benchmark results provided in the reporting spreadsheet should include the (Max) Total Benchmark Time, (Max) Total I/O Time, and the Benchmark Time (the difference between the first two times), all in seconds. The hardware configuration (i.e. the number of elements from each pool of computational resources) needed to achieve the estimated timings must also be provided. If both CPU-only and accelerated nodes are offered, it is sufficient to return results only for the accelerated nodes, and CPU-only results may be returned optionally. As part of the file response, include all the build environment, source, and make files used to build on the target platform, input files and run scripts, and the primary BerkeleyGW summary output file `BGW_EPSILON_$SLURM_JOBID.out` (i.e. the one that actually contains the timing data and epsilon inverse Head value). Do not return the `eps0mat.h5` file.
+

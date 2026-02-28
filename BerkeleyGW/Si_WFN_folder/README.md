@@ -9,6 +9,8 @@ https://portal.nersc.gov/project/m888/nersc10/benchmark_data/BGW_input
 You can download them to your local machine using `wget`
 The `wget_WFN.sh` script is provided to simplify the download process.
 
+If you are working on benchmarks for a ESIF-HPC4 response and cannot download the WFN files from the above link, please contact NLR.
+
 Note that on Kestrel's Lustre filesystems, I/O performance is greatly improved if the destination directory is striped before copying.  
 
 

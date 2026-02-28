@@ -14,6 +14,9 @@ dont_check_norms
 comm_nonblocking_cyclic
 
 # accel_chi_summation_no_full_offload
-max_mem_nv_block_algo 80
-number_valence_pools 4
+# max_mem_nv_block_algo 80
+# number_valence_pools 4
+
+mtxel_algo CPU_ALGO
+chi_summation_algo CPU_ALGO
 
