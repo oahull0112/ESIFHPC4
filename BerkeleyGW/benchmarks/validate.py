@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-BGW_validate.py: test output correctness for the ESIF-HPC4 BerkeleyGW benchmark.
+validate.py: test output correctness for the ESIF-HPC4 BerkeleyGW benchmark.
 
 Usage:
-  ./BGW_validate.py <size> <output_file>
+  ./validate.py <size> <output_file>
 Allowed sizes: small, medium, large
 """
 
@@ -50,7 +50,7 @@ def test_result(name: str, measured: float, expected: float, tol: float) -> bool
 
 def parse_args() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="BGW_validate.py",
+        prog="validate.py",
         description="Test output correctness for the ESIF-HPC4 BerkeleyGW benchmark.",
     )
     p.add_argument("size", choices=["small", "medium", "large"], help="Benchmark size")

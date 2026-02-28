@@ -174,7 +174,7 @@ The `run_epsilon_XXXX.sh` scripts will generate the `BGW_EPSILON_$SLURM_JOBID` f
 Correctness can be verified using the `$E4_BGW/benchmarks/validate.py` script, which compares values from the output to their expected output. The result of the validation test is printed on the first line of the script output. For example:
 ```
 Usage:
-  ./BGW_validate.py <size> <output_file>
+  ./validate.py <size> <output_file>
 Allowed sizes: small, medium, large
 
 $ Validating epsilon job for size: small
