@@ -1,0 +1,133 @@
+LAMMPS (22 Jul 2025 - Update 1)
+  using 1 OpenMP thread(s) per MPI task
+variable        run_name string "Xlarge NLR LAMMPS benchmark"
+print           "--- Starting run: ${run_name} ---"
+--- Starting run: Xlarge NLR LAMMPS benchmark ---
+
+variable 	thermo_print equal 10
+variable	total_step equal ${thermo_print}*10
+variable	total_step equal 10*10
+
+units		real
+boundary	p p p
+neighbor        2.0 bin
+neigh_modify    delay 10 every 1
+atom_style	full
+bond_style      harmonic
+angle_style     harmonic
+dihedral_style  harmonic
+pair_style      lj/cut/coul/long 10.0
+pair_modify     mix arithmetic
+kspace_style    pppm 1e-4
+read_data       ../data.begin
+Reading data file ...
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
+  8 by 8 by 12 MPI processor grid
+  reading atoms ...
+  744000 atoms
+  reading velocities ...
+  744000 velocities
+  scanning bonds ...
+  2 = max bonds/atom
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
+  8 by 8 by 12 MPI processor grid
+  reading bonds ...
+  648000 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     2 = max # of 1-3 neighbors
+     4 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 0.240 seconds
+  read_data CPU = 5.524 seconds
+replicate	8 8 8
+Replication is creating a 8x8x8 = 512 times larger system...
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (1668.8623 1668.8623 1668.8623)
+  8 by 8 by 12 MPI processor grid
+  380928000 atoms
+  331776000 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     2 = max # of 1-3 neighbors
+     4 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 1.476 seconds
+  replicate CPU = 7.847 seconds
+fix             microcanonical all nve
+timestep	1
+thermo          ${thermo_print}
+thermo          10
+thermo_modify   flush yes
+run             ${total_step}
+run             100
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb
+  G vector (1/distance) = 0.25839024
+  grid = 810 810 810
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.046279783
+  estimated relative force accuracy = 0.00013937019
+  using double precision FFTW3
+  3d grid and FFT values/proc = 835777 716040
+Generated 6 of 6 mixed pair_coeff terms from arithmetic mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 10 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 12
+  ghost atom cutoff = 12
+  binsize = 6, bins = 279 279 279
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut/coul/long, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 980.9 | 983.5 | 986.6 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   299.89373     -6.226157e+09   1.3679357e+08 -5.7488419e+09  41.697847    
+        10   299.60592     -6.2268986e+09  1.3787604e+08 -5.7488278e+09 -35.421233    
+        20   299.73603     -6.2263848e+09  1.3720982e+08 -5.7488325e+09 -20.12323     
+        30   300.22023     -6.2266836e+09  1.3694909e+08 -5.7488422e+09 -35.176379    
+        40   299.85878     -6.2272682e+09  1.3795913e+08 -5.7488272e+09 -78.834538    
+        50   299.69013     -6.2262793e+09  1.3715548e+08 -5.7488335e+09 -10.93436     
+        60   299.89803     -6.2263661e+09  1.3699764e+08 -5.7488421e+09  2.3856862    
+        70   299.88454     -6.2273746e+09  1.3802643e+08 -5.748837e+09  -55.082778    
+        80   299.85695     -6.2264662e+09  1.3714938e+08 -5.748837e+09  -8.9841195    
+        90   300.09041     -6.2267141e+09  1.3713229e+08 -5.7488369e+09 -3.535421     
+       100   299.87722     -6.2274699e+09  1.3813409e+08 -5.748833e+09  -49.401291    
+Loop time of 307.673 on 768 procs for 100 steps with 380928000 atoms
+
+Performance: 0.028 ns/day, 854.648 hours/ns, 0.325 timesteps/s, 123.809 Matom-step/s
+98.8% CPU use with 768 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 159.56     | 166.16     | 174.07     |  20.9 | 54.01
+Bond    | 0.97105    | 1.4114     | 1.9645     |  13.9 |  0.46
+Kspace  | 101.11     | 109.27     | 116.21     |  25.1 | 35.52
+Neigh   | 22.683     | 22.772     | 22.841     |   0.7 |  7.40
+Comm    | 3.0207     | 4.4352     | 5.9303     |  24.1 |  1.44
+Output  | 0.1102     | 0.17735    | 0.26234    |   6.3 |  0.06
+Modify  | 1.5404     | 2.394      | 3.4045     |  22.5 |  0.78
+Other   |            | 1.053      |            |       |  0.34
+
+Nlocal:         496000 ave      496347 max      495632 min
+Histogram: 256 0 0 0 0 256 0 0 0 256
+Nghost:         226884 ave      227067 max      226662 min
+Histogram: 256 0 0 0 0 0 256 0 0 256
+Neighs:    1.46932e+08 ave 1.47289e+08 max 1.46566e+08 min
+Histogram: 48 64 104 88 88 56 80 104 80 56
+
+Total # of neighbors = 1.1284393e+11
+Ave neighs/atom = 296.23428
+Ave special neighs/atom = 1.7419355
+Neighbor list builds = 7
+Dangerous builds = 0
+
+
+Total wall time: 0:05:31

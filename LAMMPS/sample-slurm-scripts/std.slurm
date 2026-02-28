@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name lammps-standardnode
-#SBATCH --nodes=4
+#SBATCH --nodes=2
 #SBATCH --time=00:20:00
 #SBATCH --tasks-per-node=96
 #SBATCH --account=hpcapps

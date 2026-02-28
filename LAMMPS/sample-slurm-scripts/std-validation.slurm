@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name lammps-standardnode-validation
 #SBATCH --nodes=1
-#SBATCH --time=1:00:00
+#SBATCH --time=00:20:00
 #SBATCH --tasks-per-node=64
 #SBATCH --account=hpcapps
 #SBATCH --exclusive

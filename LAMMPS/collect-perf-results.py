@@ -104,9 +104,9 @@ def parse_log(path: str | Path) -> RunSummary:
         timesteps_per_s,
     )
 
-
 def main(paths: list[str]) -> int:
-    print(f"Processing the file paths: {paths}\n\n")
+    print()
+    print(f"Processing the file paths: {paths}\n")
 
     print(
         "Benchmark MPItasks Nsteps LoopTime(s) "
@@ -129,7 +129,7 @@ def main(paths: list[str]) -> int:
             f"{s.timesteps_per_s:>8.3f} "
             f"{s.s_per_timestep:>8.4f}"
         )
-
+    print()
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

@@ -1,0 +1,191 @@
+LAMMPS (22 Jul 2025 - Update 1)
+  using 1 OpenMP thread(s) per MPI task
+package gpu 4
+variable        run_name string "Large NLR LAMMPS benchmark"
+print           "--- Starting run: ${run_name} ---"
+--- Starting run: Large NLR LAMMPS benchmark ---
+
+variable 	thermo_print equal 20
+variable	total_step equal ${thermo_print}*10
+variable	total_step equal 20*10
+
+units		real
+boundary	p p p
+neighbor        2.0 bin
+neigh_modify    delay 10 every 1
+atom_style	full
+bond_style      harmonic
+angle_style     harmonic
+dihedral_style  harmonic
+pair_style      lj/cut/coul/long 10.0
+pair_modify     mix arithmetic
+kspace_style    pppm 1e-4
+read_data       ../data.begin
+Reading data file ...
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
+  4 by 4 by 4 MPI processor grid
+  reading atoms ...
+  744000 atoms
+  reading velocities ...
+  744000 velocities
+  scanning bonds ...
+  2 = max bonds/atom
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
+  4 by 4 by 4 MPI processor grid
+  reading bonds ...
+  648000 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     2 = max # of 1-3 neighbors
+     4 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 0.012 seconds
+  read_data CPU = 4.738 seconds
+replicate	4 4 4
+Replication is creating a 4x4x4 = 64 times larger system...
+  orthogonal box = (0.049808341 0.049808341 0.049808341) to (834.45606 834.45606 834.45606)
+  4 by 4 by 4 MPI processor grid
+  47616000 atoms
+  41472000 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     2 = max # of 1-2 neighbors
+     2 = max # of 1-3 neighbors
+     4 = max # of 1-4 neighbors
+     2 = max # of special neighbors
+  special bonds CPU = 0.775 seconds
+  replicate CPU = 1.731 seconds
+fix             microcanonical all nve
+timestep	1
+thermo          ${thermo_print}
+thermo          20
+thermo_modify   flush yes
+run             ${total_step}
+run             200
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- GPU package (short-range, long-range and three-body potentials): doi:10.1016/j.cpc.2010.12.021, doi:10.1016/j.cpc.2011.10.012, doi:10.1016/j.cpc.2013.08.002, doi:10.1016/j.commatsci.2014.10.068, doi:10.1016/j.cpc.2016.10.020, doi:10.3233/APC200086
+
+@Article{Brown11,
+ author = {W. M. Brown and P. Wang and S. J. Plimpton and A. N. Tharrington},
+ title = {Implementing Molecular Dynamics on Hybrid High Performance Computers---Short Range Forces},
+ journal = {Comput.\ Phys.\ Commun.},
+ year =    2011,
+ volume =  182,
+ pages =   {898--911},
+ doi =     {10.1016/j.cpc.2010.12.021}
+}
+
+@Article{Brown12,
+ author = {W. M. Brown and A. Kohlmeyer and S. J. Plimpton and A. N. Tharrington},
+ title = {Implementing Molecular Dynamics on Hybrid High Performance Computers - Particle-Particle Particle-Mesh},
+ journal = {Comput.\ Phys.\ Commun.},
+ year =    2012,
+ volume =  183,
+ doi =     {10.1016/j.cpc.2011.10.012},
+ pages =   {449--459}
+}
+
+@Article{Brown13,
+ author = {W. M. Brown and Y. Masako},
+ title = {Implementing Molecular Dynamics on Hybrid High Performance Computers---Three-Body Potentials},
+ journal = {Comput.\ Phys.\ Commun.},
+ year =    2013,
+ volume =  184,
+ pages =   {2785--2793},
+ doi =     {10.1016/j.cpc.2013.08.002},
+}
+
+@Article{Trung15,
+ author = {T. D. Nguyen and S. J. Plimpton},
+ title = {Accelerating Dissipative Particle Dynamics Simulations for Soft Matter Systems},
+ journal = {Comput.\ Mater.\ Sci.},
+ year =    2015,
+ doi =     {10.1016/j.commatsci.2014.10.068},
+ volume =  100,
+ pages =   {173--180}
+}
+
+@Article{Trung17,
+ author = {T. D. Nguyen},
+ title = {{GPU}-Accelerated {T}ersoff Potentials for Massively Parallel
+    Molecular Dynamics Simulations},
+ journal = {Comput.\ Phys.\ Commun.},
+ year =    2017,
+ doi =     {10.1016/j.cpc.2016.10.020},
+ volume =  212,
+ pages =   {113--122}
+}
+
+@inproceedings{Nikolskiy19,
+ author = {V. Nikolskiy and V. Stegailov},
+ title = {{GPU} Acceleration of Four-Site Water Models in {LAMMPS}},
+ booktitle = {Proceedings of the International Conference on Parallel
+    Computing (ParCo 2019), Prague, Czech Republic},
+ doi =     {10.3233/APC200086},
+ year =    2019
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb
+  G vector (1/distance) = 0.25839024
+  grid = 405 405 405
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.046279783
+  estimated relative force accuracy = 0.00013937019
+  using double precision FFTW3
+  3d grid and FFT values/proc = 1225043 1061208
+Generated 6 of 6 mixed pair_coeff terms from arithmetic mixing rule
+Per MPI rank memory allocation (min/avg/max) = 596.1 | 597.4 | 599 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   299.89374     -7.7826904e+08  17099196      -7.1860465e+08  41.718599    
+        20   299.736       -7.782975e+08   17151222      -7.1860348e+08 -20.100712    
+        40   299.85874     -7.7840793e+08  17244885      -7.1860282e+08 -78.819143    
+        60   299.89799     -7.7829517e+08  17124704      -7.1860467e+08  2.3937573    
+        80   299.8569      -7.7830767e+08  17143666      -7.1860404e+08 -8.9755263    
+       100   299.87717     -7.7843313e+08  17266753      -7.1860354e+08 -49.393944    
+       120   299.66747     -7.7826181e+08  17125748      -7.1860299e+08  38.744184    
+       140   299.89708     -7.7833672e+08  17166792      -7.1860426e+08  1.5229776    
+       160   299.98536     -7.7845007e+08  17268137      -7.1860374e+08 -50.6774      
+       180   300.02574     -7.78325e+08    17136695      -7.1860438e+08 -12.409998    
+       200   299.55541     -7.7834136e+08  17220432      -7.1860375e+08 -38.655606    
+Loop time of 67.9518 on 64 procs for 200 steps with 47616000 atoms
+
+Performance: 0.254 ns/day, 94.377 hours/ns, 2.943 timesteps/s, 140.146 Matom-step/s
+93.9% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2.5642     | 2.9212     | 3.2791     |   9.8 |  4.30
+Bond    | 3.0253     | 3.2487     | 4.5416     |  20.3 |  4.78
+Kspace  | 54.797     | 56.257     | 56.594     |   5.5 | 82.79
+Neigh   | 0.027154   | 0.041496   | 0.056218   |   3.3 |  0.06
+Comm    | 2.9994     | 3.344      | 3.7138     |   8.6 |  4.92
+Output  | 0.02942    | 0.048178   | 0.065635   |   4.1 |  0.07
+Modify  | 1.1007     | 1.4157     | 1.6877     |  11.7 |  2.08
+Other   |            | 0.6759     |            |       |  0.99
+
+Nlocal:         744000 ave      744008 max      743992 min
+Histogram: 3 5 5 11 6 10 12 6 3 3
+Nghost:         287055 ave      287072 max      287038 min
+Histogram: 1 5 9 11 7 13 5 9 1 3
+Neighs:              0 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Ave special neighs/atom = 1.7419355
+Neighbor list builds = 15
+Dangerous builds = 0
+
+
+Total wall time: 0:01:33

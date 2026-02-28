@@ -49,51 +49,49 @@ def read_thermo_block(path: str | Path) -> pd.DataFrame:
 
 
 def main(offeror_log: str, nlr_log: str) -> int:
+    # Read LAMMPS thermo blocks into pandas df
     offeror_df = read_thermo_block(offeror_log)
     nlr_df = read_thermo_block(nlr_log)
 
+    # Check they are the same length
     assert len(offeror_df) == len(nlr_df), (
         f"Thermo length mismatch: "
         f"{len(offeror_df)} (offeror) vs {len(nlr_df)} (NLR)"
     )
 
-    merged = pd.concat(
-        [nlr_df[["Temp", "TotEng"]], offeror_df[["Temp", "TotEng"]]],
-        axis=1,
-        keys=["NLR", "Offeror"],
-    )
-    merged.columns = ["NLR_Temp", "NLR_TotEng", "Offeror_Temp", "Offeror_TotEng"]
+    # Get last entries for comparison 
+    # Even given chaotic numerical nature of MD, the first timestep printed 
+    # should still agree well
+    last_row = nlr_df.iloc[-1]
+    nlr_step = int(last_row["Step"])
+    nlr_temp = float(last_row["Temp"])
+    nlr_toteng = float(last_row["TotEng"])
+    last_row = offeror_df.iloc[-1]
+    offeror_step = int(last_row["Step"])
+    offeror_temp = float(last_row["Temp"])
+    offeror_toteng = float(last_row["TotEng"])
+    assert nlr_step == offeror_step, f"NLR_Step is {nlr_step} and Offeror_Step is {offeror_step}. Should be equal!"
+    assert offeror_temp != 0.0, "Offeror_Temp is zero; something went wrong!."
+    assert offeror_toteng != 0.0, "Offeror_TotEng is zero; something went wrong!"
 
-    nlr_temp_avg = float(merged["NLR_Temp"].mean())
-    nlr_toteng_avg = float(merged["NLR_TotEng"].mean())
-    offeror_temp_avg = float(merged["Offeror_Temp"].mean())
-    offeror_toteng_avg = float(merged["Offeror_TotEng"].mean())
-    assert offeror_temp_avg != 0.0, "Offeror_Temp average is zero; cannot form relative RMSE."
-    assert offeror_toteng_avg != 0.0, "Offeror_TotEng average is zero; cannot form relative RMSE."
+    # Relative errors here will be positive
+    rel_error_temp = abs((offeror_temp - nlr_temp) / nlr_temp)
+    rel_error_toteng = abs((offeror_toteng - nlr_toteng) / nlr_toteng)
 
-    rms_temp = float(np.sqrt(((merged["NLR_Temp"] - merged["Offeror_Temp"]) ** 2).mean()) / offeror_temp_avg)
-    rms_toteng = float(
-        np.sqrt(((merged["NLR_TotEng"] - merged["Offeror_TotEng"]) ** 2).mean()) / offeror_toteng_avg
-    )
-
-    validated = (rms_temp < 1.0e-3) and (rms_toteng < 1.0e-5)
+    temp_tol = 1e-4
+    toteng_tol = 1e-5
+    validated = (rel_error_temp < temp_tol) and (rel_error_toteng < toteng_tol)
     status = "Run validated successfully!" if validated else "Run was NOT validated..."
 
-    print(f"NLR average T and E: {nlr_temp_avg:.6e} {nlr_toteng_avg:.6e}")
-    print(f"Offeror average T and E: {offeror_temp_avg:.6e} {offeror_toteng_avg:.6e}")
-    print(f"Relative RMS errors: {rms_temp:.6e} {rms_toteng:.6e}")
+    print()
+    print(f"             {'Step':^4} {'T':>12} {'TotEng':>12}")
+    print(f"NLR:         {nlr_step: <4d} {nlr_temp:>12.4f} {nlr_toteng:>12.0f}")
+    print(f"Offeror:     {offeror_step: <4d} {offeror_temp:>12.4f} {offeror_toteng:>12.0f}")
+    print(f"Rel. error:  {'---': <4} {rel_error_temp:>12.9f} {rel_error_toteng:>12.9f}")
+    print('='*50)
     print(status)
-
-    # These file outputs are available, but commented out
-    # out_dir = Path(offeror_log).resolve().parent
-    # offeror_df.to_csv(out_dir / "thermo.dat", sep=" ", index=False)
-
-    # out_dir = Path(nlr_log).resolve().parent
-    # with open(out_dir / "rms_errors.dat", "w") as outfile:
-    #     outfile.write(f"NLR average T and E: {nlr_temp_avg:.6e} {nlr_toteng_avg:.6e}\n")
-    #     outfile.write(f"Offeror average T and E: {offeror_temp_avg:.6e} {offeror_toteng_avg:.6e}\n")
-    #     outfile.write(f"Relative RMS errors: {rms_temp:.6e} {rms_toteng:.6e}\n")
-    #     outfile.write(f"{status}\n")
+    print('='*50)
+    print()
 
     return 0 if validated else 2
 
