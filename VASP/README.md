@@ -51,7 +51,7 @@ The benchmark results must be validated against the results supplied in the `NLR
 * Required: Results must be reported for accelerated nodes and optionally for standard nodes.
 
 ### Node counts
-* Required: For each of the above, report results on the smallest possible hardware configuration (e.g., one compute node or one device), 2x this configuration, and 4x this configuration.
+* Required: For each of the above, report results on the smallest possible hardware configuration (e.g., one compute node or one device) and 2x this configuration. If possible, we are also interested in 4x this configuration.
 
 ### OpenMP usage
 * Required: For each of the above, always report performance without OpenMP (pure MPI). 
@@ -79,7 +79,7 @@ To check if a calculation has converged, search for "aborting loop because EDIFF
 
 ## Validation
 
-1. **Required Files:** The Offeror will provide `OUTCAR` and `VASP.xml` for each calculation. These files will be used to verify that the Offeror followed the prescribed instructions and did not modify any calculation settings beyond those explicitly permitted (i.e., `KPAR` and `NCORE`).
+1. **Required Files:** The Offeror will provide `OUTCAR` and `VASP.xml` for each calculation. These files will be used to verify that the Offeror followed the prescribed instructions and did not modify any calculation settings beyond those explicitly permitted (i.e., `NCORE` for bench 1 and bench 2 and `KPAR` for bench 1).
 2. **Validation Method:** Validation will consist of comparing the reported final electronic energy (TOTEN) and, for bench 1, the band gap (fundamental gap) from the submitted OUTCAR files against the corresponding reference values.
 3. **Acceptance Criteria:** A converged calculation will be considered valid if the final energy and, when relevant, the band gap agree with the reference values within a tolerance of 1E-3 eV.
 4. **Reference Data:** The reference data will be provided to the Offeror for comparison purposes but may not be modified without prior written authorization. The reference directory may be transferred to another system if needed for convenience.
@@ -89,3 +89,7 @@ Below is a summary of the results that can be found in the `NLR-results` folder 
 |---------------------|--------------|--------------|
 | TOTEN               | -666.3571    | -2531.9038   |
 | fundamental gap     | 1.0514       | N/A          |
+
+These quantities can be obtained by searching the `OUTCAR` file of a completed job using:
+`grep "TOTEN" OUTCAR | tail -n 1`
+`grep "fundamental gap" OUTCAR
