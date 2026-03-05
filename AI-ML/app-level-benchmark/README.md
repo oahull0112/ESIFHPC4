@@ -149,16 +149,17 @@ The following environment variables set in [`config_scenario1.sh`](./config_scen
 
 The following environment variables set in [`config_scenario1.sh`](./config_scenario1.sh) **must be set** for *baseline* **Scenario 1** submissions:
 
-| Variable            | Description                                                         | Required value     |
-| :--                 | :--                                                                 | :--                |
-| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `1`                |
-| `MAX_EPOCHS`        | Number of epochs at which training ends, regardless of convergence. | `5`                |
-| `LOCAL_BATCH_SIZE`  | Per-accelerator batch size                                          | `12`               |
-| `START_LR`          | Starting learning rate                                              | `0.0005`           |
-| `LR_SCHEDULE_TYPE`  | Learning rate scheduler type                                        | `cosine_annealing` |
-| `LR_WARMUP_STEPS`   | Number of LR warmup steps                                           | `0`                |
-| `OPTIMIZER`         | Learning rate optimizer                                             | `AdamW`            |
-| `WEIGHT_DECAY`      | Strength of L2 regularization                                       | `0.2`              | 
+| Variable                 | Description                                                         | Required value           |
+| :--                      | :--                                                                 | :--                      |
+| `LOGGING_FREQUENCY`      | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `1`                      |
+| `MAX_EPOCHS`             | Number of epochs at which training ends, regardless of convergence. | `5`                      |
+| `LOCAL_BATCH_SIZE`       | Per-accelerator batch size                                          | `12`                     |
+| `START_LR`               | Starting learning rate                                              | `0.0005`                 |
+| `LR_SCHEDULE_TYPE`       | Learning rate scheduler type                                        | `cosine_annealing`       |
+| `LR_WARMUP_STEPS`        | Number of LR warmup steps                                           | `0`                      |
+| `OPTIMIZER`              | Learning rate optimizer                                             | `AdamW`                  |
+| `WEIGHT_DECAY`           | Strength of L2 regularization                                       | `0.2`                    |
+| `TRAINING_INSTANCE_SIZE` | Number of GPUs to use during training (should equal all available)  | `DGXNGPU` * `Node count` |
 
 
 #### Baseline Scenario 2
@@ -175,19 +176,20 @@ The following environment variables set in [`config_scenario2.sh`](./config_scen
 
 The following environment variables set in [`config_scenario2.sh`](./config_scenario2.sh) **must be set** for *baseline* Scenario 2 submissions:
 
-| Variable            | Description                                                         | Required value     |
-| :--                 | :--                                                                 | :--                |
-| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `0`                |
-| `MAX_EPOCHS`        | Number of epochs at which training ends, regardless of convergence. | `50`               | 
-| `START_LR`          | Starting learning rate                                              | `0.0005`           |
-| `LR_SCHEDULE_TYPE`  | Learning rate scheduler type                                        | `cosine_annealing` |
-| `LR_WARMUP_STEPS`   | Number of LR warmup steps                                           | `0`                |
-| `OPTIMIZER`         | Learning rate optimizer                                             | `AdamW`            |
-| `WEIGHT_DECAY`      | Strength of L2 regularization                                       | `0.2`              | 
+| Variable                 | Description                                                         | Required value           |
+| :--                      | :--                                                                 | :--                      |
+| `LOGGING_FREQUENCY`      | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `0`                      |
+| `MAX_EPOCHS`             | Number of epochs at which training ends, regardless of convergence. | `50`                     | 
+| `START_LR`               | Starting learning rate                                              | `0.0005`                 |
+| `LR_SCHEDULE_TYPE`       | Learning rate scheduler type                                        | `cosine_annealing`       |
+| `LR_WARMUP_STEPS`        | Number of LR warmup steps                                           | `0`                      |
+| `OPTIMIZER`              | Learning rate optimizer                                             | `AdamW`                  |
+| `WEIGHT_DECAY`           | Strength of L2 regularization                                       | `0.2`                    |
+| `TRAINING_INSTANCE_SIZE` | Number of GPUs to use during training (should equal all available)  | `DGXNGPU` * `Node count` |
 
 ### Ported submissions
 
-For *ported* submissions, the *baseline* parameters must be used, though training code modifications necessary to port the code to a new/different device architecture are also permitted. As described in the repository's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), *ported* submissions should not be reported without *baseline*, unless *baseline* is not possible.
+For *ported* submissions, the *baseline* parameters must be used, though training code modifications necessary to port the code to a new/different device architecture are also permitted. **This includes replacing any vendor-specific package/library imports and calls in the training code.** As described in the repository's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), *ported* submissions should not be reported without *baseline*, unless *baseline* is not possible.
 
 ### Optimized submissions
 
