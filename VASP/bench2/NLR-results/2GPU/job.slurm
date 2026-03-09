@@ -14,4 +14,4 @@ export MPICH_GPU_SUPPORT_ENABLED=1
 module load vasp/6.5.1
 module list &> mlist
 
-time srun vasp_gam |& tee gga.out
+time srun vasp_gam 
