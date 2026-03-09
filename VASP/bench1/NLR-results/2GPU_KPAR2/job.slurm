@@ -1,13 +1,13 @@
 #!/bin/bash
-
+#SBATCH --reservation=esif4bench
 #SBATCH --account=hpcapps
 #SBATCH --nodes=1
-#SBATCH --gpus=1
-#SBATCH --ntasks-per-node=1
+#SBATCH --gpus=2
+#SBATCH --ntasks-per-node=2
 #SBATCH --cpus-per-task=1
 #SBATCH --time=12:00:00
 #SBATCH --job-name=vasp-bench1
-#SBATCH --mem=85G
+#SBATCH --mem=170G
 
 export MPICH_GPU_SUPPORT_ENABLED=1
 
