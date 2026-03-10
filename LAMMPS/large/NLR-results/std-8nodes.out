@@ -1,8 +1,8 @@
 LAMMPS (22 Jul 2025 - Update 1)
   using 1 OpenMP thread(s) per MPI task
-variable        run_name string "Xlarge NLR LAMMPS benchmark"
+variable        run_name string "Large NLR LAMMPS benchmark"
 print           "--- Starting run: ${run_name} ---"
---- Starting run: Xlarge NLR LAMMPS benchmark ---
+--- Starting run: Large NLR LAMMPS benchmark ---
 
 variable 	thermo_print equal 10
 variable	total_step equal ${thermo_print}*10
@@ -22,7 +22,7 @@ kspace_style    pppm 1e-4
 read_data       ../data.begin
 Reading data file ...
   orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
-  6 by 8 by 8 MPI processor grid
+  8 by 8 by 12 MPI processor grid
   reading atoms ...
   744000 atoms
   reading velocities ...
@@ -30,7 +30,7 @@ Reading data file ...
   scanning bonds ...
   2 = max bonds/atom
   orthogonal box = (0.049808341 0.049808341 0.049808341) to (208.65137 208.65137 208.65137)
-  6 by 8 by 8 MPI processor grid
+  8 by 8 by 12 MPI processor grid
   reading bonds ...
   648000 bonds
 Finding 1-2 1-3 1-4 neighbors ...
@@ -40,12 +40,12 @@ Finding 1-2 1-3 1-4 neighbors ...
      2 = max # of 1-3 neighbors
      4 = max # of 1-4 neighbors
      2 = max # of special neighbors
-  special bonds CPU = 0.149 seconds
-  read_data CPU = 5.385 seconds
+  special bonds CPU = 0.240 seconds
+  read_data CPU = 5.524 seconds
 replicate	8 8 8
 Replication is creating a 8x8x8 = 512 times larger system...
   orthogonal box = (0.049808341 0.049808341 0.049808341) to (1668.8623 1668.8623 1668.8623)
-  6 by 8 by 8 MPI processor grid
+  8 by 8 by 12 MPI processor grid
   380928000 atoms
   331776000 bonds
 Finding 1-2 1-3 1-4 neighbors ...
@@ -55,8 +55,8 @@ Finding 1-2 1-3 1-4 neighbors ...
      2 = max # of 1-3 neighbors
      4 = max # of 1-4 neighbors
      2 = max # of special neighbors
-  special bonds CPU = 1.589 seconds
-  replicate CPU = 6.375 seconds
+  special bonds CPU = 1.476 seconds
+  replicate CPU = 7.847 seconds
 fix             microcanonical all nve
 timestep	1
 thermo          ${thermo_print}
@@ -72,7 +72,7 @@ PPPM initialization ...
   estimated absolute RMS force accuracy = 0.046279783
   estimated relative force accuracy = 0.00013937019
   using double precision FFTW3
-  3d grid and FFT values/proc = 1602860 1404540
+  3d grid and FFT values/proc = 835777 716040
 Generated 6 of 6 mixed pair_coeff terms from arithmetic mixing rule
 Neighbor list info ...
   update: every = 1 steps, delay = 10 steps, check = yes
@@ -86,7 +86,7 @@ Neighbor list info ...
       pair build: half/bin/newton
       stencil: half/bin/3d
       bin: standard
-Per MPI rank memory allocation (min/avg/max) = 1903 | 1907 | 1910 Mbytes
+Per MPI rank memory allocation (min/avg/max) = 980.9 | 983.5 | 986.6 Mbytes
    Step          Temp          E_pair         E_mol          TotEng         Press     
          0   299.89373     -6.226157e+09   1.3679357e+08 -5.7488419e+09  41.697847    
         10   299.60592     -6.2268986e+09  1.3787604e+08 -5.7488278e+09 -35.421233    
@@ -94,34 +94,34 @@ Per MPI rank memory allocation (min/avg/max) = 1903 | 1907 | 1910 Mbytes
         30   300.22023     -6.2266836e+09  1.3694909e+08 -5.7488422e+09 -35.176379    
         40   299.85878     -6.2272682e+09  1.3795913e+08 -5.7488272e+09 -78.834538    
         50   299.69013     -6.2262793e+09  1.3715548e+08 -5.7488335e+09 -10.93436     
-        60   299.89803     -6.2263661e+09  1.3699764e+08 -5.7488421e+09  2.3856863    
+        60   299.89803     -6.2263661e+09  1.3699764e+08 -5.7488421e+09  2.3856862    
         70   299.88454     -6.2273746e+09  1.3802643e+08 -5.748837e+09  -55.082778    
-        80   299.85695     -6.2264662e+09  1.3714938e+08 -5.748837e+09  -8.9841189    
-        90   300.09041     -6.2267141e+09  1.3713229e+08 -5.7488369e+09 -3.5354204    
+        80   299.85695     -6.2264662e+09  1.3714938e+08 -5.748837e+09  -8.9841195    
+        90   300.09041     -6.2267141e+09  1.3713229e+08 -5.7488369e+09 -3.535421     
        100   299.87722     -6.2274699e+09  1.3813409e+08 -5.748833e+09  -49.401291    
-Loop time of 578.232 on 384 procs for 100 steps with 380928000 atoms
+Loop time of 307.673 on 768 procs for 100 steps with 380928000 atoms
 
-Performance: 0.015 ns/day, 1606.200 hours/ns, 0.173 timesteps/s, 65.878 Matom-step/s
-98.6% CPU use with 384 MPI tasks x 1 OpenMP threads
+Performance: 0.028 ns/day, 854.648 hours/ns, 0.325 timesteps/s, 123.809 Matom-step/s
+98.8% CPU use with 768 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 317.05     | 327.07     | 339.97     |  27.6 | 56.56
-Bond    | 1.7694     | 2.5166     | 3.1907     |  18.1 |  0.44
-Kspace  | 176.63     | 188.68     | 199.58     |  35.1 | 32.63
-Neigh   | 44.477     | 44.694     | 44.793     |   1.1 |  7.73
-Comm    | 5.1824     | 7.6844     | 9.8597     |  31.7 |  1.33
-Output  | 0.19491    | 0.30653    | 0.43324    |   8.0 |  0.05
-Modify  | 3.6715     | 5.4268     | 6.9983     |  25.6 |  0.94
-Other   |            | 1.857      |            |       |  0.32
+Pair    | 159.56     | 166.16     | 174.07     |  20.9 | 54.01
+Bond    | 0.97105    | 1.4114     | 1.9645     |  13.9 |  0.46
+Kspace  | 101.11     | 109.27     | 116.21     |  25.1 | 35.52
+Neigh   | 22.683     | 22.772     | 22.841     |   0.7 |  7.40
+Comm    | 3.0207     | 4.4352     | 5.9303     |  24.1 |  1.44
+Output  | 0.1102     | 0.17735    | 0.26234    |   6.3 |  0.06
+Modify  | 1.5404     | 2.394      | 3.4045     |  22.5 |  0.78
+Other   |            | 1.053      |            |       |  0.34
 
-Nlocal:         992000 ave      992195 max      991623 min
-Histogram: 128 0 0 0 0 0 0 0 0 256
-Nghost:         347487 ave      347739 max      347281 min
-Histogram: 128 0 0 128 0 0 0 0 0 128
-Neighs:    2.93864e+08 ave 2.94649e+08 max 2.93064e+08 min
-Histogram: 16 40 40 48 48 48 40 56 24 24
+Nlocal:         496000 ave      496347 max      495632 min
+Histogram: 256 0 0 0 0 256 0 0 0 256
+Nghost:         226884 ave      227067 max      226662 min
+Histogram: 256 0 0 0 0 0 256 0 0 256
+Neighs:    1.46932e+08 ave 1.47289e+08 max 1.46566e+08 min
+Histogram: 48 64 104 88 88 56 80 104 80 56
 
 Total # of neighbors = 1.1284393e+11
 Ave neighs/atom = 296.23428
@@ -130,4 +130,4 @@ Neighbor list builds = 7
 Dangerous builds = 0
 
 
-Total wall time: 0:10:08
+Total wall time: 0:05:31

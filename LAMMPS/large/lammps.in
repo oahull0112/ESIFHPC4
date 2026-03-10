@@ -1,7 +1,7 @@
 variable        run_name string "Large NLR LAMMPS benchmark"
 print           "--- Starting run: ${run_name} ---"
 
-variable 	thermo_print equal 20
+variable 	thermo_print equal 10
 variable	total_step equal ${thermo_print}*10
 
 units		real
@@ -16,7 +16,7 @@ pair_style      lj/cut/coul/long 10.0
 pair_modify     mix arithmetic
 kspace_style    pppm 1e-4
 read_data       ../data.begin
-replicate	4 4 4
+replicate	8 8 8
 fix             microcanonical all nve
 timestep	1
 thermo          ${thermo_print}
