@@ -1,5 +1,9 @@
-variable 	thermo_print equal 200
-variable	total_step equal ${thermo_print}*100
+variable        run_name string "Medium NLR LAMMPS benchmark validation"
+print           "--- Starting run: ${run_name} ---"
+
+variable 	thermo_print equal 100
+variable	total_step equal ${thermo_print}*1
+
 units		real
 boundary	p p p
 neighbor        2.0 bin
@@ -16,8 +20,7 @@ replicate	2 2 2
 fix             microcanonical all nve
 timestep	1
 thermo          ${thermo_print}
-#restart		${total_step} medium
+thermo_modify   flush yes
 run             ${total_step}
-#write_data	data.medium
 
 
