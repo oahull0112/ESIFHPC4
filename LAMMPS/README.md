@@ -19,7 +19,7 @@ Sample Slurm scripts have also been provided for reference in `sample-slurm-scri
 
 How to Build
 ------------
-Optional libraries or packages included in the LAMMPS distribution (*e.g.*, OpenMP or Intel) may be used for all tests in the reporting spreadsheet.
+Optional libraries or packages included in the LAMMPS distribution (*e.g.*, the Intel package) may be used for all tests in the reporting spreadsheet.
 
 LAMMPS can be built by following the instructions at [https://lammps.sandia.gov/doc/Install.html](https://docs.lammps.org/Build.html). For systems with GPUs, a version should be built with the LAMMPS GPU or KOKKOS package. All benchmarks should be run using FP64 for baseline, ported, or optimized submissions. 
 
@@ -31,7 +31,7 @@ The "Baseline (as-is)" benchmark must be run on Standard and Accelerated nodes w
 
 For "Optimized" runs only, the Offeror is allowed to vary the number of MPI ranks per node to find a more optimal value. It is possible that the optimal benchmark speed is achieved when the number of MPI ranks per node is smaller than the number of CPU cores per node.
 
-The medium benchmark should be run on 1, 2, 4, and 8 nodes (or devicesj), provided those resources are available to the Offeror. The large benchmark is intended to test multi-node performance. Therefore, large benchmar jobs should be run on N, 2N, and 4N nodes (or devices), where the smallest number of resources is chosen by the Offeror such that the 2N and 4N jobs are run on at least 2 standard or accelerated nodes. 
+The medium benchmark is intended to test jobs more bound by message rate and should be run on 1, 2, 4, and 8 nodes (for CPU-only submissions) or devices (for GPU-accelerated submissions). If the offered accelerated nodes contain 8 or more devices, then one result must be returned in which the devices are divided across two nodes (e.g., a two-node run configuration with 4 devices per node). The large benchmark is intended to test multi-node performance. Therefore, large benchmark jobs should be run on N, 2N, and 4N nodes for both CPU-only and GPU-accelerated submissions, where N may be chosen by the offeror (though can simply be N=1).   
 
 How to Validate
 ---------------
@@ -63,25 +63,25 @@ All NLR results can be collected via the helper script `summarize_nlr_results.sh
 
 A summary of NLR's standard node results is shown below. These results were generated using dual socket Intel Xeon Sapphire Rapids CPU nodes with 96 MPI tasks per node and `OMP_NUM_THREADS=1`.
 
-| Benchmark | MPItasks | Nsteps | LoopTime(s) | %CPUusage | Performance(timesteps/s) | Performance(s/timestep) |
-|:---------:|:--------:|:------:|:-----------:|:---------:|:------------------------:|:-----------------------:|
-|   Small   |    96    |  2500  |   105.823   |    93.8   |          23.624          |          0.0423         |
-|   Small   |    192   |  2500  |    59.086   |    95.3   |          42.311          |          0.0236         |
-|   Small   |    384   |  2500  |    81.790   |    98.2   |          30.566          |          0.0327         |
-|   Medium  |    96    |  1500  |   512.447   |    96.0   |           2.927          |          0.3416         |
-|   Medium  |    192   |  1500  |   266.000   |    97.4   |           5.639          |          0.1773         |
-|   Medium  |    384   |  1500  |   137.532   |    97.8   |          10.907          |          0.0917         |
-|   Large   |    384   |   100  |   578.232   |    98.6   |           0.173          |          5.7803         |
-|   Large   |    768   |   100  |   307.673   |    98.8   |           0.325          |          3.0769         |
+| Benchmark | NumberOfNodes | MPItasks | Nsteps | LoopTime(s) | %CPUusage | Performance(timesteps/s) | Performance(s/timestep) |
+|:---------:|:-------------:|:--------:|:------:|:-----------:|:---------:|:------------------------:|:-----------------------:|
+|   Small   |       1       |    96    |  2500  |   105.823   |    93.8   |          23.624          |          0.0423         |
+|   Small   |       2       |    192   |  2500  |    59.086   |    95.3   |          42.311          |          0.0236         |
+|   Small   |       4       |    384   |  2500  |    81.790   |    98.2   |          30.566          |          0.0327         |
+|   Medium  |       1       |    96    |  1500  |   512.447   |    96.0   |           2.927          |          0.3416         |
+|   Medium  |       2       |    192   |  1500  |   266.000   |    97.4   |           5.639          |          0.1773         |
+|   Medium  |       4       |    384   |  1500  |   137.532   |    97.8   |          10.907          |          0.0917         |
+|   Large   |       4       |    384   |   100  |   578.232   |    98.6   |           0.173          |          5.7803         |
+|   Large   |       8       |    768   |   100  |   307.673   |    98.8   |           0.325          |          3.0769         |
 
-A summary of NLR's accelerated node results is shown below. These results were generated using dual socket nodes with AMD Genoa CPU and four NVIDIA H100 SXM GPUs with 80 GB memory using 32 MPI tasks per node and all GPUs on each node and `OMP_NUM_THREADS=1`. Therefore, the number of GPUs used for each calculation can be found by dividing the MPItasks column by 32 and multiplying by 4. 
+A summary of NLR's accelerated node results is shown below. These results were generated using dual socket nodes with AMD Genoa CPU and four NVIDIA H100 SXM GPUs with 80 GB memory using 32 MPI tasks per node and all GPUs on each node and `OMP_NUM_THREADS=1`.
 
-| Benchmark | MPItasks | Nsteps | LoopTime(s) | %CPUusage | Performance(timesteps/s) | Performance(s/timestep) |
-|:---------:|:--------:|:------:|:-----------:|:---------:|:------------------------:|:-----------------------:|
-|   Small   |    32    |  2500  |    41.609   |    90.1   |          60.084          |          0.0166         |
-|   Small   |    64    |  2500  |    27.442   |    92.5   |          91.101          |          0.0110         |
-|   Medium  |    32    |  1500  |   123.490   |    86.4   |          12.147          |          0.0823         |
-|   Medium  |    64    |  1500  |    68.617   |    89.5   |          21.861          |          0.0457         |
+| Benchmark | NumberOfGPUs | MPItasks | Nsteps | LoopTime(s) | %CPUusage | Performance(timesteps/s) | Performance(s/timestep) |
+|:---------:|:------------:|:--------:|:------:|:-----------:|:---------:|:------------------------:|:-----------------------:|
+|   Small   |       4      |    32    |  2500  |    41.609   |    90.1   |          60.084          |          0.0166         |
+|   Small   |       8      |    64    |  2500  |    27.442   |    92.5   |          91.101          |          0.0110         |
+|   Medium  |       4      |    32    |  1500  |   123.490   |    86.4   |          12.147          |          0.0823         |
+|   Medium  |       8      |    64    |  1500  |    68.617   |    89.5   |          21.861          |          0.0457         |
 
 ## What Must be Returned
 In addition to the performance benchmark LAMMPS output log files, LAMMPS output log files from the two validation runs should also be included in the File Response.
