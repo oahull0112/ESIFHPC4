@@ -23,10 +23,12 @@ See `kestrel_example_build_script.sh` used to build IOR on Kestrel.
 These tests require MPI and HDF5.
 
 **Note on versions used:** 
+The following packages and versions were used to obtain reference results on the Kestrel system:
 * IOR v3.3.0
 * MPI cray-mpich v8.1.28
 * HDF5 hdf5-parallel v1.12.2.9
 
+The offeror is free to use newer versions of these packages. Please note that different versions of IOR allow for different combinations of keywords and may behave in different ways. The reference input files apply to IOR version 3.3.0. If the offeror wishes to use a newer version of IOR, input files may requiring updating in order to generate an equivalent test. These modifications are allowed, as long as the modified input files and a brief description of the equivalence are returned as part of the response. For example, IOR 3.3.0 allows for `blocksize` = `transfersize`, which we use to set up the random IO test described in #3 below (`test3_random_posix.ior`). In v4.0.0, `blocksize` and `transfersize` cannot be the same, but an equivalent random access test could be created by modifying the `blocksize` to be consistent with this change.
 
 
 ## Run Definitions and Requirements
