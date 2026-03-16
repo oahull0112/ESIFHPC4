@@ -39,61 +39,21 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
 
-*Any version of PyTorch that might be optimized for a targeted hardware architecture is acceptable for this benchmark, as long as the distribution is widely available and its results can be reproduced on any system hosting the hardware in question.*
+*Any version of PyTorch that might be optimized for a targeted hardware architecture that is not mentioned above is acceptable for this benchmark, as long as the distribution is widely available and its results can be reproduced on any system hosting the hardware in question.*
 
 ### Step 2: DeepCAM
 
-Install the DeepCAM Python package dependencies from pip and/or conda on inside the PyTorch environment from step 1. For example, since Kestrel (NLR's reference system) uses NVIDIA hardware, we install the following. Note that the specific packages may change depending on the type of accelerator being tested. As per our [general baseline run rules](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), the Offeror may freely substitute publicly available packages/libraries as necessary for baseline submissions.
+Install the DeepCAM Python package dependencies from pip and/or conda on inside the PyTorch environment from step 1. For an example, see the Slurm script [`prep-env-kestrel.sh`](prep-env-kestrel.sh) for reference instructions on how we created the appropriate PyTorch environment to run the DeepCAM benchmark. Note that on Kestrel, we explicitly compile PyTorch against a system module for NCCL that is configured to work with the HPE Slingshot network (`nccl/2.23.4_cuda124`) rather than using a precompiled version from pip. This step may not be necessary depending on the Offeror's hardware and network configuration.
 
-```
-conda activate $ENV_NAME
+The training scripts for DeepCAM do not require any special installation once the above environment is created. For convenience, this repository contains a lightly modified version of [the NVIDIA submission to MLCommons HPC Results v3.0](https://github.com/mlcommons/hpc_results_v3.0/tree/main/NVIDIA/benchmarks/deepcam/implementations/pytorch) (in `deepcam-mlcommons-hpcv3/`) to enable DeepCAM to run with newer versions (>=2.3.0) of PyTorch (specifically, by updating the calls to `MultiStepLRWarmup` and `CosineAnnealingLRWarmup` in `schedulers.py` to reflect the newer API). As demonstrated in the chunk above, the `io_helpers` package can also be installed from the submitted NVIDIA implementation folder.
 
-# 
-echo "h5py
-basemap
-wandb
-sympy
-filelock
-fsspec
-jinja2
-networkx
-mlperf-logging
-git+https://github.com/NVIDIA/mlperf-common.git
-nvidia-ml-py
-cupy
-" > deepcam-requirements.txt
-pip install -r deepcam-requirements.txt
-
-# DALI
-pip install --extra-index-url https://pypi.nvidia.com --upgrade nvidia-dali-cuda130
-
-# mpi4py
-mpicc=`which mpicc` pip install mpi4py --no-cache-dir
-
-# io_helpers - from NVIDIA DeepCAM MLCommons HPC v3.0 submission folder
-cd deepcam-mlcommons-hpcv3/io_helpers
-python setup.py clean
-python setup.py install
-
-# APEX
-if [ ! -d apex ]; then
-     git clone https://github.com/NVIDIA/apex
-fi
-cd apex
-APEX_CPP_EXT=1 APEX_CUDA_EXT=1 pip install -v --no-build-isolation --disable-pip-version-check .
-```
-
-The training scripts for DeepCAM do not require any special installation once the above environment is created. For convenience, this repository contains a lightly modified version of [the NVIDIA submission to MLCommons HPC Results v3.0](https://github.com/mlcommons/hpc_results_v3.0/tree/main/NVIDIA/benchmarks/deepcam/implementations/pytorch) (`./deepcam-mlcommons-hpcv3`) to enable DeepCAM to run with newer versions (>=2.3.0) of PyTorch (specifically, by updating the calls to `MultiStepLRWarmup` and `CosineAnnealingLRWarmup` in `schedulers.py` to reflect the newer API). As demonstrated in the chunk above, the `io_helpers` package can also be installed from the submitted NVIDIA implementation folder.
+Note: The specific packages mentioned in [`prep-env-kestrel.sh`](prep-env-kestrel.sh) may change depending on the type of accelerator being tested. As per our [general baseline run rules](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), the Offeror may freely substitute publicly available packages/libraries (and their subsequent calls in the training code itself) as necessary for baseline submissions.
 
 ### Step 3: Download and preprocess training data
 
 Input training data can be downloaded via Globus using the [endpoint linked here](https://app.globus.org/file-manager?origin_id=0b226e2c-4de0-11ea-971a-021304b0cca7&origin_path=%2F). Note that the training data requires roughly 10TB of storage and contains HDF5-formatted files for training, validation, and test splits. 
 
-Note that before training can occur, submitters must convert the HDF5-formatted input data into numpy format, following guidance from MLCommons HPC Results v3.0. Please see [`preprocess-deepcam-data.sh`](./preprocess-deepcam-data.sh) for instructions on how to preprocess the input data accordingly.
-
-### Kestrel build example
-
-See the Slurm script [`prep-env-kestrel.sh`](prep-env-kestrel.sh) for reference instructions on how we created the appropriate PyTorch environment to run the DeepCAM benchmark following the general guidance above. Note that on Kestrel, we explicitly compile PyTorch against a system module for NCCL that is configured to work with the HPE Slingshot network (`nccl/2.23.4_cuda124`) rather than using a precompiled version from pip. This step may not be necessary depending on your hardware and network configuration.
+Before training can occur, submitters must convert the HDF5-formatted input data into numpy format, following guidance from MLCommons HPC Results v3.0. Please see [`preprocess-deepcam-data.sh`](./preprocess-deepcam-data.sh) for instructions on how to preprocess the input data accordingly.
 
 ## Run Definitions and Requirements
 
@@ -111,8 +71,8 @@ There are three types of submissions possible for this benchmark: *baseline*, *p
 
 The ESIF-HPC-4 DeepCAM benchmark encompasses **two** types of scenarios:
 
-- **Scenario 1.** The *local* (i.e., per-device) batch size is fixed to `12`. In this scenario, the reported metric is the average time required per training step over 5 epochs. Device-level "weak scaling" is intended to be measured in this scenario; this test should span *N*, *4N*, and *8N* nodes (in which *N* may equal 1) accordingly. We ask for 3 replicates for each node size, for a total of 15 runs. Model convergence is **not** required in this scenario. This scenario requires enabling verbose, per-step logging via the environment variable `LOGGING_FREQUENCY` - see [below](#baseline-scenario-1).
-- **Scenario 2.** The *global* batch size is fixed to `1024`, with no specific requirement on the local batch size accordingly. In this scenario, the reported metric is the time required to reach an evaluation accuracy of 82%. This test should span *M*, *4M*, and *8M* nodes (in which *M* may equal 1) accordingly (*N* and *M* may vary between Scenario 1 and Scenario 2). We ask for 3 replicates for each node size, for a total of 15 runs. **Results from scenario 2 are what will be considered as part of the overall throughput metric.**
+- **Scenario 1.** The *local* (i.e., per-device) batch size is fixed to `12`. In this scenario, the reported metric is the average time required per training step over 3 epochs. Device-level "weak scaling" is intended to be measured in this scenario; this test should span *N*, *4N*, and *8N* nodes (in which *N* may equal 1) accordingly. We ask for 3 replicates for each node size, for a total of 9 runs. Model convergence is **not** required in this scenario. This scenario requires enabling verbose, per-step logging via the environment variable `LOGGING_FREQUENCY` - see [below](#baseline-scenario-1).
+- **Scenario 2.** The *global* batch size is fixed to `1024`, with no specific requirement on the local batch size accordingly. In this scenario, the reported metric is the time required to reach an evaluation accuracy of 82%. This test should span *M*, *4M*, and *8M* nodes (in which *M* may equal 1) accordingly (*N* and *M* may vary between Scenario 1 and Scenario 2). We ask for 3 replicates for each node size, for a total of 9 runs. **Results from Scenario 2 are what will be considered as part of the overall throughput metric.**
 
 **Summary of tests**
 
@@ -149,16 +109,16 @@ The following environment variables set in [`config_scenario1.sh`](./config_scen
 
 The following environment variables set in [`config_scenario1.sh`](./config_scenario1.sh) **must be set** for *baseline* **Scenario 1** submissions:
 
-| Variable            | Description                                                         | Required value     |
-| :--                 | :--                                                                 | :--                |
-| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `1`                |
-| `MAX_EPOCHS`        | Number of epochs at which training ends, regardless of convergence. | `5`                |
-| `LOCAL_BATCH_SIZE`  | Per-accelerator batch size                                          | `12`               |
-| `START_LR`          | Starting learning rate                                              | `0.0005`           |
-| `LR_SCHEDULE_TYPE`  | Learning rate scheduler type                                        | `cosine_annealing` |
-| `LR_WARMUP_STEPS`   | Number of LR warmup steps                                           | `0`                |
-| `OPTIMIZER`         | Learning rate optimizer                                             | `AdamW`            |
-| `WEIGHT_DECAY`      | Strength of L2 regularization                                       | `0.2`              | 
+| Variable                 | Description                                                         | Required value           |
+| :--                      | :--                                                                 | :--                      |
+| `LOGGING_FREQUENCY`      | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `1`                      |
+| `MAX_EPOCHS`             | Number of epochs at which training ends, regardless of convergence. | `5`                      |
+| `LOCAL_BATCH_SIZE`       | Per-accelerator batch size                                          | `12`                     |
+| `START_LR`               | Starting learning rate                                              | `0.0005`                 |
+| `LR_SCHEDULE_TYPE`       | Learning rate scheduler type                                        | `cosine_annealing`       |
+| `LR_WARMUP_STEPS`        | Number of LR warmup steps                                           | `0`                      |
+| `OPTIMIZER`              | Learning rate optimizer                                             | `AdamW`                  |
+| `WEIGHT_DECAY`           | Strength of L2 regularization                                       | `0.2`                    |
 
 
 #### Baseline Scenario 2
@@ -175,19 +135,19 @@ The following environment variables set in [`config_scenario2.sh`](./config_scen
 
 The following environment variables set in [`config_scenario2.sh`](./config_scenario2.sh) **must be set** for *baseline* Scenario 2 submissions:
 
-| Variable            | Description                                                         | Required value     |
-| :--                 | :--                                                                 | :--                |
-| `LOGGING_FREQUENCY` | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `0`                |
-| `MAX_EPOCHS`        | Number of epochs at which training ends, regardless of convergence. | `50`               | 
-| `START_LR`          | Starting learning rate                                              | `0.0005`           |
-| `LR_SCHEDULE_TYPE`  | Learning rate scheduler type                                        | `cosine_annealing` |
-| `LR_WARMUP_STEPS`   | Number of LR warmup steps                                           | `0`                |
-| `OPTIMIZER`         | Learning rate optimizer                                             | `AdamW`            |
-| `WEIGHT_DECAY`      | Strength of L2 regularization                                       | `0.2`              | 
+| Variable                 | Description                                                         | Required value           |
+| :--                      | :--                                                                 | :--                      |
+| `LOGGING_FREQUENCY`      | Whether to gather logs per-step (`1`) or per-epoch (`0`)            | `0`                      |
+| `MAX_EPOCHS`             | Number of epochs at which training ends, regardless of convergence. | `50`                     | 
+| `START_LR`               | Starting learning rate                                              | `0.0005`                 |
+| `LR_SCHEDULE_TYPE`       | Learning rate scheduler type                                        | `cosine_annealing`       |
+| `LR_WARMUP_STEPS`        | Number of LR warmup steps                                           | `0`                      |
+| `OPTIMIZER`              | Learning rate optimizer                                             | `AdamW`                  |
+| `WEIGHT_DECAY`           | Strength of L2 regularization                                       | `0.2`                    |
 
 ### Ported submissions
 
-For *ported* submissions, the *baseline* parameters must be used, though training code modifications necessary to port the code to a new/different device architecture are also permitted. As described in the repository's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), *ported* submissions should not be reported without *baseline*, unless *baseline* is not possible.
+For *ported* submissions, the *baseline* parameters must be used, though training code modifications necessary to port the code to a new/different device architecture are also permitted. **This includes replacing any vendor-specific package/library imports and calls in the training code.** As described in the repository's [top-level README](../../README.md#draft-definitions-for-baselineas-is-ported-and-optimized-runs), *ported* submissions should not be reported without *baseline*, unless *baseline* is not possible.
 
 ### Optimized submissions
 
