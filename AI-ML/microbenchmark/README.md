@@ -2,7 +2,7 @@
 
 ## Purpose and Description
 
-This benchmark is intended to stress *GPU-GPU* (or more generally, *accelerator-accelerator*) network communication relevant to AI training through the use of an appropriate collective communication library (CCL). The exact implementation of this benchmark depends on the target's hardware architecture. For example, because Kestrel (our current flagship system) hosts NVIDIA H100 GPUs, our AllReduce tests utilize [NCCL](https://developer.nvidia.com/nccl). Running AllReduce utilizing any equivalent, readily available, and actively maintained CCL is satisfactory for this benchmark (e.g., NCCL, RCCL, or OneCCL). For guidelines on specific benchmark test implementations, please see [How to run](#how-to-run).
+This benchmark is intended to stress *GPU-GPU* (or more generally, *accelerator-accelerator*) network communication relevant to AI training through the use of an appropriate collective communication library (CCL). The exact implementation of this benchmark depends on the target's hardware architecture. For example, because Kestrel (our current flagship system) hosts NVIDIA H100 GPUs, our AllReduce tests utilize [NCCL](https://developer.nvidia.com/nccl). Running AllReduce utilizing any equivalent, readily available, and actively maintained CCL is satisfactory for this benchmark (e.g., NCCL, RCCL, or OneCCL). For guidelines on specific benchmark test implementations, please see [How to Run](#how-to-run).
 
 ## Licensing Requirements
 
@@ -52,11 +52,11 @@ To demonstrate inter-node CCL performance, each collective should be run in two 
 
 ### Run Rules
 
-Any run must utilize all available accelerators on each node. For all configurations described above, the collective test should scan message sizes between 8B to 4GB, increasing by a factor of 2. See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` on Kestrel from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository. The reducing operation must be `sum`.
+Any run must utilize all available accelerators on each node. For all configurations described above, the collective test should scan message sizes between 8B to 4GB, increasing by a factor of 2. The reducing operation must be `sum`, and the highest precision that is natively supported on the hardware (e.g., `double`) must be used. See [`run_nccl_cxi.sh`](./run_nccl_cxi.sh) for an example submission script of running `all_reduce_perf` on Kestrel from the official [nccl-tests](https://github.com/NVIDIA/nccl-tests/tree/master) repository following these rules.
 
 ## Benchmark Test Results to Report and Files to Return
 
-**File response:** We request the raw data associated with each CCL run be provided, demonstrating the bandwidth and latency for each message size. An example logfile is provided [below](#logfile-example). Additionally, any environment variables, fabric settings, and/or CCL configuration settings necessary to reproduce the results should be provided. The offeror should distinguish between parameters which may be set by an unprivileged user from those which would be globally set by system adminstrators"
+**File response:** We request the raw data associated with each CCL run be provided, demonstrating the bandwidth and latency for each message size. An example logfile is provided [below](#logfile-example). Additionally, any environment variables, fabric settings, and/or CCL configuration settings necessary to reproduce the results should be provided. The offeror should distinguish between parameters which may be set by an unprivileged user from those which would be globally set by system adminstrators.
 
 **Spreadsheet response:** We request the out-of-place and in-place bandwidth and latencies, as well as high-level information about the system the benchmark was run on, to be reported in a spreadsheet (template [below](#spreadsheet-template)) for the following message sizes (in bytes):
 
@@ -67,7 +67,7 @@ Any run must utilize all available accelerators on each node. For all configurat
 
 ### AllReduce Reference
 
-Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https://github.com/NVIDIA/nccl-tests/tree/master) built with the [custom NCCL+CXI plugin](https://github.com/NERSC/nccl-ofi-plugin) (described in 'How to build') to enable the use of the HPE Slingshot interconnect. This example output represents a run of 64 GPU devices across 16 nodes:
+Below are AllReduce results from Kestrel when running [`all_reduce_perf`](https://github.com/NVIDIA/nccl-tests/tree/master) built with the [custom NCCL+CXI plugin](https://github.com/NERSC/nccl-ofi-plugin) (described in [How to Build](#how-to-build)) to enable the use of the HPE Slingshot interconnect. This example output represents a run of 64 GPU devices across 16 nodes:
 
 #### Spreadsheet Template 
 
