@@ -21,11 +21,11 @@ Sienna requires Julia as the primary programming language and depends on several
 
 ## How to build and Run
 
-Instructions to build and install Sienna components:
+### Instructions to build and install Sienna components:
 
-1. Install Julia from [JuliaLang.org](https://julialang.org/). Specifically, we recommend using the [Manual Downloads](https://julialang.org/downloads/manual-downloads/), and selecting the current stable release (v1.12.5 as of February 9, 2026) appropriate for the target architecture.   
+1. Install Julia from [JuliaLang.org](https://julialang.org/). Specifically, we recommend using the [Manual Downloads](https://julialang.org/downloads/manual-downloads/), and selecting the current stable release (v1.12.5 as of February 9, 2026) appropriate for the target architecture. Below we show two options for building the Julia environment. 
 
-### Option 1: Use existing Project.toml and Manifest.toml files
+#### Option 1: Use existing Project.toml and Manifest.toml files
 2. Instantiate the `Project.toml` and `Manifest.toml` files in this directory. On 
 the terminal, assuming that you are in the same directory as this
 README.md, run
@@ -37,7 +37,7 @@ README.md, run
    ```
    This should install all the packages needed to run the benchmark
 
-### Option 2: Build your own Julia environment
+#### Option 2: Build your own Julia environment
 
 2. Add the required packages using the Julia package manager:
    ```julia
@@ -52,27 +52,31 @@ README.md, run
    ] add HiGHS IPOPT
    ```
 
-5. Run the benchmark as follows
+### Instructions on how to run the Sienna benchmark:
+
+#### Running the benchmark from the command line
+1. Run the benchmark as follows
    ```shell
    julia --threads=auto --project=. small/run_RTS_UC-ED.jl
    ```
 
-### Option 3:
-
-5. Modify and run the sbatch file `run_benchmarks.sh` as follows
+#### How we ran this benchmark on Kestrel:
+1. Modify and run the sbatch file `run_benchmarks.sh` as follows
 
    ```shell
    sbatch run_benchmarks.sh 1 1 
    sbatch run_benchmarks.sh 104 auto
    ```
 
-   Note: The fist argument after `run_benchmarks.sh` specifies `OMP_NUM_THREADS` to be used, the second argument specifies how many threads julia should be started with. By default, Julia uses only one thread. setting number of threads to `auto` means that Julia will set the number of threads to be equal to the number of cores on the system.
+Note: The fist argument after `run_benchmarks.sh` specifies `OMP_NUM_THREADS` to be used, the second argument specifies how many threads julia should be started with. By default, Julia uses only one thread. setting number of threads to `auto` means that Julia will set the number of threads to be equal to the number of cores on the system.
 
 ## Run Definitions and Requirements
 
 - The benchmarks include:
   - Unit Commitment and Economic Dispatch simulations using `PowerSimulations.jl`.
-- The input data for these simulations is compatible with `PowerSystems v5.0`.
+- The input data for these simulations is compatible with `PowerSystems v4.0`.
+
+Note: There is a new version of Sienna that uses `PowerSystems v5.0`. However, this benchmark uses `PowerSystems v4.0`. Data sets and code may be updated to work with the latest version of Sienna, but this is not required. 
 
 ## Run Rules
 
