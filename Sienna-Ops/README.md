@@ -3,9 +3,9 @@
 
 ## Purpose and Description
 
-- The Sienna framework is an open-source ecosystem for simulation and optimization of modern energy systems. It is designed to model, solve, and analyze scheduling problems and dynamic simulations of quasi-static infrastructure systems.
-- Sienna consists of three main modules: **Sienna\Data**, **Sienna\Dyn**, and **Sienna\Ops**. This benchmark will focus on exercising **Sienna\Ops**, which enables simulation of system scheduling, including unit commitment, economic dispatch, automatic generation control, and nonlinear optimal power flow.
-- The framework applies advanced computer science, visualization, applied mathematics, and computational science to create a flexible modeling environment for energy systems.
+The purpose of this benchmark is to test the functionality of the Julia programming language, the Sienna framework, and two types of solvers commonly used to solve optimization problems for power grid operations and planning: interior point and mixed integer solvers. The **Sienna framework** is an open-source ecosystem for simulation and optimization of modern energy systems. It is designed to model, solve, and analyze scheduling problems and dynamic simulations of quasi-static infrastructure systems.
+
+Sienna consists of three main modules: **Sienna\Data**, **Sienna\Dyn**, and **Sienna\Ops**. This benchmark will focus on exercising **Sienna\Ops**, which enables simulation of system scheduling, including unit commitment, economic dispatch, automatic generation control, and nonlinear optimal power flow. The framework applies advanced computer science, visualization, applied mathematics, and computational science to create a flexible modeling environment for energy systems.
 
 Users running this benchmark will be interacting primarily with `PowerSystems.jl` and `PowerSimulations.jl` packages from the Sienna framework.
 `PowerSystem.jl` is the package that is used for creating and storing the power system that is being modeled. It stores the system as a JSON file and uses an H5 file to store timeseries data.
@@ -82,6 +82,7 @@ Note: There is a new version of Sienna that uses `PowerSystems v5.0`. However, t
 
 - The Benchmarks are single node only and must be run sequentially so as to not fight for resources.
 - GPU-compatible Optimizers that are compatible with Julia JuMP may be exercised on GPU nodes if desired. However, this is not a requirement.
+- These benchmarks have been set up to run using two open source solvers: IPOPT and HiGHS. Proprietary solvers such as Gurobi and Xpress may be used instead, but are not required.
 
 ## Benchmark test results to report and files to return
 
