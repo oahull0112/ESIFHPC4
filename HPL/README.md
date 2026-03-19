@@ -1,11 +1,11 @@
 # HPL
 
 ## Purpose and Description
-HPL solves a random dense linear system in double precision arithmetic on distributed-memory. It depends on the Message Passing Interface, Basic Linear Algebra Subprograms, or the Vector Signal Image Processing Library. The software is available at the [Netlib HPL benchmark](https://www.netlib.org/benchmark/hpl/) and most vendors including ([Nvidia](https://docs.nvidia.com/nvidia-hpc-benchmarks/HPL_benchmark.html), [AMD](https://www.amd.com/en/developer/zen-software-studio/applications/pre-built-applications.html), and [Intel](https://www.intel.com/content/www/us/en/docs/onemkl/developer-guide-linux/2024-1/overview-intel-distribution-for-linpack-benchmark.html) offer hardware-optimized versions of it. The HPL benchmark assesses both the peak performance and the integrity of the system's hardware, from individual nodes to the entire system.
+HPL solves a random dense linear system in double precision arithmetic on distributed-memory. It depends on the Message Passing Interface, Basic Linear Algebra Subprograms, or the Vector Signal Image Processing Library. The software is available at the [Netlib HPL benchmark](https://www.netlib.org/benchmark/hpl/) and most vendors including [Nvidia](https://docs.nvidia.com/nvidia-hpc-benchmarks/HPL_benchmark.html), [AMD](https://www.amd.com/en/developer/zen-software-studio/applications/pre-built-applications.html), and [Intel](https://www.intel.com/content/www/us/en/docs/onemkl/developer-guide-linux/2024-1/overview-intel-distribution-for-linpack-benchmark.html) offer hardware-optimized versions of it. The HPL benchmark assesses both the peak performance and the integrity of the system's hardware, from individual nodes to the entire system.
 
 ## Licensing Requirements
 
-HPL is licensed per the COPYRIGHT notice in the hpl-2.3 folder.
+Netlib HPL is licensed per the COPYRIGHT notice in the hpl-2.3 folder.
 
 ## Build methods
 HPL can be obtained in a number of ways.  These include:
@@ -13,7 +13,7 @@ HPL can be obtained in a number of ways.  These include:
 * Using predefined make include files, or edits of such
 * Downloading optimized binaries or containers
 
-## How to build using all open source components
+## Example build instructions using all open source components
 We assume we have gcc, openmpi, and openblas compiled against these two and we have modules for each. We then:
 * Download the source, unpack it, and enter the directory
 * Load our modules
@@ -58,17 +58,31 @@ End of Tests.
 
 ## How to run
 
-To execute xhpl on CPUs, MPI with or without OpenMP support are required. The required input is number of nodes, total number of MPI ranks, total number of ranks per node and total number of OpenMP threads per MPI rank. The benchmark results can be obtained with Slurm cluster management: `srun -N <number of nodes> -n <total number of ranks> -c < number of cpus per task> ./xhpl`.  
+To execute xhpl on CPUs, MPI with or without OpenMP support is required. The required input is number of nodes, total number of MPI ranks, total number of ranks per node and total number of OpenMP threads per MPI rank. For example, with Slurm, benchmark results can be obtained with: `srun -N <number of nodes> -n <total number of ranks> -c < number of cpus per task> ./xhpl`.  
 
-To run xhpl on GPUs, you need GPU-Aware MPI with or without OpenMP support for an optimal performance. The required input is number of nodes, total number of MPI ranks, total number of ranks per node, total number of OpenMP threads per MPI rank, and total number of GPUs per node. The benchmark results can be obtained with Slurm: `srun -N <number of nodes> -n <total number of ranks> --cpus-per-task=< number of CPUs per task> --gpus-per-node=<total number of GPUs per node> ./xhpl`. 
+To run xhpl on GPUs, you need GPU-Aware MPI with or without OpenMP support for an optimal performance. The required input is number of nodes, total number of MPI ranks, total number of ranks per node, total number of OpenMP threads per MPI rank, and total number of GPUs per node. For example, with Slurm, benchmark results can be obtained with: `srun -N <number of nodes> -n <total number of ranks> --cpus-per-task=< number of CPUs per task> --gpus-per-node=<total number of GPUs per node> ./xhpl`. 
 
 ### Tests
 
 Testing will include single-node and multi-node configurations.
 
+**CPU-only tests:**
+For CPU-only nodes, the following two scaling series from 1, 2, 4, 8, 16, 32 64 nodes should be submitted as part of the baseline results:
+    - One CPU thread per MPI task, with at least 90% of CPU cores per node saturated
+    - One MPI task per NUMA node, saturating all threads (i.e., `OMP_NUM_THREADS=[CPU cores in NUMA region]`)
+
+Optimized CPU-only submissions may use any binding scheme, number of MPI tasks, number of threads, etc.
+
+**Accelerator-based tests:**
+For accelerated nodes, the following two scaling series should be submitted as part of the baseline results:
+- 1, 2, 4, 8, 16, 32, and 64 nodes, saturating all devices, with one CPU thread per MPI task
+- A single-node scaling series of 1, 2, 4, 8, ..., [all available devices on node], with one CPU thread per MPI task
+
 ## Run Rules
 
-Publicly available, optimized HPL versions or binaries are permitted. A single or multiple programming models might be used to optimize performance based on the architecture of the machine.
+- The problem size must fit at least 80% of aggregate memory
+- Publicly available, optimized HPL versions or binaries are permitted for baseline submissions.
+- FP64 must be used for all baseline submissions. Any optional optimized submission may use any precision.
 
 ## Benchmark test results to report and files to return
 
