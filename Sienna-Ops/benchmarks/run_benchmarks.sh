@@ -23,6 +23,6 @@ julia --project=. -e "using Pkg; Pkg.instantiate()"
 echo "Starting Sienna benchmark..."
 
 echo "Running RTS UC-ED benchmark..."
-julia --threads=$JULIA_THREADS --project=. small/run_RTS_UC-ED.jl > fout_RTS_UC-ED_${OMP_NUM_THREADS}_${JULIA_THREADS}.out 2>&1
+julia --threads=$JULIA_THREADS --project=. small/run_RTS_UC-ED.jl > fout_RTS_UC-ED_${JULIA_THREADS}.out 2>&1
 
 echo "Benchmark completed!"
