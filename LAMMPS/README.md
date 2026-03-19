@@ -24,14 +24,26 @@ Optional libraries or packages included in the LAMMPS distribution (*e.g.*, the 
 LAMMPS can be built by following the instructions at [https://lammps.sandia.gov/doc/Install.html](https://docs.lammps.org/Build.html). For systems with GPUs, a version should be built with the LAMMPS GPU or KOKKOS package. All benchmarks should be run using FP64 for baseline, ported, or optimized submissions. 
 
 How to Run  
-----------
-For all runs, use MPI ranks and threads (where applicable for optional openMP runs) such that the total number of cores used (ranks × threads) is at least 75% of the physical cores per node. The "# cores" reported should reflect the number of physical CPU cores hosting independent threads of execution.
+---------- 
 
-The "Baseline (as-is)" benchmark must be run on Standard and Accelerated nodes with no OpenMP parallization, that is, `OMP_NUM_THREADS=1`.
+### Medium benchmark scaling series
+The medium benchmark targets message-rate-bound performance
+#### CPU-only Submissions
+- A strong scaling series of 1, 2, 4, and 8 nodes
+- Baseline submissions should use MPI ranks such that the total number of cores used is at least 75% of the physical cores per node, with no OpenMP parallelization (i.e., `OMP_NUM_THREADS=1`). Optional optimized submissions may use any number of MPI ranks and/or OpenMP threads.
+#### Accelerated Submissions
+- A strong scaling series of 1, 2, 4, and 8 devices.
+- If the offered accelerated nodes contain 8 or more devices, then one 8-device result must be returned in which the devices are divided across two nodes (i.e., 4 devices per node).
 
-For "Optimized" runs only, the Offeror is allowed to vary the number of MPI ranks per node to find a more optimal value. It is possible that the optimal benchmark speed is achieved when the number of MPI ranks per node is smaller than the number of CPU cores per node.
+### Large benchmark scaling series
+The large benchmark is intended to test multi-node performance
+#### CPU-only Submissions
+- N, 2N, and 4N node scaling series, where N may be chosen by the offeror (though can simply be N=1)
+- Baseline submissions should use MPI ranks such that the total number of cores used is at least 75% of the physical cores per node, with no OpenMP parallelization (i.e., `OMP_NUM_THREADS=1`). Optional optimized submissions may use any number of MPI ranks and/or OpenMP threads.
+#### Accelerated Submissions
+- N, 2N, and 4N node scaling series, where N may be chosen by the offeror (though can simply be N=1)
+- Baseline submissions should use all devices per node. Optional optimized submissions may use any number of devices per node.
 
-The medium benchmark is intended to test jobs more bound by message rate and should be run on 1, 2, 4, and 8 nodes (for CPU-only submissions) or devices (for GPU-accelerated submissions). If the offered accelerated nodes contain 8 or more devices, then one result must be returned in which the devices are divided across two nodes (e.g., a two-node run configuration with 4 devices per node). The large benchmark is intended to test multi-node performance. Therefore, large benchmark jobs should be run on N, 2N, and 4N nodes for both CPU-only and GPU-accelerated submissions, where N may be chosen by the offeror (though can simply be N=1).   
 
 How to Validate
 ---------------
