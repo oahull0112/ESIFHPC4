@@ -64,11 +64,11 @@ README.md, run
 1. Modify and run the sbatch file `run_benchmarks.sh` as follows
 
    ```shell
-   sbatch run_benchmarks.sh 1 1 
-   sbatch run_benchmarks.sh 104 auto
+   sbatch run_benchmarks.sh 1 
+   sbatch run_benchmarks.sh auto
    ```
 
-Note: The fist argument after `run_benchmarks.sh` specifies `OMP_NUM_THREADS` to be used, the second argument specifies how many threads julia should be started with. By default, Julia uses only one thread. setting number of threads to `auto` means that Julia will set the number of threads to be equal to the number of cores on the system.
+Note: The argument after `run_benchmarks.sh` specifies how many threads julia should be started with. By default, Julia uses only one thread. setting number of threads to `auto` means that Julia will set the number of threads to be equal to the number of cores on the system.
 
 ## Run Definitions and Requirements
 
