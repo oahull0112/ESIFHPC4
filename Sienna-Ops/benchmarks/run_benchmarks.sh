@@ -10,9 +10,7 @@
 # Load required modules
 module load julia
 
-export OMP_NUM_THREADS=$1
-
-JULIA_THREADS=$2
+JULIA_THREADS=$1
 
 # Set working directory to the benchmarks folder
 cd /scratch/mreynold/ESIFHPC4/Sienna-Ops/benchmarks
@@ -22,9 +20,9 @@ echo "Instantiating Julia environment..."
 julia --project=. -e "using Pkg; Pkg.instantiate()"
 
 # Run the benchmark suite
-echo "Starting Sienna benchmarks..."
+echo "Starting Sienna benchmark..."
 
 echo "Running RTS UC-ED benchmark..."
 julia --threads=$JULIA_THREADS --project=. small/run_RTS_UC-ED.jl > fout_RTS_UC-ED_${OMP_NUM_THREADS}_${JULIA_THREADS}.out 2>&1
 
-echo "All benchmarks completed!"
+echo "Benchmark completed!"
