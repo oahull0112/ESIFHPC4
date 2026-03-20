@@ -86,4 +86,6 @@ Note: There is a new version of Sienna that uses `PowerSystems v5.0`. However, t
 
 ## Benchmark test results to report and files to return
 
-The benchmark creates timing, memory, and allocation data that can be inspected visually for comparison.
+The benchmark creates timing, memory, and allocation data that can be inspected visually for comparison. An output summary text file and CSV file are created in `small/benchmark_results` that include these data. These are the files to return. We emphasize, however, that this is only a functionality test, and will not be judged by computation time, answer correctness, etc.
+
+Also produced by our script `run_benchmarks.sh` is a file containing information printed by Sienna during the solve process (e.g., fout_RTS_UC-ED_auto.out). This file is not required. 
