@@ -23,7 +23,7 @@ Sienna requires Julia as the primary programming language and depends on several
 
 ### Instructions to build and install Sienna components:
 
-1. Install Julia from [JuliaLang.org](https://julialang.org/). Specifically, we recommend using the [Manual Downloads](https://julialang.org/downloads/manual-downloads/), and selecting the current stable release (v1.12.5 as of February 9, 2026) appropriate for the target architecture. Below we show two options for building the Julia environment. 
+1. Install Julia from [JuliaLang.org](https://julialang.org/). Specifically, we recommend using the [Manual Downloads](https://julialang.org/downloads/manual-downloads/), and selecting the current stable release appropriate for the target architecture. Below we show two options for building the Julia environment. 
 
 #### Option 1: Use existing Project.toml and Manifest.toml files
 2. Instantiate the `Project.toml` and `Manifest.toml` files in this directory. On 
@@ -68,11 +68,11 @@ README.md, run
    sbatch run_benchmarks.sh auto
    ```
 
-Note: The argument after `run_benchmarks.sh` specifies how many threads julia should be started with. By default, Julia uses only one thread. setting number of threads to `auto` means that Julia will set the number of threads to be equal to the number of cores on the system.
+Note: The argument after `run_benchmarks.sh` specifies how many threads julia should be started with. By default, Julia uses only one thread. Setting the number of threads to `auto` means that Julia will set the number of threads to be equal to the number of cores on the system.
 
 ## Run Definitions and Requirements
 
-- The benchmarks include:
+- The benchmark includes:
   - Unit Commitment and Economic Dispatch simulations using `PowerSimulations.jl`.
 - The input data for these simulations is compatible with `PowerSystems v4.0`.
 
@@ -80,9 +80,9 @@ Note: There is a new version of Sienna that uses `PowerSystems v5.0`. However, t
 
 ## Run Rules
 
-- The Benchmarks are single node only and must be run sequentially so as to not fight for resources.
+- The Benchmark is single node only.
 - GPU-compatible Optimizers that are compatible with Julia JuMP may be exercised on GPU nodes if desired. However, this is not a requirement.
-- These benchmarks have been set up to run using two open source solvers: IPOPT and HiGHS. Proprietary solvers such as Gurobi and Xpress may be used instead, but are not required.
+- This benchmark has been set up to run using two open source solvers: IPOPT and HiGHS. Proprietary solvers such as Gurobi and Xpress may be used instead, but are not required.
 
 ## Benchmark test results to report and files to return
 
