@@ -34,7 +34,7 @@ The source code of Netlib can be accessed here, [HPL](https://www.netlib.org/ben
 
 Optimized binaries of HPL can be obtained from [Intel-HPL](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl-download.html?operatingsystem=linux&linux-install=offline) that is shipped with Intel MKL, [Zen-HPL](https://www.amd.com/en/developer/zen-software-studio/applications/pre-built-applications/zen-hpl-eula.html?filename=amd-zen-hpl-2024_10_08.tar.gz) and [Nvidia-HPL](https://developer.download.nvidia.com/compute/nvidia-hpc-benchmarks/redist/nvidia_hpc_benchmarks_mpich/linux-x86_64/nvidia_hpc_benchmarks_mpich-linux-x86_64-25.02.04-archive.tar.xz). 
 
-## Run Definitions and Requirements
+## Run Validation
 
 The run output should show that tests sucessfully passed, finished and ended, as in:
 ```
@@ -67,25 +67,24 @@ To run xhpl on GPUs, you need GPU-Aware MPI with or without OpenMP support for a
 Testing will include single-node and multi-node configurations.
 
 **CPU-only tests:**
-For CPU-only nodes, the following two scaling series from 1, 2, 4, 8, 16, 32 64 nodes should be submitted as part of the baseline results:
-    - One CPU thread per MPI task, with at least 90% of CPU cores per node saturated
-    - One MPI task per NUMA node, saturating all threads (i.e., `OMP_NUM_THREADS=[CPU cores in NUMA region]`)
-
+For CPU-only nodes, the following scaling series from 1, 2, 4, 8, 16, 32 64 nodes should be submitted as part of the baseline results:
+- One CPU core per MPI task, with at least 80% of CPU cores per node utilized
+    
 Optimized CPU-only submissions may use any binding scheme, number of MPI tasks, number of threads, etc.
 
 **Accelerator-based tests:**
 For accelerated nodes, the following two scaling series should be submitted as part of the baseline results:
-- 1, 2, 4, 8, 16, 32, and 64 nodes, saturating all devices, with one CPU thread per MPI task
-- A single-node scaling series of 1, 2, 4, 8, ..., [all available devices on node], with one CPU thread per MPI task
+- 1, 2, 4, 8, 16, 32, and 64 nodes, utilizing all devices, with one CPU thread per MPI task
+- A single-node scaling series of 1, 2, 4, 8, ..., up to all the devices available on the node, with one CPU core per MPI task
 
 ## Run Rules
 
 - The problem size must fit at least 80% of aggregate memory
 - Publicly available, optimized HPL versions or binaries are permitted for baseline submissions.
-- FP64 must be used for all baseline submissions. Any optional optimized submission may use any precision.
+- FP64 must be used for all baseline results. Precision must be reported for both baseline and optimized results.
 
 ## Benchmark test results to report and files to return
 
 * The Make.myarch files or script, job submission scripts, stdout and stderr files from each run, an environment dump, and HPL.dat files shall be included in the File response.
 * The Text response should include high-level descriptions of build and run optimizations.
-* For performance reporting, the performance reported in the output files and the theoretical performance should be entered into the Spreadsheet (`report/HPL_benchmark.csv`) response.
+* For performance reporting, the performance reported in the output files and the theoretical peak performance should be entered into the spreadsheet response.
