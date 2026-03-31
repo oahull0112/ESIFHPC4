@@ -74,7 +74,7 @@ Optimized CPU-only submissions may use any binding scheme, number of MPI tasks, 
 
 **Accelerator-based tests:**
 For accelerated nodes, the following two scaling series should be submitted as part of the baseline results:
-- 1, 2, 4, 8, 16, 32, and 64 nodes, utilizing all devices, with one CPU thread per MPI task
+- 1, 2, 4, 8, 16, 32, and 64 nodes, utilizing all devices, with one CPU core per MPI task
 - A single-node scaling series of 1, 2, 4, 8, ..., up to all the devices available on the node, with one CPU core per MPI task
 
 ## Run Rules
