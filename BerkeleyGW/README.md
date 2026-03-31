@@ -171,7 +171,7 @@ The `run_epsilon_XXXX.sh` scripts will generate a `BGW_EPSILON_XXXX` folder wher
 
 ## 3.1 Correctness & Timing
 
-Correctness can be verified using the `$E4_BGW/benchmarks/validate.py` script, which compares values (the `Head of Epsilon` and `Epsilon(2,2)` values) from the output to their expected output. The result of the validation test is printed on the first line of the script output. For example:
+Correctness can be verified using the `$E4_BGW/benchmarks/validate.py` script, which compares values (the `Head of Epsilon` and `Epsilon(2,2)` values) from the output to their expected output. The result of the validation test is printed in the script output. For example:
 ```
 Usage:
   ./validate.py <size> <output_file>
