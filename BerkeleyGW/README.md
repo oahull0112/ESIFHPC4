@@ -5,7 +5,7 @@ Any available general ESIF-HPC-4 benchmark run rules provided in the technical s
 In particular:
 - Any broader ESIF-HPC-4 run rules apply to this benchmark except where explicitly noted within this README.
 - Responses must include the performance metrics discussed below in section 3.1. These values include whether the run successfully completed (Validation), the Total Time in seconds, the Total I/O Time in seconds, and the Benchmark Time (defined as Total Time minus Total I/O Time) in seconds. Each timing result must be taken from the "max" column of the "Wall time (s)" right columns (the final time column before "Number of calls") in the BerkeleyGW output file summary table. Each reported result's BerkeleyGW output file, `BGW_EPSILON.out`, must be provided. The reference times included for this benchmark were run by NLR on Kestrel. 
-- This benchmark set defines multiple benchmark sizes: Small, Medium, and Large to allow testing across a range of resource sizes. Only the Large benchmark is rqeuired for the RFP response, however the offeror might wish to provide additional timing data for the Small/Medium benchmarks to showcase the offered system's performance at many calculation scales. The multiple benchmark sizes form a weak-scaling set, and a given benchmark size can be run with different amounts of compute resources to form a strong-scaling set. We have provided a table with strong-scaling results for each benchmark size at the end of this document to provide reference data on the performance currently achievable on Kestrel.  
+- This benchmark set defines multiple benchmark sizes: Small, Medium, and Large to allow testing across a range of resource sizes. Only the Large benchmark is required for the RFP response, however the offeror might wish to provide additional timing data for the Small/Medium benchmarks to showcase the offered system's performance at many calculation scales. The multiple benchmark sizes form a weak-scaling set, and a given benchmark size can be run with different amounts of compute resources to form a strong-scaling set. We have provided a table with strong-scaling results for each benchmark size at the end of this document to provide reference data on the performance currently achievable on Kestrel.  
 - This benchmark can be run on standard or accelerated compute nodes, and is expected to perform well on both. If both CPU-only and accelerated nodes are offered, it is sufficient to return results only for the accelerated nodes, and CPU-only results may be returned optionally.
 
 For this BerkeleyGW benchmark, we describe here how different job modifications are classified for Baseline, Ported, and Optimized results. Any change not discussed here is assumed to be addressed by the general ESIF-HPC-4 run requirements. For example, FP64 precision must be used for the Baseline and Ported reported results. 
@@ -32,7 +32,7 @@ Predicting optical properties of materials and nanostructures is a key step towa
 
 **This benchmark focuses on the Epsilon stage of the workflow. The DFT, Sigma, Kernel, and Absorption stages are not included in this benchmark.**
 
-The BerkeleyGW code is written primarily in Fortran, with some C and C++. It is parallelized using MPI and OpenMP on the CPU, and OpenACC/OpenMP-target constructs on GPUs. The project website is [https://berkeleygw.org](https://berkeleygw.org), with accompanying [online documentation](http://manual.berkeleygw.org/4.0/). Further details describing the implementation has been published [here](https://www.sciencedirect.com/science/article/pii/S0010465511003912?via%3Dihub). BerkeleyGW is distributed under the Berkeley Software Distribution (BSD) license. Please see the [license.txt](BerkeleyGW/license.txt) and [Copyright.txt](BerkeleyGW/Copyright.txt) files for more details.
+The BerkeleyGW code is written primarily in Fortran, with some C and C++. It is parallelized using MPI and OpenMP on the CPU, and OpenACC/OpenMP-target constructs on GPUs. The project website is [https://berkeleygw.org](https://berkeleygw.org), with accompanying [online documentation](http://manual.berkeleygw.org/4.0/). Further details describing the implementation has been published [here](https://www.sciencedirect.com/science/article/pii/S0010465511003912?via%3Dihub). BerkeleyGW is distributed under the Berkeley Software Distribution (BSD) license. Please see the `BerkeleyGW/license.txt` and `BerkeleyGW/Copyright.txt` files in the source code for more details.
 
 ## 0.1 Epsilon 
 
@@ -171,17 +171,27 @@ The `run_epsilon_XXXX.sh` scripts will generate a `BGW_EPSILON_XXXX` folder wher
 
 ## 3.1 Correctness & Timing
 
-Correctness can be verified using the `$E4_BGW/benchmarks/validate.py` script, which compares values from the output to their expected output. The result of the validation test is printed on the first line of the script output. For example:
+Correctness can be verified using the `$E4_BGW/benchmarks/validate.py` script, which compares values (the `Head of Epsilon` and `Epsilon(2,2)` values) from the output to their expected output. The result of the validation test is printed on the first line of the script output. For example:
 ```
 Usage:
   ./validate.py <size> <output_file>
 Allowed sizes: small, medium, large
 
 $ Validating epsilon job for size: small
-  Validation:     PASSED
-  Total Time:     395.65
-  I/O Time:       6.60
-  Benchmark Time: 389.05
+      Tolerance: 1e-10
+
+      Reference Head of Epsilon = 1.777506988066533e+01
+      Test Head of Epsilon =      1.777506988066550e+01
+      Absolute Error =            1.705302565824240e-13
+
+      Reference Epsilon(2,2) = 9.276513200265800e+00
+      Test Epsilon(2,2) =      9.276513200265793e+00
+      Absolute Error =         7.105427357601002e-15
+
+    Validation:     PASSED
+    Total Time:     395.65
+    I/O Time:       6.60
+    Benchmark Time: 389.05
 ```
 In addition, this script will print performance results for the job:
 * Total Time corresponds to the full duration of the executed job.

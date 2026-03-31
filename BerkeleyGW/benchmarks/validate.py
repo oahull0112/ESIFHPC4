@@ -46,7 +46,7 @@ def test_result(name: str, measured: float, expected: float, tol: float) -> bool
         print(f"  AbsError: {err:.15e}")
         print(f"  Tol:      {tol:.15e}")
         print("  Result:   FAILED")
-    return ok
+    return ok, err
 
 def parse_args() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
@@ -74,16 +74,23 @@ def main() -> int:
     io_time = extract_float_after_marker(text, " - I/O TOTAL ", 6)
     bench_time = total_time - io_time
 
-    ok1 = test_result("Head of Epsilon validation", testval_1, exp.expected_1, exp.tolerance)
-    ok2 = test_result("Epsilon(2,2) validation", testval_2, exp.expected_2, exp.tolerance)
+    ok1, error1 = test_result("Head of Epsilon validation", testval_1, exp.expected_1, exp.tolerance)
+    ok2, error2 = test_result("Epsilon(2,2) validation", testval_2, exp.expected_2, exp.tolerance)
     validation_ok = ok1 and ok2
 
     print()
     print(f"Validating epsilon job for size: {args.size}")
-    print(f" Validation:     {'PASSED' if validation_ok else 'FAILED'}")
-    print(f" Total Time:     {total_time:.2f}")
-    print(f" I/O Time:       {io_time:.2f}")
-    print(f" Benchmark Time: {bench_time:.2f}")
+    print(f"    Tolerance: {exp.tolerance}\n")
+    print(f"    Reference Head of Epsilon = {exp.expected_1:.15e}")
+    print(f"    Test Head of Epsilon =      {testval_1:.15e}")
+    print(f"    Absolute Error =            {error1:.15e}\n")
+    print(f"    Reference Epsilon(2,2) = {exp.expected_2:.15e}")
+    print(f"    Test Epsilon(2,2) =      {testval_2:.15e}")
+    print(f"    Absolute Error =         {error2:.15e}\n")
+    print(f"  Validation:     {'PASSED' if validation_ok else 'FAILED'}")
+    print(f"  Total Time:     {total_time:.2f}")
+    print(f"  I/O Time:       {io_time:.2f}")
+    print(f"  Benchmark Time: {bench_time:.2f}")
     print()
 
     return 0 if validation_ok else 2
