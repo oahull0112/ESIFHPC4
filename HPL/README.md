@@ -14,7 +14,7 @@ HPL can be obtained in a number of ways.  These include:
 * Downloading optimized binaries or containers
 
 ## Example build instructions using all open source components
-We assume we have gcc, openmpi, and openblas compiled against these two and we have modules for each. We then:
+We assume we have gcc and openmpi available as modules, with openblas compiled against both. We then:
 * Download the source, unpack it, and enter the directory
 * Load our modules
 * Set LDFLAGS to point to our openblas library directory
