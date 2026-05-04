@@ -28,7 +28,7 @@ This procedure is shown in the file test-run/simple.
 
 The source code of Netlib can be accessed here, [HPL](https://www.netlib.org/benchmark/hpl/hpl-2.3.tar.gz). Build instructions are in the INSTALL file (top directory) and are summarized below: 
 1. Download and extract the source file: `$ gunzip hpl-2.3.tgz; tar -xvf hpl-2.3`.
-2. Copy a make file under the setup direcotry: `$ cp setup/Make.<arch> .`.
+2. Copy a make file under the setup directory: `$ cp setup/Make.<arch> .`.
 3. Build HPL: `$ make arch=<arch>`. This should create an executable in the bin/<arch> directory called xhpl.
 4. Test the executable: `$ cd bin/<arch> && mpirun -np 4 xhpl`.
 
@@ -67,7 +67,7 @@ To run xhpl on GPUs, you need GPU-Aware MPI with or without OpenMP support for a
 Testing will include single-node and multi-node configurations.
 
 **CPU-only tests:**
-For CPU-only nodes, the following scaling series from 1, 2, 4, 8, 16, 32 64 nodes should be submitted as part of the baseline results:
+For CPU-only nodes, the following scaling series from 1, 2, 4, 8, 16, 32, and 64 nodes should be submitted as part of the baseline results:
 - One CPU core per MPI task, with at least 80% of CPU cores per node utilized
     
 Optimized CPU-only submissions may use any binding scheme, number of MPI tasks, number of threads, etc.
